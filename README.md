@@ -8,6 +8,13 @@ This repository is for the development of a web application for our SENG 513 pro
 - Harrison Mondragon
 - Tyler Witzke
 
+## Figma
+UI/UX design will be completed using Figma. We have separate mockups for mobile and computer:
+
+[Computer](https://www.figma.com/file/bI5E1qi820KH3M59GDhDcO/Computer?type=design&node-id=0%3A1&mode=design&t=9cHrGGIiWYxIyYot-1)
+
+[Mobile](https://www.figma.com/file/GVt4gFmJDPROsmAa51QyG3/Mobile?type=design&node-id=0%3A1&mode=design&t=yKPYNnlhwFWcsKAp-1)
+
 ## New Feature Workflow:
 When developing a new feature, the following workflow should be followed:
 
