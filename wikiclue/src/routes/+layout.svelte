@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { auth, db } from '../firebase/firebase';
     import '../global.css'
     import { onMount } from 'svelte'
@@ -7,27 +7,26 @@
     const nonAuthRoutes = ['/login', '/signup', '/']
 
     onMount(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
 
-        authStore.update(() => ({
-            user: user || null
-        }));
+            authStore.update(() => ({
+                user: user || null
+            }));
 
-        const currentPath = window.location.pathname;
+            const currentPath = window.location.pathname;
 
-        if (!user && !nonAuthRoutes.includes(currentPath)) {
-            window.location.href = '/login';
-            return;
-        }
+            if (!user && !nonAuthRoutes.includes(currentPath)) {
+                window.location.href = '/login';
+                return;
+            }
 
-        if (user && currentPath === '/') {
-            window.location.href = '/home';
-            return;
-        }
+            //if (user && currentPath === '/') {
+            //    window.location.href = '/home';
+            //    return;
+            //}
+        });
+        return unsubscribe;
     });
-
-    return unsubscribe;
-});
 </script>
 
 <slot/>
