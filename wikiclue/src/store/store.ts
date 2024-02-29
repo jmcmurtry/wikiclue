@@ -1,11 +1,14 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import {
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+	signOut,
+	type User
+} from 'firebase/auth';
 import { writable } from 'svelte/store';
 import { auth } from '../firebase/firebase';
 
-export const authStore = writable({
-	user: null,
-	loading: true,
-	data: {}
+export const authStore = writable<{ user: User | null }>({
+	user: null
 });
 
 export const authHandlers = {
