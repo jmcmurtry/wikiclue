@@ -1,2 +1,21 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+    let searchTerm = "";
+</script>
+
+<div class="landing-page">
+  <h1>Welcome to WikiClue</h1>
+  <p class = "sub-header">Find a Wikipedia page that contains the following words!</p>
+  <div class="words-container">
+    <p class="search-words">Sample</p>
+    <p class="search-words">Words</p>
+  </div>
+  <input type="text" class="search-bar" placeholder="Start typing to play..." bind:value={searchTerm}/>
+  <div class="buttons-container">
+    <button on:click={()=>console.log("change this function later")}>Login</button>
+    <button on:click={()=>console.log("change this function later")}>Sign Up</button>
+  </div>
+</div>
+
+<style>
+@import '../styles/rootPageStyles.css';
+</style>

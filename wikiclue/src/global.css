@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Arbutus+Slab&display=swap');
+
+body {
+	font-family: 'Arbutus Slab', serif;
+}
+
+button {
+	font-family: inherit;
+}
+
+input {
+	font-family: inherit;
+}
