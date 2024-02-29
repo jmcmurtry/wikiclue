@@ -33,7 +33,7 @@ h1 {
     text-align: center;
     margin-right: 2rem;
     margin-left: 2rem;
-}  
+}
 
 .words-container {
     display: flex;
