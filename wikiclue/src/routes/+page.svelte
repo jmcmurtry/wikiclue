@@ -11,42 +11,42 @@
   </div>
   <input type="text" class="search-bar" placeholder="Start typing to play..." bind:value={searchTerm}/>
   <div class="buttons-container">
-    <button on:click={()=>console.log("button clicked")}>Login</button>
-    <button on:click={()=>console.log("button clicked")}>Sign Up</button>
+    <button on:click={()=>console.log("change this function later")}>Login</button>
+    <button on:click={()=>console.log("change this function later")}>Sign Up</button>
   </div>
 </div>
 
 <style>
-
-
-
 .landing-page {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
     margin-top: 5rem;
 }
+
 h1 {
     font-size: 2rem;
 }
+
 .sub-header {
     font-size: 1.5rem;
     text-align: center;
     margin-right: 2rem;
     margin-left: 2rem;
 }  
+
 .words-container {
     display: flex;
-    gap: 5rem;
-    margin: 1rem 0;
+    gap: 10vw;
+    margin: 1rem;
 }
 
 .search-words {
     font-size: 2rem;
 }
+
 .search-bar {
-    width: 65%;
+    width: 70%;
     padding: 0.5rem;
     font-size: 1.5rem;
     margin: 1rem 0;
@@ -56,9 +56,9 @@ h1 {
 
 .buttons-container {
     display: flex;
-    flex-wrap: wrap; /* Allow buttons to wrap to the next line */
-    justify-content: center; /* Center buttons horizontally */
-    margin: 1rem 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 1rem;
 }
 
 button {
@@ -72,7 +72,7 @@ button {
 }
 
 button:hover {
-    background-color: #E0D8B8;
+    background-color: #cbb563;
 }
 
 .buttons-container button {
