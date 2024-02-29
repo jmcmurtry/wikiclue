@@ -31,8 +31,8 @@ h1 {
 	padding: 0.5rem;
 	font-size: 1.5rem;
 	margin: 1rem 0;
-	border: 1px solid #000;
-	background-color: #f1efef;
+	border: 1px solid var(--black);
+	background-color: var(--input-background);
 }
 
 .buttons-container {
@@ -43,7 +43,7 @@ h1 {
 }
 
 button {
-	background-color: #ccc8aa;
+	background-color: var(--button-background);
 	width: 14rem;
 	height: 3rem;
 	border: 0px;
@@ -53,7 +53,7 @@ button {
 }
 
 button:hover {
-	background-color: #cbb563;
+	background-color: var(--button-hover);
 }
 
 .buttons-container button {
