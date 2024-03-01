@@ -15,15 +15,15 @@
 
             const currentPath = window.location.pathname;
 
-            //if (!user && !nonAuthRoutes.includes(currentPath)) {
-            //    window.location.href = '/login';
-            //    return;
-            //}
+            if (!user && !nonAuthRoutes.includes(currentPath)) {
+                window.location.href = '/login';
+                return;
+            }
 
-            //if (user && currentPath === '/') {
-            //    window.location.href = '/home';
-            //    return;
-            //}
+            if (user && (currentPath === '/'|| currentPath === '/login' || currentPath === '/signup')) {
+                window.location.href = '/home';
+                return;
+            }
         });
         return unsubscribe;
     });
