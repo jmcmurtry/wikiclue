@@ -20,10 +20,7 @@
                 errorMessage = "Invalid password, try again.";
             } else if (error.message === "Firebase: Error (auth/invalid-email)."){
                 errorMessage = "Invalid email, try again.";
-            } else if (error.message ===
-                `Firebase: Access to this account has been temporarily disabled due
-                to many failed login attempts. You can immediately restore it by resetting
-                your password or you can try again later. (auth/too-many-requests).`){
+            } else if (error.message === "Firebase: Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later. (auth/too-many-requests)."){
                 errorMessage = "Too many unsuccessful login attempts, this account is temporarily locked.";
             } else {
                 errorMessage = error.message;
