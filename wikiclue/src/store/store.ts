@@ -6,6 +6,7 @@ import {
 } from 'firebase/auth';
 import { writable } from 'svelte/store';
 import { auth } from '../firebase/firebase';
+import { goto } from '$app/navigation';
 
 export const authStore = writable<{ user: User | null }>({
 	user: null
@@ -20,5 +21,6 @@ export const authHandlers = {
 	},
 	logout: async () => {
 		await signOut(auth);
+		goto('/');
 	}
 };
