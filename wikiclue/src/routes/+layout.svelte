@@ -20,10 +20,10 @@
                 return;
             }
 
-            //if (user && currentPath === '/') {
-            //    window.location.href = '/home';
-            //    return;
-            //}
+            if (user && (currentPath === '/'|| currentPath === '/login' || currentPath === '/signup')) {
+                window.location.href = '/home';
+                return;
+            }
         });
         return unsubscribe;
     });
