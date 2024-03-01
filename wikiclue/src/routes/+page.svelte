@@ -12,7 +12,7 @@
     </div>
     <input type="text" class="search-bar" placeholder="Start typing to play..." bind:value={searchTerm}/>
     <div class="buttons-container">
-        <button on:click={()=>console.log("change this function later")}>Login</button>
+        <button on:click={()=>goto("/login")}>Login</button>
         <button on:click={()=>goto("/signup")}>Sign Up</button>
     </div>
 </div>
