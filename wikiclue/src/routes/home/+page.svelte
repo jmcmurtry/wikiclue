@@ -3,6 +3,7 @@
     import LevelsIcon from '~icons/carbon/skill-level-advanced'
     import DailyIcon from '~icons/ion/calendar-outline'
     import RushIcon from '~icons/nimbus/fire'
+    import { goto } from '$app/navigation';
 </script>
 
 <HeaderBar />
@@ -29,7 +30,7 @@
         </div>
     </div>
     <div class="buttons-container">
-        <button>Add Friends</button>
+        <button on:click={()=>goto("/add-friends")}>Add Friends</button>
         <button>View Leaderboards</button>
     </div>
 </div>
