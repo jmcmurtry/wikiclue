@@ -51,7 +51,7 @@
     {/if}
     {#if $isOverlayOpen && dailyOpen}
         <Overlay header="Daily" onClose={() => {isOverlayOpen.set(false); dailyOpen = false;}}>
-            <p class="popup-description">Solve the new daily problem each day! Solve in the least amount of clues possible! Come back everyday to get a streak!</p>
+            <p class="popup-description">Solve the daily problem as fast as possible! Come back everyday to build your streak!</p>
             <DailyIcon style="font-size: 4rem; color: black; margin-bottom: 10%"/>
             <button>Play Now!</button>
         </Overlay>   
