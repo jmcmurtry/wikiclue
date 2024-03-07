@@ -1,49 +1,49 @@
 h1 {
-    font-size: 2.5rem;
-    text-align: center;
-    margin-top: 75px;
-}   
+	font-size: 2.5rem;
+	text-align: center;
+	margin-top: 75px;
+}
 
 .games-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-    margin-top: 25px;
-    gap: 30px;
-    flex-wrap: wrap;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	width: 100%;
+	margin-top: 25px;
+	gap: 30px;
+	flex-wrap: wrap;
 }
 
 .game-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 50px;
-    margin-right: 10px;
-    margin-left: 10px;
-    padding: 20px;
-    width: 260px;
-    height: 320px;
-    background-color: var(--light-gray);
-    box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.2);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 50px;
+	margin-right: 10px;
+	margin-left: 10px;
+	padding: 20px;
+	width: 260px;
+	height: 320px;
+	background-color: var(--light-gray);
+	box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.2);
 }
 
 h2 {
-    font-size: 1.5rem;
+	font-size: 1.5rem;
 }
 
 .game-description {
-    font-size: 1.2rem;
-    text-align: center;
+	font-size: 1.2rem;
+	text-align: center;
 }
 
 .buttons-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 50px;
-    gap: calc(5vw + 10px);
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin-top: 50px;
+	gap: calc(5vw + 10px);
 }
 
 button {
@@ -51,10 +51,33 @@ button {
 	width: 14rem;
 	height: 3rem;
 	border: 0px;
-    font-size: 1.3rem;
-    cursor: pointer;
+	font-size: 1.3rem;
+	cursor: pointer;
 }
 
 button:hover {
 	background-color: var(--button-hover);
+}
+
+.popup-row {
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 85%;
+	margin-bottom: 2%;
+}
+
+.popup-text {
+	font-size: 1.2rem;
+	margin-left: 7%;
+}
+
+.popup-description {
+	font-size: 1.2rem;
+	margin-top: 5%;
+	margin-bottom: 5%;
+	margin-right: 10%;
+	margin-left: 10%;
+	text-align: center;
 }
