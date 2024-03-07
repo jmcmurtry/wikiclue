@@ -1,0 +1,61 @@
+.add-friends-page {
+	display: flex;
+	height: 100vh;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+h1 {
+	font-size: 2rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: calc(25vw + 260px);
+}
+
+.error-message {
+	color: var(--error-color);
+	font-size: 1.3rem;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	text-align: center;
+}
+
+.success-message {
+	color: var(--success-color);
+	font-size: 1.3rem;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	text-align: center;
+}
+
+.add-friend-input {
+	width: 100%;
+	padding: 0.5rem;
+	font-size: 1.3rem;
+	border: 1px solid var(--black);
+	background-color: var(--input-background);
+	text-align: center
+}
+
+button {
+	font-size: 1.3rem;
+	background-color: var(--button-background);
+	width: 14rem;
+	height: 3rem;
+	border: 0px;
+	cursor: pointer;
+	margin: 2rem;
+}
+
+button:hover {
+	background-color: var(--button-hover);
+}

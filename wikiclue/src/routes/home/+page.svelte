@@ -6,6 +6,7 @@
     import TimerIcon from '~icons/material-symbols/timer-outline'
     import SkipIcon from '~icons/bi/skip-forward'
     import Overlay from "../../components/overlay.svelte";
+    import { goto } from '$app/navigation';
 	import { writable } from "svelte/store";
 
     export let levelsOpen = false;
@@ -39,7 +40,7 @@
         </div>
     </div>
     <div class="buttons-container">
-        <button>Add Friends</button>
+        <button on:click={()=>goto("/add-friends")}>Add Friends</button>
         <button>View Leaderboards</button>
     </div>
     {#if $isOverlayOpen && levelsOpen}
@@ -50,7 +51,7 @@
         </Overlay>   
     {/if}
     {#if $isOverlayOpen && dailyOpen}
-        <Overlay header="Daily" onClose={() => {isOverlayOpen.set(false); dailyOpen = false;}}>
+        <Overlay header="The Daily" onClose={() => {isOverlayOpen.set(false); dailyOpen = false;}}>
             <p class="popup-description">Solve the daily problem as fast as possible! Come back everyday to build your streak!</p>
             <DailyIcon style="font-size: 4rem; color: black; margin-bottom: 10%"/>
             <button>Play Now!</button>
