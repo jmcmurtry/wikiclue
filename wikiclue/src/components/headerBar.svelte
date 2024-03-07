@@ -11,7 +11,7 @@
     <div class="content-container">
         <p class="name">WikiClue</p>
         <div class="links-container">
-            <a href="/profile">
+            <a href="/user-settings">
                 <ProfileIcon style="font-size: 1.5em; color: black; padding-top: 5px"/>
             </a>
             <button on:click={() => logout()}>Logout</button>
