@@ -13,7 +13,7 @@
 
     try {
       // Call function that adds the friend here
-      successMessage = `Sent friend request to ${friendEmail}`
+      successMessage = `Success! A friend request has been sent to ${friendEmail}`
       friendEmail = "";
     } catch (error: any) {
       errorMessage = error.message;
@@ -27,10 +27,10 @@
   <h1>Add friends</h1>
   <form>
       {#if errorMessage}
-      <p class="error-message">{errorMessage}</p>
+        <p class="error-message">{errorMessage}</p>
       {/if}
       {#if successMessage}
-      <p class="success-message">{successMessage}</p>
+        <p class="success-message">{successMessage}</p>
       {/if}
       <h2>Enter your friend's email</h2>
       <input type="text" class="add-friend-input" bind:value={friendEmail}/>
