@@ -3,11 +3,18 @@
 
   let friendEmail = "";
   let errorMessage = "";
+  let successMessage = ""
 
   async function addFriend(){
+
+    // Reset status messages
+    errorMessage = "";
+    successMessage = ""
+
     try {
-        console.log(friendEmail);
-        friendEmail = "";
+      // Call function that adds the friend here
+      successMessage = `Sent friend request to ${friendEmail}`
+      friendEmail = "";
     } catch (error: any) {
       errorMessage = error.message;
     }
@@ -21,6 +28,9 @@
   <form>
       {#if errorMessage}
       <p class="error-message">{errorMessage}</p>
+      {/if}
+      {#if successMessage}
+      <p class="success-message">{successMessage}</p>
       {/if}
       <h2>Enter your friend's email</h2>
       <input type="text" class="add-friend-input" bind:value={friendEmail}/>
