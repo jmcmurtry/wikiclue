@@ -55,6 +55,8 @@ button {
 	border: 0px;
 	font-size: 1.3rem;
 	cursor: pointer;
+	margin-top: auto;
+	margin-bottom: 20px;
 }
 
 button:hover {
@@ -72,7 +74,7 @@ button:hover {
 
 .popup-text {
 	font-size: 1.2rem;
-	margin-left: 7%;
+	margin-left: 10%;
 }
 
 .popup-description {
