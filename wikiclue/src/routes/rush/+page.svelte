@@ -34,7 +34,6 @@
         if($isOverlayOpen) {
             rush.timeRemaining.subscribe(value => {
                 timeRemaining = value;
-                console.log("in here");
                 loadNextRound();
             });
         }
@@ -107,8 +106,6 @@
             skipsRemaining--;
             isOverlayOpen.set(true);
             skippedOverlay = true;
-        } else {
-            console.log("No skips remaining");
         }
     }
 
@@ -116,6 +113,7 @@
         incorrectAnswer = false;
         // will need to change the if statement to use actual wikipedia api function
         if (searchTerm.includes(wordsToFind[0]) && searchTerm.includes(wordsToFind[1])) {
+            clearInterval(timerInterval);
             streakCount++;
             isOverlayOpen.set(true);
             correctOverlay = true;
@@ -144,7 +142,6 @@
     function endGame() {
         if (!$isOverlayOpen) {
             gameOver = true;
-            console.log("Game over");
             // Show end of game pop up and take user back to home page
         }
     }

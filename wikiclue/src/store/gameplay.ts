@@ -1,9 +1,8 @@
 import { writable } from 'svelte/store';
 
-// Levels Variables
-const levelsStreakCount = writable(0);
-const levelsTimeRemaining = writable(60);
-const levelsSkipsRemaining = writable(3);
+// Levels Variables if needed
+
+// The Daily Variables if needed
 
 // Rush Variables
 const rushStreakCount = writable(0);
@@ -11,9 +10,11 @@ const rushTimeRemaining = writable(60);
 const rushSkipsRemaining = writable(3);
 
 const levels = {
-	streakCount: levelsStreakCount,
-	timeRemaining: levelsTimeRemaining,
-	skipsRemaining: levelsSkipsRemaining
+	// Insert levels variables if needed
+};
+
+const theDaily = {
+	// Insert the daily variables if needed
 };
 
 const rush = {
@@ -22,4 +23,4 @@ const rush = {
 	skipsRemaining: rushSkipsRemaining
 };
 
-export { rush, levels };
+export { rush, levels, theDaily };
