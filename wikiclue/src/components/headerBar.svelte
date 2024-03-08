@@ -9,7 +9,9 @@
 
 <nav class="header-bar">
     <div class="content-container">
-        <p class="name">WikiClue</p>
+        <a href="/home">
+            <p class="name">WikiClue</p>
+        </a>
         <div class="links-container">
             <a href="/user-settings">
                 <ProfileIcon style="font-size: 1.5em; color: black; padding-top: 5px"/>
