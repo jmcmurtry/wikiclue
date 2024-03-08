@@ -2,7 +2,8 @@
 	import { authHandlers } from '../../store/store';
 	import { writable } from 'svelte/store';
 	import Overlay from '../../components/overlay.svelte';
-	import Icon from '@iconify/svelte';
+	import EmailIcon from '~icons/mdi/email-sent-outline'
+	import { goto } from '$app/navigation';
 
 	let email = '';
 	let errorMessage = '';
@@ -15,7 +16,6 @@
 				return;
 			}
 			await authHandlers.forgotPasswordEmail(email);
-
 			email = '';
 			errorMessage = '';
 			isOverlayOpen.set(true);
@@ -32,7 +32,7 @@
 
 	function clearPopup() {
 		isOverlayOpen.set(false);
-		window.location.href = '/login';
+		setTimeout(() => goto('/login'), 0);
 	}
 </script>
 
@@ -45,8 +45,8 @@
 		{#if $isOverlayOpen}
 			<Overlay header="Email Sent" displayX={false}>
 				<p class="popup-text">If you don't see the email, please check your junk or spam folder.</p>
-				<Icon style="width: 25%; height: 10%;" icon="mingcute:mail-send-fill" />
-				<button on:click={() => clearPopup()}>Close</button>
+				<EmailIcon style="width: 20%; height: 20%; color: black;"/>
+				<button on:click={() => clearPopup()}>Login</button>
 			</Overlay>
 		{/if}
 		<p class="input-label">Email</p>
@@ -57,5 +57,5 @@
 </div>
 
 <style>
-	@import '../../styles/forgot-passwordPageStyles.css';
+	@import '../../styles/forgotPasswordPageStyles.css';
 </style>

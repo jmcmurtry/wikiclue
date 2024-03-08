@@ -4,7 +4,7 @@
     import { onMount } from 'svelte'
 	import { authStore } from '../store/store';
 
-    const nonAuthRoutes = ['/login', '/signup', '/']
+    const nonAuthRoutes = ['/login', '/signup', '/', '/forgot-password']
 
     onMount(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -20,7 +20,7 @@
                 return;
             }
 
-            if (user && (currentPath === '/'|| currentPath === '/login' || currentPath === '/signup')) {
+            if (user && nonAuthRoutes.includes(currentPath)) {
                 window.location.href = '/home';
                 return;
             }
