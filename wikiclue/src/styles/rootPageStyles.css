@@ -60,3 +60,26 @@ button {
 button:hover {
 	background-color: var(--button-hover);
 }
+
+.popup-row {
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 85%;
+	margin-bottom: 2%;
+}
+
+.popup-text {
+	font-size: 1.2rem;
+	margin-left: 7%;
+}
+
+.popup-button {
+	background-color: var(--button-background);
+	width: 14rem;
+	height: 3rem;
+	border: 0px;
+	font-size: 1.3rem;
+	cursor: pointer;
+}
