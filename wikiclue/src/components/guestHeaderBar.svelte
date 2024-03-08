@@ -4,7 +4,9 @@
 
 <nav class="header-bar">
     <div class="content-container">
-        <p class="name">WikiClue</p>
+        <a href="/">
+            <p class="name">WikiClue</p>
+        </a>
         <div class="links-container">
             <button on:click={()=>goto('/login')}>Login</button>
         </div>
