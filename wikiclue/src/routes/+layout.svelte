@@ -4,7 +4,7 @@
     import { onMount } from 'svelte'
 	import { authStore } from '../store/store';
 
-    const nonAuthRoutes = ['/login', '/signup', '/', '/forgot-password']
+    const nonAuthRoutes = ['/login', '/signup', '/', '/play', '/forgot-password']
 
     onMount(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {

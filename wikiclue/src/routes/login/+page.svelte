@@ -41,7 +41,7 @@
         <input type="password" class="login-input" placeholder="Enter your password..." bind:value={password}/>
         <button on:click={() => login()}>Login</button>
         <a href="/forgot-password">Forgot your password?</a>
-        <a href="/signup">Dont have an account?</a>
+        <a href="/signup">Dont have an account? Sign up</a>
     </form>
 </div>
 
