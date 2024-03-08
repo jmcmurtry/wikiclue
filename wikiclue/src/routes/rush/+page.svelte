@@ -27,7 +27,18 @@
         loadSkipsRemaining();
         loadWordsToFind();
         startTimer();
+        window.addEventListener('beforeunload', handleBeforeUnload); 
     });
+
+    function handleBeforeUnload(event: BeforeUnloadEvent) {
+        if($isOverlayOpen) {
+            rush.timeRemaining.subscribe(value => {
+                timeRemaining = value;
+                console.log("in here");
+                loadNextRound();
+            });
+        }
+    }
 
     function loadStreakCount() {
         if (browser) {
@@ -77,11 +88,11 @@
 
     function startTimer() {
         clearInterval(timerInterval);
-        const interval = setInterval(() => {
+        timerInterval = setInterval(() => {
             if (timeRemaining > 0) {
                 timeRemaining -= 1;
             } else {
-                clearInterval(interval);
+                clearInterval(timerInterval);
                 endGame();
             }
         }, 1000);
@@ -96,7 +107,6 @@
             skipsRemaining--;
             isOverlayOpen.set(true);
             skippedOverlay = true;
-            timeRemaining = 0;
         } else {
             console.log("No skips remaining");
         }
@@ -109,7 +119,6 @@
             streakCount++;
             isOverlayOpen.set(true);
             correctOverlay = true;
-            timeRemaining = 0;
         } else {
             incorrectAnswer = true;
             setTimeout(() => {
@@ -133,9 +142,11 @@
     }
 
     function endGame() {
-        gameOver = true;
-        console.log("Game over");
-        // Show end of game pop up and take user back to home page
+        if (!$isOverlayOpen) {
+            gameOver = true;
+            console.log("Game over");
+            // Show end of game pop up and take user back to home page
+        }
     }
 
     function onEnterPressed(event: KeyboardEvent) {
@@ -163,21 +174,21 @@
             <RushIcon style="font-size: 2rem; color: black;"/>
             <p class="info-text">
                 <span class="streak-text">Current Streak:</span>
-                <span class="streak-content">{streakCount !== undefined ? streakCount : "loading"}</span>
+                <span class="streak-content">{streakCount !== undefined ? streakCount : 0}</span>
             </p>
         </div>
         <div class="info-container">
             <TimerIcon style="font-size: 2rem; color: black;"/>
             <p class="info-text">
                 <span class="time-text">Time Remaining:</span>
-                <span class="time-content">{timeRemaining !== undefined ? timeRemaining : "loading"}</span>
+                <span class="time-content">{timeRemaining !== undefined ? timeRemaining : "00"}</span>
             </p>
         </div>
         <div class="info-container">
             <SkipIcon style="font-size: 2rem; color: black;"/>
             <p class="info-text">
                 <span class="skips-text">Skips Remaining:</span>
-                <span class="skips-content">{skipsRemaining !== undefined ? skipsRemaining : "loading"}</span>
+                <span class="skips-content">{skipsRemaining !== undefined ? skipsRemaining : 0}</span>
             </p>
         </div>
     </div>
