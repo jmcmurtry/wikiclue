@@ -13,7 +13,8 @@
 
 .popup {
 	background-color: white;
-	width: calc(275px + 15vw);
+	width: calc(200px + 15vw);
+	min-width: 325px;
 	height: calc(400px + 10vh);
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 	display: flex;
