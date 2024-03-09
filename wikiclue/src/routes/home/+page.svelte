@@ -35,6 +35,16 @@
             goto("/rush");
         }
     }
+
+    function playLevels() {
+        if (browser) {
+            // Will need to change this to some function that actually generates random words
+            sessionStorage.setItem('firstWord', JSON.stringify("King"));
+            sessionStorage.setItem('secondWord', JSON.stringify("Harra"));
+            //
+            goto("/levels");
+        }
+    }
 </script>
 
 <HeaderBar />
@@ -68,7 +78,7 @@
         <Overlay header="Levels" onClose={() => {isOverlayOpen.set(false); levelsOpen = false;}}>
             <p class="popup-description">In this game mode you will have unlimited time to try and complete 30 levels of increasing difficulty! Are you ready for the challenge?</p>
             <LevelsIcon style="font-size: 4rem; color: black; margin-bottom: 10%"/>
-            <button>Play Now!</button>
+            <button on:click={() => playLevels()}>Play Now!</button>
         </Overlay>   
     {/if}
     {#if $isOverlayOpen && dailyOpen}
