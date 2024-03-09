@@ -1,5 +1,6 @@
 import {
 	createUserWithEmailAndPassword,
+	sendPasswordResetEmail,
 	signInWithEmailAndPassword,
 	signOut,
 	type User
@@ -24,5 +25,8 @@ export const authHandlers = {
 	logout: async () => {
 		await signOut(auth);
 		goto('/');
+	},
+	forgotPasswordEmail: async (email: string) => {
+		await sendPasswordResetEmail(auth, email);
 	}
 };

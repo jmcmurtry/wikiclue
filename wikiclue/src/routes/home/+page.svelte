@@ -8,12 +8,33 @@
     import Overlay from "../../components/overlay.svelte";
     import { goto } from '$app/navigation';
 	import { writable } from "svelte/store";
+    import { browser } from '$app/environment';
+    import { rush } from "../../store/gameplay";
 
     export let levelsOpen = false;
     export let dailyOpen = false;
     export let rushOpen = false;
-
     const isOverlayOpen = writable(false);
+
+    function playRush() {
+        if (browser) {
+            rush.streakCount.subscribe(value => {
+                sessionStorage.setItem('streakCount', JSON.stringify(value));
+            });
+            rush.timeRemaining.subscribe(value => {
+                sessionStorage.setItem('timeRemaining', JSON.stringify(value));
+            });
+
+            rush.skipsRemaining.subscribe(value => {
+                sessionStorage.setItem('skipsRemaining', JSON.stringify(value));
+            });
+            // Will need to change this to some function that actually generates random words
+            sessionStorage.setItem('firstWord', JSON.stringify("First"));
+            sessionStorage.setItem('secondWord', JSON.stringify("Second"));
+            //
+            goto("/rush");
+        }
+    }
 </script>
 
 <HeaderBar />
@@ -71,7 +92,7 @@
                 <SkipIcon style="font-size: 3.5em; color: black"/>
                 <p class="popup-text">You have up to 3 minutes per round</p>
             </div>
-            <button>Play Now!</button>
+            <button on:click={() => playRush()}>Play Now!</button>
         </Overlay>   
     {/if}
 </div>

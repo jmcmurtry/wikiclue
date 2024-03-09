@@ -52,6 +52,7 @@
         <p class ="input-label">Confirm</p>
         <input type="password" class="signup-input" placeholder="Enter password again..." bind:value={confirmPassword}/>
         <button on:click={() => signUp()}>Sign Up</button>
+        <a href="/login">Already have an account? Login</a>
     </form>
 </div>
 
