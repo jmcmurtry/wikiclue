@@ -51,28 +51,37 @@ h2 {
 button {
 	background-color: var(--button-background);
 	width: 14rem;
-	height: 3rem;
+	height: 45px;
 	border: 0px;
 	font-size: 1.3rem;
 	cursor: pointer;
+	margin-top: auto;
+	margin-bottom: 20px;
 }
 
 button:hover {
 	background-color: var(--button-hover);
 }
 
+.popup-button {
+	margin-bottom: 40px;
+}
+
 .popup-row {
 	display: flex;
 	align-items: center;
 	flex-direction: row;
-	justify-content: space-between;
 	width: 85%;
 	margin-bottom: 2%;
 }
 
+.icon-container {
+	max-width: 20%;
+}
+
 .popup-text {
 	font-size: 1.2rem;
-	margin-left: 7%;
+	margin-left: 10%;
 }
 
 .popup-description {

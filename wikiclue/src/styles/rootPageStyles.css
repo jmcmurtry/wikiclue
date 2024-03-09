@@ -57,6 +57,17 @@ button {
 	cursor: pointer;
 }
 
+.popup-button {
+	background-color: var(--button-background);
+	width: 14rem;
+	height: 45px;
+	border: 0px;
+	font-size: 1.3rem;
+	cursor: pointer;
+	margin-top: auto;
+	margin-bottom: 50px;
+}
+
 button:hover {
 	background-color: var(--button-hover);
 }
@@ -73,13 +84,4 @@ button:hover {
 .popup-text {
 	font-size: 1.2rem;
 	margin-left: 7%;
-}
-
-.popup-button {
-	background-color: var(--button-background);
-	width: 14rem;
-	height: 3rem;
-	border: 0px;
-	font-size: 1.3rem;
-	cursor: pointer;
 }
