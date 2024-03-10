@@ -6,6 +6,19 @@ const guestTimeRemaining = writable(60);
 const guestSkipsRemaining = writable(3);
 
 // Levels Variables if needed
+// levelWords is only needed for now until the db is setup
+const levelWords =  [
+  ['apple', 'banana'],
+  ['cat', 'dog'],
+  ['sun', 'moon'],
+  ['tree', 'flower'],
+  ['coffee', 'tea'],
+  ['book', 'pen'],
+  ['mountain', 'river'],
+  ['cake', 'cookie'],
+  ['music', 'art'],
+  ['computer', 'phone']
+];
 
 // The Daily Variables if needed
 
@@ -21,7 +34,7 @@ const guestPlay = {
 };
 
 const levels = {
-	// Insert levels variables if needed
+	levelWords: levelWords
 };
 
 const theDaily = {
