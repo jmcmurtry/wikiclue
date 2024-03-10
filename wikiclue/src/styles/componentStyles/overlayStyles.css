@@ -1,39 +1,43 @@
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .popup {
-    background-color: white;
-    width: calc(200px + 15vw);
-    height: calc(400px + 10vh);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
+	background-color: white;
+	width: calc(200px + 15vw);
+	min-width: 325px;
+	height: calc(400px + 10vh);
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
 }
 
 .close-button {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    background-color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 2.5em;
+	position: absolute;
+	top: 5px;
+	right: 10px;
+	background-color: white;
+	border: none;
+	padding: 5px;
+	cursor: pointer;
+	font-size: 2.5em;
 }
 
 .popup-title {
-    margin-top: 10%;
-    font-size: 2rem;
+	margin: 5% 0;
+	font-size: 2rem;
+	text-wrap: wrap;
+	width: 70%;
+	text-align: center;
 }

@@ -46,21 +46,28 @@
         </div>
     </div>
     {#if $isOverlayOpen}
-        <Overlay header="Play!" onClose={() => {isOverlayOpen.set(false)}}>
+        <Overlay header="Play!" onClose={() => {isOverlayOpen.set(false);}}>
             <div class="popup-row">
-                <RushIcon style="font-size: 2.5em; color: black"/>
+                <div class="icon-container">
+                    <RushIcon style="font-size: 2.5em; color: black"/>
+                </div>
                 <p class="popup-text">Try to achieve the longest streak you can</p>
             </div>
             <div class="popup-row">
-                <TimerIcon style="font-size: 2.5em; color: black"/>
+                <div class="icon-container">
+                    <TimerIcon style="font-size: 2.5em; color: black"/>
+                </div>
                 <p class="popup-text">You are allowed 3 skips per game</p>
             </div>
             <div class="popup-row">
-                <SkipIcon style="font-size: 2.5em; color: black"/>
+                <div class="icon-container">
+                    <SkipIcon style="font-size: 2.5em; color: black"/>
+                </div>
+                
                 <p class="popup-text">You have up to 3 minutes per round</p>
             </div>
             <button class="popup-button" on:click={() => play()}>Play Now!</button>
-        </Overlay>   
+        </Overlay> 
     {/if}
 </div>
 
