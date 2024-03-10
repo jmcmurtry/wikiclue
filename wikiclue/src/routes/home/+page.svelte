@@ -75,7 +75,7 @@
         <Overlay header="The Daily" onClose={() => {isOverlayOpen.set(false); dailyOpen = false;}}>
             <p class="popup-description">Solve the daily problem as fast as possible! Come back everyday to build your streak!</p>
             <DailyIcon style="font-size: 6rem; color: black; margin: 10%"/>
-            <button class="popup-button">Play Now!</button>
+            <button class="popup-button" on:click={() => {goto("/daily")}}>Play Now!</button>
         </Overlay>   
     {/if}
     {#if $isOverlayOpen && rushOpen}
