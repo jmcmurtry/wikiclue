@@ -10,6 +10,10 @@ h1 {
 	font-size: 2rem;
 }
 
+.daily-title {
+    text-align: center;
+}
+
 .search-container {
 	display: flex;
 	flex-direction: column;
@@ -30,6 +34,7 @@ h1 {
 }
 
 .words-container {
+    justify-content: center;
 	display: flex;
 	gap: 10vw;
 }
@@ -75,4 +80,3 @@ button {
 button:hover:not([disabled]) {
 	background-color: var(--button-hover);
 }
-

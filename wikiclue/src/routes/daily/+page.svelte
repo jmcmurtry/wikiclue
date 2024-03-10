@@ -145,7 +145,7 @@
 
 <HeaderBar />
 <div class="daily-page">
-	<h1>{monthNames[today.getMonth()]} {today.getDay()} Daily Challenge</h1>
+	<h1 class="daily-title">{monthNames[today.getMonth()]} {today.getDay()} Daily Challenge</h1>
 	<div class="search-container">
 		<p class="sub-header">Find a Wikipedia page that contains the following words:</p>
 		<div>
