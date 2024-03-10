@@ -64,7 +64,7 @@
 		if (
 			lastDate.getFullYear() === today.getFullYear() &&
 			lastDate.getMonth() === today.getMonth() &&
-			lastDate.getDay() === today.getDay()
+			lastDate.getDate() === today.getDate()
 		) {
 			if (savedRemaining === 0) {
 				endGame();
@@ -145,7 +145,7 @@
 
 <HeaderBar />
 <div class="daily-page">
-	<h1 class="daily-title">{monthNames[today.getMonth()]} {today.getDay()} Daily Challenge</h1>
+	<h1 class="daily-title">{monthNames[today.getMonth()]} {today.getDate()} Daily Challenge</h1>
 	<div class="search-container">
 		<p class="sub-header">Find a Wikipedia page that contains the following words:</p>
 		<div>
