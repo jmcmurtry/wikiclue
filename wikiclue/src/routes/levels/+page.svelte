@@ -1,54 +1,36 @@
 <script lang="ts">
     import HeaderBar from "../../components/headerBar.svelte";
     import LevelsIcon from '~icons/carbon/skill-level-advanced'
-    import Overlay from "../../components/overlay.svelte";
+    import LevelEnd from '../../components/levelEnd.svelte';
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
     import { browser } from '$app/environment';
-    import { levels } from "../../store/gameplay";
+    import { levels } from '../../store/gameplay';
 
-    const isOverlayOpen = writable(false);
+    // export const currentLevel = writable(1);
+    const levelOver = writable(false);
+    let wordsToFind = ["",""];
     let searchTerm = "";
-    const wordsToFind = ["Sample", "Words"]; // this will need to change to actual algo code
     let incorrectAnswer = false;
-    let gameOver = false;
-    let correctOverlay = false;
+    let currentLevel = 1
 
     onMount(() => {
-        loadWordsToFind();
-        // window.addEventListener('beforeunload', handleBeforeUnload);
-    });
+		loadLevelWords(currentLevel);
+	});
 
-    // function handleBeforeUnload(event: BeforeUnloadEvent) {
-    //     if($isOverlayOpen) {
-    //         rush.timeRemaining.subscribe(value => {
-    //             loadNextRound();
-    //         });
-    //     }
-    // }
-
-    function loadWordsToFind() {
-        if (browser) {
-            const savedFirstWord = sessionStorage.getItem('firstWord');
-            const savedSecondWord = sessionStorage.getItem('secondWord');
-            if (savedFirstWord !== null && savedSecondWord !== null) {
-                wordsToFind[0] = JSON.parse(savedFirstWord);
-                wordsToFind[1] = JSON.parse(savedSecondWord);
-            }
-        }
+    function loadLevelWords(currentLevel: number) {
+        // Load the current level words from firebase, it's just in store/gameplay for now
+        wordsToFind[0] = levels.levelWords[currentLevel-1][0];
+        wordsToFind[1] = levels.levelWords[currentLevel-1][1];
     }
 
-    function setWordsToFind() {
-        sessionStorage.setItem('firstWord', JSON.stringify(wordsToFind[0]));
-        sessionStorage.setItem('secondWord', JSON.stringify(wordsToFind[1]));
-    }
 
     function confirmPressed() {
         incorrectAnswer = false;
         // will need to change the if statement to use actual wikipedia api function
         if (searchTerm.includes(wordsToFind[0]) && searchTerm.includes(wordsToFind[1])) {
-            isOverlayOpen.set(true);
-            correctOverlay = true;
+			storeData();
+			endLevel();
         } else {
             incorrectAnswer = true;
             setTimeout(() => {
@@ -57,38 +39,27 @@
         }
     }
 
-    function loadNextLevel() {
-        gameOver = false;
-        searchTerm = "";
-        // need to use actual function to generate new words
-        wordsToFind[0] = "New";
-        wordsToFind[1] = "Round";
-        //
-        setWordsToFind();
-    }
+    function storeData() {
+		// save into database
+	}
 
-    function endGame() {
-        if (!$isOverlayOpen) {
-            gameOver = true;
-            // Show end of game pop up and take user back to home page
-        }
-    }
+    function endLevel() {
+		levelOver.set(true);
+	}
 
     function onEnterPressed(event: KeyboardEvent) {
-        if (event.key === "Enter" && $isOverlayOpen) {
-            isOverlayOpen.set(false);
+        if (event.key === "Enter" && $levelOver) {
+            levelOver.set(false);
             return;
         }
-        if (event.key === "Enter" && !$isOverlayOpen) {
+        if (event.key === "Enter" && !$levelOver) {
             confirmPressed();
             return;
         }
     }
 </script>
 
-<svelte:window
-    on:keydown={onEnterPressed}
-/>
+<svelte:window on:keydown={onEnterPressed} />
 
 <HeaderBar />
 <div class="levels-page">
@@ -98,7 +69,7 @@
             <LevelsIcon style="font-size: 2rem; color: black;"/>
             <p class="info-text">
                 <span class="level-text">Current Level:</span>
-                <span class="streak-content">69</span>
+                <span class="streak-content">{currentLevel}</span>
             </p>
         </div>
     </div>
@@ -108,25 +79,22 @@
             <p class="search-words">{wordsToFind[0]}</p>
             <p class="search-words">{wordsToFind[1]}</p>
         </div>
-        {#if !gameOver}
+        {#if !$levelOver}
             <input type="text" class="search-bar" placeholder="Enter the Wikipedia URL here..." bind:value={searchTerm}/>
         {:else}
-            <input type="text" class="search-bar" placeholder="Game Over" bind:value={searchTerm} disabled={true}/>
+            <input type="text" class="search-bar" placeholder="Level Over" bind:value={searchTerm} disabled={true}/>
         {/if}
         <p class="incorrect-answer">{incorrectAnswer? "This page does not contain the two words" : "\u00A0"}</p>
     </div>
     <div class="buttons-container">
-        {#if gameOver}
+        {#if $levelOver}
             <button disabled={true}>Confirm Answer</button>
         {:else}
             <button on:click={()=>confirmPressed()}>Confirm Answer</button>
         {/if}
     </div>
-    {#if $isOverlayOpen && correctOverlay}
-        <Overlay header="Correct!" onClose={() => {isOverlayOpen.set(false); correctOverlay = false}}>
-            <p class="popup-description">You found a page that contains the two words! Keep it up!</p>
-            <p class="popup-description">Switch this to use colin's end level!</p>
-        </Overlay>
+    {#if $levelOver}
+        <LevelEnd currentLevel={currentLevel} levelWords={wordsToFind} userAnswer={searchTerm}/>
     {/if}
 </div>
 
