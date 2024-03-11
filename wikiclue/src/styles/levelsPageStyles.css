@@ -95,16 +95,50 @@ button:hover:not([disabled]) {
 	background-color: var(--button-hover);
 }
 
-.popup-description {
-	font-size: 1.3rem;
-	text-align: center;
-	margin-right: 15%;
-	margin-left: 15%;
-	margin-top: 10%;
-}
-
 @media screen and (max-width: 1200px) {
 	.info-container .level-text {
 		display: none;
 	}
+}
+
+
+.popup-text {
+	font-size: 1.1rem;
+	margin: 0 5%;
+	text-align: center;
+}
+
+.score {
+	font-size: 1.6rem;
+	margin: 2%;
+	font-weight: 500;
+}
+
+.level-answer {
+	text-align: center;
+	padding: 1vh;
+	width: 90%;
+}
+
+.bottom-options {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	position: absolute;
+	bottom: 5px;
+}
+
+button {
+	background-color: var(--button-background);
+	width: 14.5rem;
+	height: 3rem;
+	border: 0px;
+	font-size: 1.3rem;
+	cursor: pointer;
+	margin: 5px 0;
+	bottom: 0;
+}
+
+button:hover {
+	background-color: var(--button-hover);
 }
