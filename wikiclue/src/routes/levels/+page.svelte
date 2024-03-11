@@ -114,7 +114,7 @@
         {/if}
     </div>
     {#if $isOverlayOpen && $levelOver}
-        <Overlay header="Level {$currentLevel}" onClose={() => {isOverlayOpen.set(false);}}>
+        <Overlay header="Level {$currentLevel}" onClose={() => {isOverlayOpen.set(false);}} displayX={false}>
 
             <p class="popup-text">Congratulations!</p>
             <div class="level-answer">
