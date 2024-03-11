@@ -19,6 +19,7 @@ const levelWords =  [
   ['music', 'art'],
   ['computer', 'phone']
 ];
+const currentLevel = writable(1);
 
 // The Daily Variables if needed
 
@@ -33,10 +34,6 @@ const guestPlay = {
 	skipsRemaining: guestSkipsRemaining
 };
 
-const levels = {
-	levelWords: levelWords
-};
-
 const theDaily = {
 	// Insert the daily variables if needed
 };
@@ -47,4 +44,4 @@ const rush = {
 	skipsRemaining: rushSkipsRemaining
 };
 
-export { guestPlay, rush, levels, theDaily };
+export { guestPlay, rush, currentLevel, levelWords, theDaily };

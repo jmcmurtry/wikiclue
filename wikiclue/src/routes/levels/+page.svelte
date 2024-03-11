@@ -1,27 +1,28 @@
 <script lang="ts">
     import HeaderBar from "../../components/headerBar.svelte";
     import LevelsIcon from '~icons/carbon/skill-level-advanced'
-    import LevelEnd from '../../components/levelEnd.svelte';
+    import Overlay from "../../components/overlay.svelte";
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
-    import { browser } from '$app/environment';
-    import { levels } from '../../store/gameplay';
+    import { currentLevel, levelWords } from '../../store/gameplay';
+    import { goto } from '$app/navigation';
 
-    // export const currentLevel = writable(1);
+    const isOverlayOpen = writable(false);
     const levelOver = writable(false);
+
     let wordsToFind = ["",""];
     let searchTerm = "";
     let incorrectAnswer = false;
-    let currentLevel = 1
 
     onMount(() => {
-		loadLevelWords(currentLevel);
+        // When we use the database we need to get the user's current level instead
+		loadLevelWords();
 	});
 
-    function loadLevelWords(currentLevel: number) {
+    function loadLevelWords() {
         // Load the current level words from firebase, it's just in store/gameplay for now
-        wordsToFind[0] = levels.levelWords[currentLevel-1][0];
-        wordsToFind[1] = levels.levelWords[currentLevel-1][1];
+        wordsToFind[0] = levelWords[$currentLevel-1][0];
+        wordsToFind[1] = levelWords[$currentLevel-1][1];
     }
 
 
@@ -29,7 +30,6 @@
         incorrectAnswer = false;
         // will need to change the if statement to use actual wikipedia api function
         if (searchTerm.includes(wordsToFind[0]) && searchTerm.includes(wordsToFind[1])) {
-			storeData();
 			endLevel();
         } else {
             incorrectAnswer = true;
@@ -40,16 +40,36 @@
     }
 
     function storeData() {
-		// save into database
+		// Save level data into database
 	}
 
     function endLevel() {
+        storeData;
+        isOverlayOpen.set(true);
 		levelOver.set(true);
+	}
+
+    function playNextLevelClicked() {
+        // Reset when we get to the end for now
+        if ($currentLevel === 10) {
+            currentLevel.set(1);
+        } else {
+            currentLevel.update(n => n + 1);
+        }
+        loadLevelWords();
+        searchTerm= "";
+        levelOver.set(false);
+        isOverlayOpen.set(false);
+	}
+
+    function returnToMainMenuClicked() {
+        currentLevel.set(1);
+        goto('/home');
 	}
 
     function onEnterPressed(event: KeyboardEvent) {
         if (event.key === "Enter" && $levelOver) {
-            levelOver.set(false);
+            playNextLevelClicked()
             return;
         }
         if (event.key === "Enter" && !$levelOver) {
@@ -69,7 +89,7 @@
             <LevelsIcon style="font-size: 2rem; color: black;"/>
             <p class="info-text">
                 <span class="level-text">Current Level:</span>
-                <span class="streak-content">{currentLevel}</span>
+                <span class="streak-content">{$currentLevel}</span>
             </p>
         </div>
     </div>
@@ -93,8 +113,25 @@
             <button on:click={()=>confirmPressed()}>Confirm Answer</button>
         {/if}
     </div>
-    {#if $levelOver}
-        <LevelEnd currentLevel={currentLevel} levelWords={wordsToFind} userAnswer={searchTerm}/>
+    {#if $isOverlayOpen && $levelOver}
+        <Overlay header="Level {$currentLevel}" onClose={() => {isOverlayOpen.set(false);}}>
+
+            <p class="popup-text">Congratulations!</p>
+            <div class="level-answer">
+                <p class="popup-text">You completed level {$currentLevel}:</p>
+                <h3 class="score">{wordsToFind[0]}</h3>
+                <h3 class="score">{wordsToFind[1]}</h3>
+            </div>
+            <div class="level-answer">
+                <p class="popup-text">With you answer:</p>
+                <h3 class="score">{searchTerm}</h3>
+            </div>
+
+            <div class="bottom-options">
+                <button on:click={() => {playNextLevelClicked()}}>Play Next Level</button>
+                <button on:click={() => {returnToMainMenuClicked()}}>Return to Main Menu</button>
+            </div>
+        </Overlay>
     {/if}
 </div>
 
