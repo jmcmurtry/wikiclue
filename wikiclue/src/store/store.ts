@@ -3,6 +3,7 @@ import {
 	sendPasswordResetEmail,
 	signInWithEmailAndPassword,
 	signOut,
+	updatePassword,
 	type User
 } from 'firebase/auth';
 import { writable } from 'svelte/store';
@@ -28,5 +29,14 @@ export const authHandlers = {
 	},
 	forgotPasswordEmail: async (email: string) => {
 		await sendPasswordResetEmail(auth, email);
+	},
+	changePassword: async (password: string) => {
+		const user = auth.currentUser;
+		if (user) {
+			await updatePassword(user, password);
+			goto('/login');
+		} else {
+			console.error("No user is currently signed in.");
+		}
 	}
 };
