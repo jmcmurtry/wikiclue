@@ -4,7 +4,7 @@
 	import { writable } from 'svelte/store';
 	export let levelOpen = false;
 
-	export let statistics = { Played: 24, 'Win %': '85%', 'Current Streak': 3, 'Max Streak': 7 };
+	export let statistics = { 'Played': 24, 'Win %': '85%', 'Current Streak': 3, 'Max Streak': 7 };
 	export let distribution = [4, 1, 3, 3, 4, 1];
 	let max = 4;
 	const isOverlayOpen = writable(false);

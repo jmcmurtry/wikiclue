@@ -2,7 +2,6 @@
 	import HeaderBar from '../../components/headerBar.svelte';
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
 	import DailyEnd from '../../components/dailyEnd.svelte';
 
 	const isOverlayOpen = writable(false);
@@ -17,7 +16,7 @@
 	let totalWins = 0;
 	let totalTimesPlayed = 0;
 	let guessDistribution: number[] = [];
-	let statistics = { Played: 0, 'Win %': '0%', 'Current Streak': 0, 'Max Streak': 0 };
+	let statistics = { 'Played': 0, 'Win %': '0%', 'Current Streak': 0, 'Max Streak': 0 };
 	let monthNames = [
 		'January',
 		'February',
@@ -39,15 +38,7 @@
 	});
 
 	function loadDailyWords() {
-		// Load daily words from firebase
-		if (browser) {
-			const savedFirstWord = sessionStorage.getItem('firstWord');
-			const savedSecondWord = sessionStorage.getItem('secondWord');
-			if (savedFirstWord !== null && savedSecondWord !== null) {
-				wordsToFind[0] = JSON.parse(savedFirstWord);
-				wordsToFind[1] = JSON.parse(savedSecondWord);
-			}
-		}
+		// Call to db to get daily words
 	}
 
 	function getUserInfo() {
@@ -116,7 +107,7 @@
 	function formatOverlay() {
 		const winPercentage = ((totalWins / totalTimesPlayed) * 100).toFixed(0);
 		statistics = {
-			Played: totalTimesPlayed,
+			'Played': totalTimesPlayed,
 			'Win %': winPercentage + '%',
 			'Current Streak': currentStreak,
 			'Max Streak': maxStreak
@@ -146,10 +137,10 @@
 <HeaderBar />
 <div class="daily-page">
 	<h1 class="daily-title">{monthNames[today.getMonth()]} {today.getDate()} Daily Challenge</h1>
+	<h1 class="guesses-remaining">Guesses Remaining: {guessesRemaining}</h1>
 	<div class="search-container">
 		<p class="sub-header">Find a Wikipedia page that contains the following words:</p>
 		<div>
-			<h1>Guesses Remaining: {guessesRemaining}</h1>
 			<div class="words-container">
 				<p class="search-words">{wordsToFind[0]}</p>
 				<p class="search-words">{wordsToFind[1]}</p>
