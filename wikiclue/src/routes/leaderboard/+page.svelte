@@ -1,10 +1,5 @@
 <script lang="ts">
     import HeaderBar from "../../components/headerBar.svelte";
-    import Overlay from "../../components/overlay.svelte";
-    import { goto } from '$app/navigation';
-    import { browser } from '$app/environment';
-
-
 </script>
 
 <HeaderBar />
