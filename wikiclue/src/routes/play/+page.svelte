@@ -1,9 +1,9 @@
 <script lang="ts">
     import GuestHeaderBar from "../../components/guestHeaderBar.svelte";
-    import RushIcon from '~icons/nimbus/fire'
-    import TimerIcon from '~icons/material-symbols/timer-outline'
-    import SkipIcon from '~icons/bi/skip-forward'
-    import Overlay from "../../components/overlay.svelte";;
+    import RushIcon from '~icons/nimbus/fire';
+    import TimerIcon from '~icons/material-symbols/timer-outline';
+    import SkipIcon from '~icons/bi/skip-forward';
+    import Overlay from "../../components/overlay.svelte";
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
     import { browser } from '$app/environment';
