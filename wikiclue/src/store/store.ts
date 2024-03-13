@@ -39,11 +39,19 @@ export const authHandlers = {
 			email,
 			username,
 			gameinfo: {
-				currentstreak: 0,
-				daily: [0, 0, 0, 0, 0, 0, 0],
-				gamesplayed: 0,
-				lastsolve: Timestamp.fromDate(new Date()),
-				levels: 1,
+				daily: {
+					currentstreak: 0,
+					daily: [0, 0, 0, 0, 0, 0],
+					played: 0,
+					won: 0,
+					lastsolve: Timestamp.fromDate(new Date()),
+					lastplay: Timestamp.fromDate(new Date(new Date().getTime() - 86400000)),
+					currentGuesses: 6
+				},
+				currenteasylevel: 1,
+				currentmediumlevel: 1,
+				currenthardlevel: 1,
+				totallevels: 0,
 				maxstreak: 0,
 				rush: 0
 			}
