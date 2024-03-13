@@ -62,7 +62,7 @@
     </div>
     <div class="buttons-container">
         <button on:click={()=>goto("/add-friends")}>Add Friends</button>
-        <button>View Leaderboards</button>
+        <button on:click={()=>goto("/leaderboard")}>View Leaderboards</button>
     </div>
     {#if $isOverlayOpen && levelsOpen}
         <Overlay header="Levels" onClose={() => {isOverlayOpen.set(false); levelsOpen = false;}}>
