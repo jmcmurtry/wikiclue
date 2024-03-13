@@ -8,19 +8,25 @@
   let newPassword = "";
   let confirmNewPassword = "";
   let errorMessage = "";
+
+  const needRecentLogin = writable(false);
   let recentLoginEmail = "";
   let recentLoginPassword = "";
-  const needRecentLogin = writable(false);
+  let recentLoginErrorMessage = "";
 
   async function changePasswordClicked(){
     try {
       if (!currentPassword || !newPassword || !confirmNewPassword) {
-          errorMessage = "Please ensure that you fill in all fields.";
-          return;
+        errorMessage = "Please ensure that you fill in all fields.";
+        return;
       }
       if (newPassword !== confirmNewPassword) {
-          errorMessage = "Your new passwords do not match. Please try again.";
-          return;
+        errorMessage = "Your new passwords do not match. Please try again.";
+        return;
+      }
+      if (currentPassword === newPassword){
+        errorMessage = "Cannot use your current password.";
+        return;
       }
       await authHandlers.changePassword(newPassword);
       currentPassword = "";
@@ -32,9 +38,36 @@
         errorMessage = "Password Reset Failed - Weak Password";
       } else if (error.message === "Firebase: Error (auth/requires-recent-login)."){
         needRecentLogin.set(true);
-        // errorMessage = "Invalid email, try again.";
       } else {
-          errorMessage = error.message;
+        errorMessage = error.message;
+      }
+    }
+  }
+
+  async function recentLogin(){
+    try {
+      if (!recentLoginEmail || !recentLoginPassword) {
+        errorMessage = "Please ensure that you fill in all fields.";
+        return;
+      }
+      await authHandlers.verifyLogin(recentLoginEmail, recentLoginPassword);
+      recentLoginEmail = "";
+      recentLoginPassword = "";
+      recentLoginErrorMessage = "";
+      needRecentLogin.set(false);
+      currentPassword = "";
+      newPassword = "";
+      confirmNewPassword = "";
+      errorMessage = "";
+    } catch (error: any) {
+      if (error.message === "Firebase: Error (auth/invalid-credential)."){
+        recentLoginErrorMessage = "Invalid password, try again.";
+      } else if (error.message === "Firebase: Error (auth/invalid-email)."){
+        recentLoginErrorMessage = "Invalid email, try again.";
+      } else if (error.message === "Firebase: Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later. (auth/too-many-requests)."){
+        recentLoginErrorMessage = "Too many unsuccessful login attempts, this account is temporarily locked.";
+      } else {
+        recentLoginErrorMessage = error.message;
       }
     }
   }
@@ -58,11 +91,15 @@
   </form>
   {#if $needRecentLogin}
     <Overlay header="Verify yourself by logging in" onClose={() => {needRecentLogin.set(false);}}>
+        {#if recentLoginErrorMessage}
+          <p class="error-message">{recentLoginErrorMessage}</p>
+        {/if}
         <p class ="input-label">Email</p>
         <input type="text" class="login-input" placeholder="Enter your email..." bind:value={recentLoginEmail}/>
         <p class ="input-label">Password</p>
         <input type="password" class="login-input" placeholder="Enter your password..." bind:value={recentLoginPassword}/>
-        <button class="popup-button">Kill me :)</button>
+        <button on:click={() => recentLogin()}>Verify Me!</button>
+
     </Overlay>
   {/if}
 </div>

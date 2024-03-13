@@ -30,6 +30,9 @@ export const authHandlers = {
 	forgotPasswordEmail: async (email: string) => {
 		await sendPasswordResetEmail(auth, email);
 	},
+	verifyLogin: async (email: string, password: string) => {
+		await signInWithEmailAndPassword(auth, email, password);
+	},
 	changePassword: async (password: string) => {
 		const user = auth.currentUser;
 		if (user) {
