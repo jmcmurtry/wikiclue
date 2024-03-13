@@ -3,7 +3,7 @@
     import RushIcon from '~icons/nimbus/fire'
     import TimerIcon from '~icons/material-symbols/timer-outline'
     import SkipIcon from '~icons/bi/skip-forward'
-    import Overlay from "../../components/overlay.svelte";
+    import Overlay from "../../components/overlay.svelte";;
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
     import { browser } from '$app/environment';
@@ -11,7 +11,7 @@
 
     const isOverlayOpen = writable(false);
     let searchTerm = "";
-    const wordsToFind = ["Sample", "Words"]; // this will need to change to actual algo code
+    let wordsToFind = ["", ""];
     let skipsRemaining: number;
     let timeRemaining: number;
     let streakCount: number;
@@ -125,16 +125,16 @@
         }
     }
 
-    function loadNextRound() {
+    async function loadNextRound() {
         rush.timeRemaining.subscribe(value => {
             timeRemaining = value;
         });
         gameOver = false;
         searchTerm = "";
-        // need to use actual function to generate new words
-        wordsToFind[0] = "New";
-        wordsToFind[1] = "Round";
-        //
+        const response = await fetch("/");
+        const words = await response.json();
+        wordsToFind[0] = words.word1;
+        wordsToFind[1] = words.word2;
         setWordsToFind();
         startTimer();
     }

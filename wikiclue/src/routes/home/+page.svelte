@@ -16,22 +16,22 @@
 	export let rushOpen = false;
 	const isOverlayOpen = writable(false);
 
-	function playRush() {
-		if (browser) {
-			rush.streakCount.subscribe((value) => {
-				sessionStorage.setItem('streakCount', JSON.stringify(value));
-			});
-			rush.timeRemaining.subscribe((value) => {
-				sessionStorage.setItem('timeRemaining', JSON.stringify(value));
-			});
+    async function playRush() {
+        if (browser) {
+            rush.streakCount.subscribe(value => {
+                sessionStorage.setItem('streakCount', JSON.stringify(value));
+            });
+            rush.timeRemaining.subscribe(value => {
+                sessionStorage.setItem('timeRemaining', JSON.stringify(value));
+            });
 
             rush.skipsRemaining.subscribe(value => {
                 sessionStorage.setItem('skipsRemaining', JSON.stringify(value));
             });
-            // Will need to change this to some function that actually generates random words
-            sessionStorage.setItem('firstWord', JSON.stringify("First"));
-            sessionStorage.setItem('secondWord', JSON.stringify("Second"));
-            //
+            const response = await fetch("/");
+            const words = await response.json();
+            sessionStorage.setItem('firstWord', JSON.stringify(words.word1));
+            sessionStorage.setItem('secondWord', JSON.stringify(words.word2));
             goto("/rush");
         }
     }
