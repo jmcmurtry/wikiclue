@@ -43,12 +43,12 @@ h1 {
 }
 
 .leader-name {
-	font-size: 1.2rem;
+	font-size: 0.75rem;
 	text-align: left;
 }
 
 .leader-score {
-    font-size: 1.2rem;
+    font-size: 0.75rem;
     float: right;
 }
 
