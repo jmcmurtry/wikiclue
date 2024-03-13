@@ -9,7 +9,7 @@
   <form>
       <h1>User Settings</h1>
       <button on:click={()=>window.location.href = '/change-password'}>Change Password</button>
-      <button on:click={()=>console.log("dummy button, replace")}>Change Username</button>
+      <button on:click={()=>window.location.href = '/change-username'}>Change Username</button>
   </form>
 </div>
 
