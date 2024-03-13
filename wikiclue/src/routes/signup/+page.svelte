@@ -1,35 +1,40 @@
 <script lang="ts">
     import { authHandlers } from "../../store/store";
-
+    import { allowOnMount } from '../../store/mount';
     let email = "";
-    let username = "";
+    let name = "";
     let password = "";
     let confirmPassword = "";
     let errorMessage = "";
 
     async function signUp(){
         try {
-            if (!email || !username || !password || !confirmPassword) {
+            if (!email || !name || !password || !confirmPassword) {
                 errorMessage = "Please ensure that you fill in all fields.";
                 return;
             }
             if (password !== confirmPassword) {
                 errorMessage = "Your passwords do not match. Please try again.";
+                password = "";
+                confirmPassword = "";
                 return;
             }
-            await authHandlers.signup(email, password);
-            email = "";
-            username = "";
-            password = "";
-            confirmPassword = "";
+            allowOnMount.set(false);
+            const userCredential = await authHandlers.signup(email, password);
+            await authHandlers.setUser(userCredential.user.uid, email, name);
             errorMessage = "";
+            allowOnMount.set(true);
         } catch (error: any) {
             if (error.message === "Firebase: Error (auth/invalid-email)."){
                 errorMessage = "Please enter a valid email address.";
+                email = "";
             } else if (error.message === "Firebase: Error (auth/email-already-in-use)."){
                 errorMessage = "This email is already in use. Please try another email.";
+                email = "";
             } else if (error.message === "Firebase: Password should be at least 6 characters (auth/weak-password)."){
                 errorMessage = "Your password is too short. Please enter a password that is at least 6 characters long.";
+                password = "";
+                confirmPassword = "";
             } else {
                 errorMessage = error.message;
             }
@@ -45,8 +50,8 @@
         {/if}
         <p class ="input-label">Email</p>
         <input type="text" class="signup-input" placeholder="Enter email..." bind:value={email}/>
-        <p class ="input-label">Username</p>
-        <input type="text" class="signup-input" placeholder="Enter username..." bind:value={username}/>
+        <p class ="input-label">name</p>
+        <input type="text" class="signup-input" placeholder="Enter name..." bind:value={name}/>
         <p class ="input-label">Password</p>
         <input type="password" class="signup-input" placeholder="Enter password..." bind:value={password}/>
         <p class ="input-label">Confirm</p>
