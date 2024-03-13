@@ -8,8 +8,8 @@
 <div class="user-settings-page">
   <form>
       <h1>User Settings</h1>
-      <button on:click={()=>window.location.href = '/change-password'}>Change Password</button>
-      <button on:click={()=>window.location.href = '/change-username'}>Change Username</button>
+      <button on:click={()=>setTimeout(() => goto('/change-password'), 0)}>Change Password</button>
+      <button on:click={()=>setTimeout(() => goto('/change-username'), 0)}>Change Username</button>
   </form>
 </div>
 
