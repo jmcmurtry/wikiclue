@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
     import { authHandlers } from "../../store/store";
     import { allowOnMount } from '../../store/mount';
     let email = "";
@@ -21,9 +22,11 @@
             }
             allowOnMount.set(false);
             const userCredential = await authHandlers.signup(email, password);
+            goto('/home');
             await authHandlers.setUser(userCredential.user.uid, email, name);
-            errorMessage = "";
             allowOnMount.set(true);
+            errorMessage = "";
+            
         } catch (error: any) {
             if (error.message === "Firebase: Error (auth/invalid-email)."){
                 errorMessage = "Please enter a valid email address.";
