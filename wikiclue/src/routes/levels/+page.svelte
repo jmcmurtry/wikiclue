@@ -100,7 +100,7 @@
             <p class="search-words">{wordsToFind[1]}</p>
         </div>
         {#if !$levelOver}
-            <input type="text" class="search-bar" placeholder="Enter the Wikipedia URL here..." bind:value={searchTerm}/>
+            <input type="text" class="search-bar" placeholder="Enter the Wikipedia page title here..." bind:value={searchTerm}/>
         {:else}
             <input type="text" class="search-bar" placeholder="Level Over" bind:value={searchTerm} disabled={true}/>
         {/if}
