@@ -3,14 +3,14 @@
     import { authHandlers } from "../../store/store";
     import { allowOnMount } from '../../store/mount';
     let email = "";
-    let name = "";
+    let username = "";
     let password = "";
     let confirmPassword = "";
     let errorMessage = "";
 
     async function signUp(){
         try {
-            if (!email || !name || !password || !confirmPassword) {
+            if (!email || !username || !password || !confirmPassword) {
                 errorMessage = "Please ensure that you fill in all fields.";
                 return;
             }
@@ -23,7 +23,7 @@
             allowOnMount.set(false);
             const userCredential = await authHandlers.signup(email, password);
             goto('/home');
-            await authHandlers.setUser(userCredential.user.uid, email, name);
+            await authHandlers.setUser(userCredential.user.uid, email, username);
             allowOnMount.set(true);
             errorMessage = "";
             
@@ -53,8 +53,8 @@
         {/if}
         <p class ="input-label">Email</p>
         <input type="text" class="signup-input" placeholder="Enter email..." bind:value={email}/>
-        <p class ="input-label">name</p>
-        <input type="text" class="signup-input" placeholder="Enter name..." bind:value={name}/>
+        <p class ="input-label">Username</p>
+        <input type="text" class="signup-input" placeholder="Enter username..." bind:value={username}/>
         <p class ="input-label">Password</p>
         <input type="password" class="signup-input" placeholder="Enter password..." bind:value={password}/>
         <p class ="input-label">Confirm</p>

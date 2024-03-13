@@ -30,14 +30,14 @@ export const authHandlers = {
 	forgotPasswordEmail: async (email: string) => {
 		await sendPasswordResetEmail(auth, email);
 	},
-	setUser: async (id: string, email: string, name: string) => {
+	setUser: async (id: string, email: string, username: string) => {
 		const userCollection = collection(db, 'users');
 
 		const userDocRef = doc(userCollection, id);
 		console.log(userDocRef);
 		await setDoc(userDocRef, {
 			email,
-			name,
+			username,
 			gameinfo: {
 				currentstreak: 0,
 				daily: [0, 0, 0, 0, 0, 0, 0],
