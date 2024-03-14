@@ -10,7 +10,7 @@
 
     const isOverlayOpen = writable(false);
 
-    function play() {
+    async function play() {
         if (browser) {
             guestPlay.streakCount.subscribe(value => {
                 sessionStorage.setItem('streakCount', JSON.stringify(value));
@@ -22,10 +22,10 @@
             guestPlay.skipsRemaining.subscribe(value => {
                 sessionStorage.setItem('skipsRemaining', JSON.stringify(value));
             });
-            // Will need to change this to some function that actually generates random words
-            sessionStorage.setItem('firstWord', JSON.stringify("First"));
-            sessionStorage.setItem('secondWord', JSON.stringify("Second"));
-            //
+            const response = await fetch("/api/word-generation");
+            const words = await response.json();
+            sessionStorage.setItem('firstWord', JSON.stringify(words.word1));
+            sessionStorage.setItem('secondWord', JSON.stringify(words.word2));
             goto("/play");
         }
     }

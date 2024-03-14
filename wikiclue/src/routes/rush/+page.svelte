@@ -11,7 +11,7 @@
 
     const isOverlayOpen = writable(false);
     let searchTerm = "";
-    const wordsToFind = ["Sample", "Words"]; // this will need to change to actual algo code
+    let wordsToFind = ["", ""];
     let skipsRemaining: number;
     let timeRemaining: number;
     let streakCount: number;
@@ -125,16 +125,17 @@
         }
     }
 
-    function loadNextRound() {
+    async function loadNextRound() {
         rush.timeRemaining.subscribe(value => {
             timeRemaining = value;
         });
         gameOver = false;
         searchTerm = "";
-        // need to use actual function to generate new words
-        wordsToFind[0] = "New";
-        wordsToFind[1] = "Round";
-        //
+        const response = await fetch("/api/word-generation");
+        const words = await response.json();
+        wordsToFind[0] = words.word1;
+        wordsToFind[1] = words.word2;
+        setWordsToFind();
         setWordsToFind();
         startTimer();
     }
