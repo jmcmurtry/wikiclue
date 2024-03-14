@@ -6,8 +6,10 @@ import {
 	updatePassword,
 	type User
 } from 'firebase/auth';
+import { Timestamp } from 'firebase/firestore';
+import { collection, doc, setDoc } from 'firebase/firestore';
 import { writable } from 'svelte/store';
-import { auth } from '../firebase/firebase';
+import { auth, db } from '../firebase/firebase';
 import { goto } from '$app/navigation';
 
 export const authStore = writable<{ user: User | null }>({
@@ -16,8 +18,7 @@ export const authStore = writable<{ user: User | null }>({
 
 export const authHandlers = {
 	signup: async (email: string, password: string) => {
-		await createUserWithEmailAndPassword(auth, email, password);
-		goto('/home');
+		return await createUserWithEmailAndPassword(auth, email, password);
 	},
 	login: async (email: string, password: string) => {
 		await signInWithEmailAndPassword(auth, email, password);
@@ -30,6 +31,32 @@ export const authHandlers = {
 	forgotPasswordEmail: async (email: string) => {
 		await sendPasswordResetEmail(auth, email);
 	},
+	setUser: async (id: string, email: string, username: string) => {
+		const userCollection = collection(db, 'users');
+
+		const userDocRef = doc(userCollection, id);
+		await setDoc(userDocRef, {
+			email,
+			username,
+			gameinfo: {
+				daily: {
+					currentstreak: 0,
+					daily: [0, 0, 0, 0, 0, 0],
+					played: 0,
+					won: 0,
+					lastsolve: Timestamp.fromDate(new Date()),
+					lastplay: Timestamp.fromDate(new Date(new Date().getTime() - 86400000)),
+					currentGuesses: 6
+				},
+				currenteasylevel: 1,
+				currentmediumlevel: 1,
+				currenthardlevel: 1,
+				totallevels: 0,
+				maxstreak: 0,
+				rush: 0
+			}
+		});
+	},
 	verifyLogin: async (email: string, password: string) => {
 		await signInWithEmailAndPassword(auth, email, password);
 	},
@@ -39,7 +66,7 @@ export const authHandlers = {
 			await updatePassword(user, password);
 			goto('/login');
 		} else {
-			console.error("No user is currently signed in.");
+			console.error('No user is currently signed in.');
 		}
 	}
 };
