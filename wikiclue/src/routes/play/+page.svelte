@@ -131,7 +131,7 @@
         });
         gameOver = false;
         searchTerm = "";
-        const response = await fetch("/");
+        const response = await fetch("/api/word-generation");
         const words = await response.json();
         wordsToFind[0] = words.word1;
         wordsToFind[1] = words.word2;

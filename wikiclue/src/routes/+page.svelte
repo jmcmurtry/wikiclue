@@ -22,7 +22,7 @@
             guestPlay.skipsRemaining.subscribe(value => {
                 sessionStorage.setItem('skipsRemaining', JSON.stringify(value));
             });
-            const response = await fetch("/");
+            const response = await fetch("/api/word-generation");
             const words = await response.json();
             sessionStorage.setItem('firstWord', JSON.stringify(words.word1));
             sessionStorage.setItem('secondWord', JSON.stringify(words.word2));
