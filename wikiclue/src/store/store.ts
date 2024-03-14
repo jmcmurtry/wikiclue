@@ -3,6 +3,7 @@ import {
 	sendPasswordResetEmail,
 	signInWithEmailAndPassword,
 	signOut,
+	updatePassword,
 	type User
 } from 'firebase/auth';
 import { Timestamp } from 'firebase/firestore';
@@ -34,7 +35,6 @@ export const authHandlers = {
 		const userCollection = collection(db, 'users');
 
 		const userDocRef = doc(userCollection, id);
-		console.log(userDocRef);
 		await setDoc(userDocRef, {
 			email,
 			username,
@@ -56,5 +56,17 @@ export const authHandlers = {
 				rush: 0
 			}
 		});
+	},
+	verifyLogin: async (email: string, password: string) => {
+		await signInWithEmailAndPassword(auth, email, password);
+	},
+	changePassword: async (password: string) => {
+		const user = auth.currentUser;
+		if (user) {
+			await updatePassword(user, password);
+			goto('/login');
+		} else {
+			console.error('No user is currently signed in.');
+		}
 	}
 };
