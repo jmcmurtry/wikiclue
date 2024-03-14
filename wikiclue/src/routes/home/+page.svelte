@@ -68,7 +68,7 @@
         <Overlay header="Levels" onClose={() => {isOverlayOpen.set(false); levelsOpen = false;}}>
             <p class="popup-description">In this game mode you will have unlimited time to try and complete 30 levels of increasing difficulty! Are you ready for the challenge?</p>
             <LevelsIcon style="font-size: 5.0rem; color: black; margin: 5%"/>
-            <button class="popup-button">Play Now!</button>
+            <button class="popup-button" on:click={() => goto("/levels")}>Play Now!</button>
         </Overlay>   
     {/if}
     {#if $isOverlayOpen && dailyOpen}
