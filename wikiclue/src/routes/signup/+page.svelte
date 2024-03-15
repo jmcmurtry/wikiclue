@@ -1,6 +1,7 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
     import { authHandlers } from "../../store/store";
-
+    import { allowOnMount } from '../../store/mount';
     let email = "";
     let username = "";
     let password = "";
@@ -15,21 +16,28 @@
             }
             if (password !== confirmPassword) {
                 errorMessage = "Your passwords do not match. Please try again.";
+                password = "";
+                confirmPassword = "";
                 return;
             }
-            await authHandlers.signup(email, password);
-            email = "";
-            username = "";
-            password = "";
-            confirmPassword = "";
+            allowOnMount.set(false);
+            const userCredential = await authHandlers.signup(email, password);
+            goto('/home');
+            await authHandlers.setUser(userCredential.user.uid, email, username);
+            allowOnMount.set(true);
             errorMessage = "";
+            
         } catch (error: any) {
             if (error.message === "Firebase: Error (auth/invalid-email)."){
                 errorMessage = "Please enter a valid email address.";
+                email = "";
             } else if (error.message === "Firebase: Error (auth/email-already-in-use)."){
                 errorMessage = "This email is already in use. Please try another email.";
+                email = "";
             } else if (error.message === "Firebase: Password should be at least 6 characters (auth/weak-password)."){
                 errorMessage = "Your password is too short. Please enter a password that is at least 6 characters long.";
+                password = "";
+                confirmPassword = "";
             } else {
                 errorMessage = error.message;
             }
