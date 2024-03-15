@@ -2,7 +2,8 @@
 	import HeaderBar from '../../components/headerBar.svelte';
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
-	import DailyEnd from '../../components/dailyEnd.svelte';
+	import Overlay from '../../components/overlay.svelte';
+	import { goto } from '$app/navigation';
 
 	const isOverlayOpen = writable(false);
 	let searchTerm = '';
@@ -164,10 +165,47 @@
 		{/if}
 	</div>
 	{#if $isOverlayOpen && gameOver}
-		<DailyEnd {statistics} distribution={guessDistribution} />
+		<Overlay
+			header="Daily Challenge"
+			onClose={() => {
+				goto('/home');
+			}}
+		>
+			<p class="popup-text">Statistics</p>
+			<div class="stats-container">
+				{#each Object.entries(statistics) as [key, value]}
+					<div class="stat">
+						<h3 class="stat-figure">{value}</h3>
+						<p class="stat-name">{key}</p>
+					</div>
+				{/each}
+			</div>
+			<p class="popup-text">Guess Distribution</p>
+			<div class="guess-distribution">
+				{#each guessDistribution as amount, index}
+					<div class="daily-guess">
+						<p class="guess-amount">{index + 1}</p>
+						<div class="guess-bar" style="width: calc({amount} / {4} * 80%);">
+							<p class="times-guessed">
+								{amount}
+							</p>
+						</div>
+					</div>
+				{/each}
+			</div>
+
+			<div class="bottom-options">
+				<button
+					on:click={() => {
+						goto('/home');
+					}}>Return to Main Menu</button
+				>
+			</div>
+		</Overlay>
 	{/if}
 </div>
 
 <style>
 	@import '../../styles/dailyPageStyles.css';
+	@import '../../styles/componentStyles/endScreenStyles.css';
 </style>
