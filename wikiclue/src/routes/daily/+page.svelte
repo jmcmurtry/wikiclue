@@ -122,10 +122,6 @@
 	}
 
 	function onEnterPressed(event: KeyboardEvent) {
-		if (event.key === 'Enter' && $isOverlayOpen) {
-			isOverlayOpen.set(false);
-			return;
-		}
 		if (event.key === 'Enter' && !$isOverlayOpen) {
 			confirmPressed();
 			return;
