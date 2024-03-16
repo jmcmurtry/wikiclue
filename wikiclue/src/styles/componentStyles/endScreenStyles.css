@@ -4,12 +4,6 @@
 	text-align: center;
 }
 
-.score {
-	font-size: 1.6rem;
-	margin: 2%;
-	font-weight: 500;
-}
-
 .stats-container {
 	display: flex;
 	margin: 5px 0;
@@ -66,62 +60,6 @@
 	margin-right: 5px;
 	font-size: 0.8rem;
 	text-align: end;
-}
-
-.distribution-container {
-	width: 90%;
-	display: flex;
-	flex-wrap: wrap;
-	margin: 0.5% 0;
-	overflow-y: auto;
-	max-height: calc(50px + 10vh);
-}
-
-.distribution-container::-webkit-scrollbar {
-	width: 10px;
-}
-.distribution-container::-webkit-scrollbar-track {
-	background: #f1f1f1;
-	border-radius: 5px;
-}
-.distribution-container::-webkit-scrollbar-thumb {
-	background: #888;
-	border-radius: 5px;
-}
-
-.guess {
-	width: 15%;
-	margin: 5px 2.5%;
-	box-sizing: border-box;
-	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-	aspect-ratio: 1;
-	align-items: center;
-	text-align: center;
-}
-
-.guess-number {
-	text-shadow: #888;
-	margin: 0;
-	font-weight: 300;
-	padding: calc(27.5%);
-}
-
-.level-answer {
-	text-align: center;
-	padding: 1vh;
-	width: 90%;
-}
-
-.correct {
-	background-color: var(--correct-answer);
-}
-
-.pass {
-	background-color: var(--pass);
-}
-
-.wrong {
-	background-color: var(--wrong-answer);
 }
 
 .bottom-options {

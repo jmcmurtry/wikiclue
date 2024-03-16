@@ -1,20 +1,20 @@
 <script lang="ts">
-    import HeaderBar from "../../components/headerBar.svelte";
-    import LevelsIcon from '~icons/carbon/skill-level-advanced'
-    import DailyIcon from '~icons/ion/calendar-outline'
-    import RushIcon from '~icons/nimbus/fire'
-    import TimerIcon from '~icons/material-symbols/timer-outline'
-    import SkipIcon from '~icons/bi/skip-forward'
-    import Overlay from "../../components/overlay.svelte";
-    import { goto } from '$app/navigation';
-	import { writable } from "svelte/store";
-    import { browser } from '$app/environment';
-    import { rush } from "../../store/gameplay";
+	import HeaderBar from '../../components/headerBar.svelte';
+	import LevelsIcon from '~icons/carbon/skill-level-advanced';
+	import DailyIcon from '~icons/ion/calendar-outline';
+	import RushIcon from '~icons/nimbus/fire';
+	import TimerIcon from '~icons/material-symbols/timer-outline';
+	import SkipIcon from '~icons/bi/skip-forward';
+	import Overlay from '../../components/overlay.svelte';
+	import { goto } from '$app/navigation';
+	import { writable } from 'svelte/store';
+	import { browser } from '$app/environment';
+	import { rush } from '../../store/gameplay';
 
-    export let levelsOpen = false;
-    export let dailyOpen = false;
-    export let rushOpen = false;
-    const isOverlayOpen = writable(false);
+	export let levelsOpen = false;
+	export let dailyOpen = false;
+	export let rushOpen = false;
+	const isOverlayOpen = writable(false);
 
     async function playRush() {
         if (browser) {
@@ -75,7 +75,7 @@
         <Overlay header="The Daily" onClose={() => {isOverlayOpen.set(false); dailyOpen = false;}}>
             <p class="popup-description">Solve the daily problem as fast as possible! Come back everyday to build your streak!</p>
             <DailyIcon style="font-size: 6rem; color: black; margin: 10%"/>
-            <button class="popup-button">Play Now!</button>
+            <button class="popup-button" on:click={()=>goto("/daily")}>Play Now!</button>
         </Overlay>   
     {/if}
     {#if $isOverlayOpen && rushOpen}
@@ -105,5 +105,5 @@
 </div>
 
 <style>
-    @import '../../styles/homePageStyles.css';
+	@import '../../styles/homePageStyles.css';
 </style>
