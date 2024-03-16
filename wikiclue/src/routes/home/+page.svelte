@@ -10,11 +10,21 @@
 	import { writable } from "svelte/store";
     import { browser } from '$app/environment';
     import { rush } from "../../store/gameplay";
+    import { collection, doc, getDoc } from 'firebase/firestore';
+	import { auth, db } from "../../firebase/firebase";
+	import { onMount } from "svelte";
 
-    export let levelsOpen = false;
-    export let dailyOpen = false;
-    export let rushOpen = false;
+    let levelsOpen = false;
+    let dailyOpen = false;
+    let rushOpen = false;
+    let levelsSelectorOpen = false;
     const isOverlayOpen = writable(false);
+    let userLevelsData: any;
+    let difficultySelected = "easy";
+
+    onMount (async () => {
+        await getUserLevelsData();
+    });
 
     async function playRush() {
         if (browser) {
@@ -34,6 +44,28 @@
             sessionStorage.setItem('secondWord', JSON.stringify(words.word2));
             goto("/rush");
         }
+    }
+
+    async function getUserLevelsData() {
+        await auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                const userCollection = collection(db, 'users');
+                const userDocRef = doc(userCollection, user.uid);
+                try {
+                    const doc = await getDoc(userDocRef);
+                    if (doc.exists()) {
+                        userLevelsData = doc.data().gameinfo;
+                        console.log("Document data:", userLevelsData);
+                    } else {
+                        console.log("No such document!");
+                    }
+                } catch (error) {
+                    console.log("Error getting document:", error);
+                }
+            } else {
+                console.log("User not available");
+            }
+        });
     }
 </script>
 
@@ -67,6 +99,37 @@
     {#if $isOverlayOpen && levelsOpen}
         <Overlay header="Levels" onClose={() => {isOverlayOpen.set(false); levelsOpen = false;}}>
             <p class="popup-description">In this game mode you will have unlimited time to try and complete 30 levels of increasing difficulty! Are you ready for the challenge?</p>
+            <LevelsIcon style="font-size: 5.0rem; color: black; margin: 5%"/>
+            <button class="popup-button" on:click={() => {levelsOpen = false; levelsSelectorOpen = true;}}>Select Difficulty</button>
+        </Overlay>   
+    {/if}
+    {#if $isOverlayOpen && levelsSelectorOpen}
+        <Overlay header="Select Difficulty" onClose={() => {isOverlayOpen.set(false); levelsSelectorOpen = false;}}>
+            <div class="difficulty-selector">
+                <div>
+                    <input id="easy" name="difficulty" value="easy" type="radio" bind:group={difficultySelected}/>
+                    <label for="easy">Easy</label>
+                </div>
+                <div>
+                    <input id="medium" name="difficulty" value="medium" type="radio" bind:group={difficultySelected}/>
+                    <label for="medium">Medium</label>
+                </div>
+                <div>
+                    <input  id="hard" name="difficulty" value="hard" type="radio" bind:group={difficultySelected}/>
+                    <label for="hard" class="disabled">Hard</label>
+                </div>
+            </div>
+            <p class="popup-description">
+                {#if difficultySelected === 'easy'}
+                    You are currently on level {userLevelsData.currenteasylevel} in Easy!
+                {:else if difficultySelected === 'medium'}
+                    You are currently on level {userLevelsData.currentmediumlevel} in Medium!
+                {:else if difficultySelected === 'hard'}
+                    You are currently on level {userLevelsData.currenthardlevel} in Hard!
+                {:else}
+                    Please select a difficulty!
+                {/if}
+            </p>
             <LevelsIcon style="font-size: 5.0rem; color: black; margin: 5%"/>
             <button class="popup-button" on:click={() => goto("/levels")}>Play Now!</button>
         </Overlay>   

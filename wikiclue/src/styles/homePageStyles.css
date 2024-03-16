@@ -92,3 +92,26 @@ button:hover {
 	margin-left: 10%;
 	text-align: center;
 }
+
+.difficulty-selector {
+	display: flex;
+	justify-content: space-around;
+	margin: 5%;
+	font-size: 1.3rem;
+	gap: 15px;
+}
+
+.difficulty-selector input[type='radio'] {
+	display: none;
+}
+
+.difficulty-selector label {
+	cursor: pointer;
+	padding: 5px 10px;
+	border: 2px solid black;
+}
+
+.difficulty-selector input[type='radio']:checked ~ label {
+	background-color: black;
+	color: white;
+}

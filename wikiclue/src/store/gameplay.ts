@@ -7,17 +7,17 @@ const guestSkipsRemaining = writable(3);
 
 // Levels Variables if needed
 // levelWords is only needed for now until the db is setup
-const levelWords =  [
-  ['apple', 'banana'],
-  ['cat', 'dog'],
-  ['sun', 'moon'],
-  ['tree', 'flower'],
-  ['coffee', 'tea'],
-  ['book', 'pen'],
-  ['mountain', 'river'],
-  ['cake', 'cookie'],
-  ['music', 'art'],
-  ['computer', 'phone']
+const levelWords = [
+	['apple', 'banana'],
+	['cat', 'dog'],
+	['sun', 'moon'],
+	['tree', 'flower'],
+	['coffee', 'tea'],
+	['book', 'pen'],
+	['mountain', 'river'],
+	['cake', 'cookie'],
+	['music', 'art'],
+	['computer', 'phone']
 ];
 const currentLevel = writable(1);
 
