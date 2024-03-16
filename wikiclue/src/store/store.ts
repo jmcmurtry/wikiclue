@@ -6,7 +6,7 @@ import {
 	updatePassword,
 	type User
 } from 'firebase/auth';
-import { Timestamp } from 'firebase/firestore';
+import { getDoc, Timestamp } from 'firebase/firestore';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { writable } from 'svelte/store';
 import { auth, db } from '../firebase/firebase';
@@ -56,6 +56,21 @@ export const authHandlers = {
 				rush: 0
 			}
 		});
+	},
+	getUserCurrentLevelsData: async (id: string) => {
+		const userCollection = collection(db, 'users');
+		const userDocRef = doc(userCollection, id);
+		try {
+			const doc = await getDoc(userDocRef);
+			if (doc.exists()) {
+				const { currenteasylevel, currentmediumlevel, currenthardlevel } = doc.data().gameinfo;
+				return [currenteasylevel, currentmediumlevel, currenthardlevel];
+			} else {
+				console.log('No such document!');
+			}
+		} catch (error) {
+			console.log('Error getting document:', error);
+		}
 	},
 	verifyLogin: async (email: string, password: string) => {
 		await signInWithEmailAndPassword(auth, email, password);

@@ -10,9 +10,9 @@
 	import { writable } from "svelte/store";
     import { browser } from '$app/environment';
     import { rush } from "../../store/gameplay";
-    import { collection, doc, getDoc } from 'firebase/firestore';
-	import { auth, db } from "../../firebase/firebase";
+	import { auth } from "../../firebase/firebase";
 	import { onMount } from "svelte";
+    import { authHandlers } from "../../store/store";
 
     let levelsOpen = false;
     let dailyOpen = false;
@@ -23,7 +23,14 @@
     let difficultySelected = "easy";
 
     onMount (async () => {
-        await getUserLevelsData();
+        await auth.onAuthStateChanged(async (user) => {
+            const userData = user;
+            if(userData){
+                userLevelsData = await authHandlers.getUserCurrentLevelsData(userData.uid);
+            }
+            // Would need to use this functionality to pre load levels data with words from database
+            // depending on if the user selects easy medium or hard
+        });
     });
 
     async function playRush() {
@@ -44,28 +51,6 @@
             sessionStorage.setItem('secondWord', JSON.stringify(words.word2));
             goto("/rush");
         }
-    }
-
-    async function getUserLevelsData() {
-        await auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                const userCollection = collection(db, 'users');
-                const userDocRef = doc(userCollection, user.uid);
-                try {
-                    const doc = await getDoc(userDocRef);
-                    if (doc.exists()) {
-                        userLevelsData = doc.data().gameinfo;
-                        console.log("Document data:", userLevelsData);
-                    } else {
-                        console.log("No such document!");
-                    }
-                } catch (error) {
-                    console.log("Error getting document:", error);
-                }
-            } else {
-                console.log("User not available");
-            }
-        });
     }
 </script>
 
@@ -121,11 +106,11 @@
             </div>
             <p class="popup-description">
                 {#if difficultySelected === 'easy'}
-                    You are currently on level {userLevelsData.currenteasylevel} in Easy!
+                    You are currently on level {userLevelsData[0]} in Easy!
                 {:else if difficultySelected === 'medium'}
-                    You are currently on level {userLevelsData.currentmediumlevel} in Medium!
+                    You are currently on level {userLevelsData[1]} in Medium!
                 {:else if difficultySelected === 'hard'}
-                    You are currently on level {userLevelsData.currenthardlevel} in Hard!
+                    You are currently on level {userLevelsData[2]} in Hard!
                 {:else}
                     Please select a difficulty!
                 {/if}
