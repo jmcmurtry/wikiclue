@@ -62,7 +62,7 @@
     </div>
     <div class="buttons-container">
         <button on:click={()=>goto("/add-friends")}>Add Friends</button>
-        <button>View Leaderboards</button>
+        <button on:click={()=>goto("/leaderboard")}>View Leaderboards</button>
     </div>
     {#if $isOverlayOpen && levelsOpen}
         <Overlay header="Levels" onClose={() => {isOverlayOpen.set(false); levelsOpen = false;}}>
@@ -81,18 +81,24 @@
     {#if $isOverlayOpen && rushOpen}
         <Overlay header="Rush" onClose={() => {isOverlayOpen.set(false); rushOpen = false;}}>
             <div class="popup-row">
-                <RushIcon style="font-size: 2.5em; color: black"/>
+                <div class="icon-container">
+                    <RushIcon style="font-size: 2.5em; color: black"/>
+                </div>
                 <p class="popup-text">Try to achieve the longest streak you can</p>
             </div>
             <div class="popup-row">
-                <TimerIcon style="font-size: 2.5em; color: black"/>
+                <div class="icon-container">
+                    <TimerIcon style="font-size: 2.5em; color: black"/>
+                </div>
                 <p class="popup-text">You are allowed 3 skips per game</p>
             </div>
             <div class="popup-row">
-                <SkipIcon style="font-size: 2.5em; color: black"/>
+                <div class="icon-container">
+                    <SkipIcon style="font-size: 2.5em; color: black"/>
+                </div>
                 <p class="popup-text">You have up to 3 minutes per round</p>
             </div>
-            <button on:click={() => playRush()}>Play Now!</button>
+            <button class="popup-button" on:click={() => playRush()}>Play Now!</button>
         </Overlay>   
     {/if}
 </div>
