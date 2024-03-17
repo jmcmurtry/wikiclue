@@ -12,7 +12,7 @@
 
     onMount(() => {
       let unsubscribe: any;
-      const unsubscribeStore = allowOnMount.subscribe(value => {
+      const unsubscribeStore = allowOnMount.subscribe((value: any) => {
           if (!value) {
               if (unsubscribe) unsubscribe();
               return;
