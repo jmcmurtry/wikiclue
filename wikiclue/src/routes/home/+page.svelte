@@ -21,7 +21,7 @@
             rush.streakCount.subscribe(value => {
                 sessionStorage.setItem('streakCount', JSON.stringify(value));
             });
-            rush.timeRemaining.subscribe(value => {
+            rush.timeAllowed.subscribe(value => {
                 sessionStorage.setItem('timeRemaining', JSON.stringify(value));
             });
 
