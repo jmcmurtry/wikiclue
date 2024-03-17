@@ -7,7 +7,7 @@ import {
 	type User
 } from 'firebase/auth';
 import { isAdmin } from './admin';
-import { Timestamp } from 'firebase/firestore';
+import { addDoc, Timestamp } from 'firebase/firestore';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { writable } from 'svelte/store';
 import { auth, db } from '../firebase/firebase';
@@ -69,6 +69,17 @@ export const authHandlers = {
 			goto('/login');
 		} else {
 			console.error('No user is currently signed in.');
+		}
+	},
+	updateRushWins: async (words: string[], timeTaken: number, url: string) => {
+		try {
+			await addDoc(collection(db, 'rush-wins'), {
+				words,
+				timeTaken,
+				url
+			});
+		} catch (error) {
+			console.error('Error adding document: ', error);
 		}
 	}
 };

@@ -8,6 +8,7 @@
     import { onMount } from "svelte";
     import { browser } from '$app/environment';
     import { rush } from "../../store/gameplay";
+	import { authHandlers } from "../../store/store";
 
     const isOverlayOpen = writable(false);
     let searchTerm = "";
@@ -20,19 +21,23 @@
     let timerInterval: NodeJS.Timeout;
     let correctOverlay = false;
     let skippedOverlay = false;
+    let timeAllowed = 100;
 
     onMount(() => {
         loadStreakCount();
         loadTimeRemaining();
         loadSkipsRemaining();
         loadWordsToFind();
+        rush.timeAllowed.subscribe(value => {
+            timeAllowed = value;
+        });
         startTimer();
         window.addEventListener('beforeunload', handleBeforeUnload); 
     });
 
     function handleBeforeUnload(event: BeforeUnloadEvent) {
         if($isOverlayOpen) {
-            rush.timeRemaining.subscribe(value => {
+            rush.timeAllowed.subscribe(value => {
                 timeRemaining = value;
                 loadNextRound();
             });
@@ -109,10 +114,11 @@
         }
     }
 
-    function confirmPressed() {
+    async function confirmPressed() {
         incorrectAnswer = false;
         // will need to change the if statement to use actual wikipedia api function
         if (searchTerm.includes(wordsToFind[0]) && searchTerm.includes(wordsToFind[1])) {
+            await authHandlers.updateRushWins(wordsToFind, timeAllowed - timeRemaining, "put-real-wikipedia-url-here");
             clearInterval(timerInterval);
             streakCount++;
             isOverlayOpen.set(true);
@@ -126,7 +132,7 @@
     }
 
     async function loadNextRound() {
-        rush.timeRemaining.subscribe(value => {
+        rush.timeAllowed.subscribe(value => {
             timeRemaining = value;
         });
         gameOver = false;
