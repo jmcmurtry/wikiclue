@@ -131,6 +131,11 @@
 		}
 	}
 
+	function test2(word: string) {
+			searchResults.set([]);
+			searchTerm = word;
+	}
+
 	function endGame() {
 		formatOverlay();
 		isOverlayOpen.set(true);
@@ -169,7 +174,7 @@
 		<div class="dropdown">
 			<ul>
 			  {#each $searchResults as option}
-				<li>{option}</li>
+				<button on:click={() => test2(option)}>{option}</button>
 			  {/each}
 			</ul>
 		  </div>
