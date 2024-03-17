@@ -38,7 +38,7 @@
             rush.streakCount.subscribe(value => {
                 sessionStorage.setItem('streakCount', JSON.stringify(value));
             });
-            rush.timeRemaining.subscribe(value => {
+            rush.timeAllowed.subscribe(value => {
                 sessionStorage.setItem('timeRemaining', JSON.stringify(value));
             });
 
@@ -144,7 +144,6 @@
                 <div class="icon-container">
                     <SkipIcon style="font-size: 2.5em; color: black"/>
                 </div>
-                
                 <p class="popup-text">You have up to 3 minutes per round</p>
             </div>
             <button class="popup-button" on:click={() => playRush()}>Play Now!</button>

@@ -15,7 +15,7 @@
             guestPlay.streakCount.subscribe(value => {
                 sessionStorage.setItem('streakCount', JSON.stringify(value));
             });
-            guestPlay.timeRemaining.subscribe(value => {
+            guestPlay.timeAllowed.subscribe(value => {
                 sessionStorage.setItem('timeRemaining', JSON.stringify(value));
             });
 

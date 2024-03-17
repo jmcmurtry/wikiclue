@@ -6,7 +6,8 @@ import {
 	updatePassword,
 	type User
 } from 'firebase/auth';
-import { getDoc, Timestamp } from 'firebase/firestore';
+import { isAdmin } from './admin';
+import { addDoc, getDoc, Timestamp } from 'firebase/firestore';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { writable } from 'svelte/store';
 import { auth, db } from '../firebase/firebase';
@@ -21,8 +22,9 @@ export const authHandlers = {
 		return await createUserWithEmailAndPassword(auth, email, password);
 	},
 	login: async (email: string, password: string) => {
-		await signInWithEmailAndPassword(auth, email, password);
-		goto('/home');
+		const userCredential = await signInWithEmailAndPassword(auth, email, password);
+		const userClaims = await userCredential.user.getIdTokenResult();
+		isAdmin.set(userClaims.claims.user_id == import.meta.env.VITE_FIREBASE_ADMIN_ID);
 	},
 	logout: async () => {
 		await signOut(auth);
@@ -82,6 +84,17 @@ export const authHandlers = {
 			goto('/login');
 		} else {
 			console.error('No user is currently signed in.');
+		}
+	},
+	updateRushWins: async (words: string[], timeTaken: number, url: string) => {
+		try {
+			await addDoc(collection(db, 'rush-wins'), {
+				words,
+				timeTaken,
+				url
+			});
+		} catch (error) {
+			console.error('Error adding document: ', error);
 		}
 	}
 };
