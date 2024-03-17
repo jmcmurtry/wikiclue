@@ -6,6 +6,7 @@ import {
 	updatePassword,
 	type User
 } from 'firebase/auth';
+import { isAdmin } from './admin';
 import { Timestamp } from 'firebase/firestore';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { writable } from 'svelte/store';
@@ -21,8 +22,9 @@ export const authHandlers = {
 		return await createUserWithEmailAndPassword(auth, email, password);
 	},
 	login: async (email: string, password: string) => {
-		await signInWithEmailAndPassword(auth, email, password);
-		goto('/home');
+		const userCredential = await signInWithEmailAndPassword(auth, email, password);
+		const userClaims = await userCredential.user.getIdTokenResult();
+		isAdmin.set(userClaims.claims.user_id == import.meta.env.VITE_FIREBASE_ADMIN_ID);
 	},
 	logout: async () => {
 		await signOut(auth);
