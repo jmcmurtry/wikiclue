@@ -32,6 +32,8 @@
 		'November',
 		'December'
 	];
+	let searchUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&origin=*&format=json&search=";
+	const searchResults = writable([])
 
 	onMount(() => {
 		loadDailyWords();
@@ -68,8 +70,9 @@
 		}
 	}
 
-	function confirmPressed() {
+	async function confirmPressed() {
 		incorrectAnswer = false;
+	
 		// will need to change the if statement to use actual wikipedia api function
 		if (searchTerm.includes(wordsToFind[0]) && searchTerm.includes(wordsToFind[1])) {
 			currentStreak++;
@@ -115,6 +118,19 @@
 		};
 	}
 
+	async function test() {
+		if(searchTerm === ''){
+			searchResults.set([]);
+		} else {
+
+		
+		let url = searchUrl + searchTerm;
+		const response = await fetch(url);
+      	const data = await response.json();
+		searchResults.set(data[1]);
+		}
+	}
+
 	function endGame() {
 		formatOverlay();
 		isOverlayOpen.set(true);
@@ -148,7 +164,15 @@
 			class="search-bar"
 			placeholder="Enter the Wikipedia URL here..."
 			bind:value={searchTerm}
+			on:input={() => test()}
 		/>
+		<div class="dropdown">
+			<ul>
+			  {#each $searchResults as option}
+				<li>{option}</li>
+			  {/each}
+			</ul>
+		  </div>
 		<p class="incorrect-answer">
 			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
 		</p>
