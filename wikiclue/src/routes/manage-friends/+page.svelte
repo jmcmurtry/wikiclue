@@ -6,7 +6,7 @@
     const friendRemoveOverlayVis = writable(false);
 
     function removeFriend(){
-        friendRemoveOverlayVis.set(true);
+        //remove friend logic
     }
 </script>
 
@@ -17,17 +17,21 @@
         <div class="friends-container">
             <h3>View and manage your friends!</h3>
             <div class ="users-container">
-                <p class="friend-name">LitLover911<button on:click={() => removeFriend()}>Remove</button></p>
-                <p class="friend-name">Chris_Morroco <button on:click={() => removeFriend()}>Remove</button></p>
-                <p class="friend-name">Bonnie <button on:click={() => removeFriend()}>Remove</button></p>
-                <p class="friend-name">Clyde <button on:click={() => removeFriend()}>Remove</button> </p>
+                <p class="friend-name">LitLover911<button on:click={() =>{friendRemoveOverlayVis.set(true)}}>Remove</button></p>
+                <p class="friend-name">Chris_Morroco <button on:click={() => {friendRemoveOverlayVis.set(true)}}>Remove</button></p>
+                <p class="friend-name">Bonnie <button on:click={() => {friendRemoveOverlayVis.set(true)}}>Remove</button></p>
+                <p class="friend-name">Clyde <button on:click={() => {friendRemoveOverlayVis.set(true)}}>Remove</button> </p>
             </div>
         </div>
     </div>
 
     {#if $friendRemoveOverlayVis}
-        <Overlay header="Friend Removed"onClose={() => {friendRemoveOverlayVis.set(false)}}>
-            <p class="popup-text">This user is no longer your friend</p>
+        <Overlay header="Confirm Removal"onClose={() => {friendRemoveOverlayVis.set(false)}}>
+            <p class="popup-text">Are you sure you want to remove this friend?</p>
+            <div class="button-container">
+            <button class="popup-button" button on:click={() => removeFriend()}>Yes</button>
+            <button class="popup-button" button on:click={() => {friendRemoveOverlayVis.set(false)}}>No</button> 
+            </div>
         </Overlay>   
     {/if}
 </div>
