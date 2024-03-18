@@ -3,11 +3,23 @@
     import Overlay from '../../components/overlay.svelte';
     import { writable } from 'svelte/store';
 
-    const friendAddOverlayVis = writable(false);
+    let errorMessage = "";
+    let successMessage = "";
 
-    function addFriend(){
-        friendAddOverlayVis.set(true);
+    async function addFriend(){
+
+    // Reset status messages
+    errorMessage = "";
+    successMessage = "";
+
+    try {
+      // Call function that adds the friend here
+      successMessage = `Friend added!`
+    } catch (error: any) {
+      errorMessage = error.message;
     }
+  }
+
     function declineRequest(){
         //declineFriendRequest
     }
@@ -19,6 +31,9 @@
     <div class="friendboard-container">
         <div class="friends-container">
             <h3>These users want to be your friend!</h3>
+            {#if successMessage}
+                <p class="success-message">{successMessage}</p>
+            {/if}        
             <div class ="users-container">
                 <p class="friend-name">LitLover911<button class="deny-button" on:click={() => declineRequest()}>&#10006;</button><button class="accept-button" on:click={() => addFriend()}>&#10004;</button></p>
                 <p class="friend-name">Chris_Morroco <button class="deny-button" on:click={() => declineRequest()}>&#10006;</button><button class="accept-button" on:click={() => addFriend()}>&#10004;</button></p>
@@ -27,12 +42,6 @@
             </div>
         </div>
     </div>
-
-    {#if $friendAddOverlayVis}
-        <Overlay header="New Friend!" onClose={() => {friendAddOverlayVis.set(false)}}>
-            <p class="popup-text">Friend Added!</p>
-        </Overlay>   
-    {/if}
 </div>
 
 <style>
