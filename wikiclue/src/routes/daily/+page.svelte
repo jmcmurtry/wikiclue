@@ -7,8 +7,9 @@
 
 	const isOverlayOpen = writable(false);
 	let searchTerm = '';
-	const wordsToFind = ['Sample', 'Words']; // this will need to change to actual algo code
+	const wordsToFind = ['York', 'Times']; // this will need to change to actual algo code
 	let incorrectAnswer = false;
+	let pageDoesNotExist = false;
 	let gameOver = false;
 	let guessesRemaining = 6;
 	let today = new Date();
@@ -33,7 +34,9 @@
 		'December'
 	];
 	let searchUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&origin=*&format=json&search=";
+	let contentUrl ="https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=revisions&rvprop=content&format=json&titles=";
 	const searchResults = writable([])
+	let guess = '';
 
 	onMount(() => {
 		loadDailyWords();
@@ -47,7 +50,7 @@
 	function getUserInfo() {
 		// Get user info from firebase
 		let lastDate = new Date(); // last date completed daily challenge
-		let savedRemaining = 2; // guesses remaining on daily challenge
+		let savedRemaining = 6; // guesses remaining on daily challenge
 		maxStreak = 7;
 		currentStreak = 5;
 		totalWins = 30;
@@ -72,9 +75,11 @@
 
 	async function confirmPressed() {
 		incorrectAnswer = false;
-	
-		// will need to change the if statement to use actual wikipedia api function
-		if (searchTerm.includes(wordsToFind[0]) && searchTerm.includes(wordsToFind[1])) {
+		let pageExists = await getData();
+
+		if (!pageExists) return;
+		
+		if (guess.includes(wordsToFind[0].toLowerCase()) && guess.includes(wordsToFind[1].toLowerCase())) {
 			currentStreak++;
 			totalWins++;
 			guessDistribution[6 - guessesRemaining]++;
@@ -118,8 +123,8 @@
 		};
 	}
 
-	async function test() {
-		if(searchTerm === ''){
+	async function onKeyPress() {
+		if(searchTerm.replace(/\s/g, "") === ''){
 			searchResults.set([]);
 		} else {
 
@@ -131,10 +136,44 @@
 		}
 	}
 
-	function test2(word: string) {
+	function onSelectPage(word: string) {
 			searchResults.set([]);
 			searchTerm = word;
 	}
+
+	async function getData() {
+    // Check if the search term contains any non-space characters
+    if (!/\S/.test(searchTerm)) {
+        return false;
+    }
+
+    let url = contentUrl + searchTerm;
+    
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.query.pages && !data.query.pages[-1]) {
+            let htmlContent = data.query.pages[Object.keys(data.query.pages)[0]].revisions[0]["*"];
+			
+			// This is to remove html content from api call
+            let tempDiv = document.createElement('div');
+            tempDiv.innerHTML = htmlContent;
+            let textContent = tempDiv.textContent || tempDiv.innerText || "";
+            guess = textContent.replace(/\n/g, ' ').replace(/\s\s+/g, ' ').toLowerCase();     
+            return true;
+        } else {
+            throw new Error("Page does not exist.");
+        }
+    } catch (error) {
+        pageDoesNotExist = true;
+        setTimeout(() => {
+            pageDoesNotExist = false;
+        }, 2000);
+        storeData();
+        return false;
+    }
+}
 
 	function endGame() {
 		formatOverlay();
@@ -169,17 +208,18 @@
 			class="search-bar"
 			placeholder="Enter the Wikipedia URL here..."
 			bind:value={searchTerm}
-			on:input={() => test()}
+			on:input={() => onKeyPress()}
 		/>
 		<div class="dropdown">
 			<ul>
 			  {#each $searchResults as option}
-				<button on:click={() => test2(option)}>{option}</button>
+				<button on:click={() => onSelectPage(option)}>{option}</button>
 			  {/each}
 			</ul>
 		  </div>
 		<p class="incorrect-answer">
 			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
+			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
 		</p>
 	</div>
 	<div class="buttons-container">
