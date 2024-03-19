@@ -37,7 +37,7 @@
 }
 
 .add-level-button {
-	font-size: 1.3rem;
+	font-size: 1.1rem;
 	background-color: var(--button-background);
 	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
 	width: 10rem;
@@ -73,12 +73,12 @@ h3 {
 	margin: auto;
 	width: 80vw;
 	min-width: 350px;
-	height: 70vh;
 	display: flex;
 	flex-wrap: wrap;
 	flex-basis: calc(100% - 150px);
 	align-content: start;
 	justify-content: center;
+	margin-bottom: 5vh;
 }
 
 .level {
