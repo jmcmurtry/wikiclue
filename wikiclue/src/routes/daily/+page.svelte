@@ -78,7 +78,7 @@
 		let pageExists = await getData();
 
 		if (!pageExists) return;
-		
+
 		if (guess.includes(wordsToFind[0].toLowerCase()) && guess.includes(wordsToFind[1].toLowerCase())) {
 			currentStreak++;
 			totalWins++;
@@ -128,7 +128,6 @@
 			searchResults.set([]);
 		} else {
 
-		
 		let url = searchUrl + searchTerm;
 		const response = await fetch(url);
       	const data = await response.json();
@@ -148,19 +147,19 @@
     }
 
     let url = contentUrl + searchTerm;
-    
+
     try {
         const response = await fetch(url);
         const data = await response.json();
-        
+
         if (data.query.pages && !data.query.pages[-1]) {
             let htmlContent = data.query.pages[Object.keys(data.query.pages)[0]].revisions[0]["*"];
-			
-			// This is to remove html content from api call
+
+						// This is to remove html content from api call
             let tempDiv = document.createElement('div');
             tempDiv.innerHTML = htmlContent;
             let textContent = tempDiv.textContent || tempDiv.innerText || "";
-            guess = textContent.replace(/\n/g, ' ').replace(/\s\s+/g, ' ').toLowerCase();     
+            guess = textContent.replace(/\n/g, ' ').replace(/\s\s+/g, ' ').toLowerCase();
             return true;
         } else {
             throw new Error("Page does not exist.");
@@ -203,6 +202,10 @@
 				<p class="search-words">{wordsToFind[1]}</p>
 			</div>
 		</div>
+		<p class="incorrect-answer">
+			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
+			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
+		</p>
 		<input
 			type="text"
 			class="search-bar"
@@ -210,17 +213,15 @@
 			bind:value={searchTerm}
 			on:input={() => onKeyPress()}
 		/>
-		<div class="dropdown">
+		<div class="search-results-container">
 			<ul>
 			  {#each $searchResults as option}
-				<button on:click={() => onSelectPage(option)}>{option}</button>
+					<button class="search-result" on:click={() => onSelectPage(option)}>
+						{option}
+					</button>
 			  {/each}
 			</ul>
-		  </div>
-		<p class="incorrect-answer">
-			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
-			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
-		</p>
+		</div>
 	</div>
 	<div class="buttons-container">
 		{#if gameOver}
