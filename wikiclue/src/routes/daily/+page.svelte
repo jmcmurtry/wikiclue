@@ -37,6 +37,7 @@
 	let contentUrl ="https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=revisions&rvprop=content&format=json&titles=";
 	const searchResults = writable([])
 	let guess = '';
+	let selectedResult = -1;
 
 	onMount(() => {
 		loadDailyWords();
@@ -126,12 +127,13 @@
 	async function onKeyPress() {
 		if(searchTerm.replace(/\s/g, "") === ''){
 			searchResults.set([]);
-		} else {
-
-		let url = searchUrl + searchTerm;
-		const response = await fetch(url);
-      	const data = await response.json();
-		searchResults.set(data[1]);
+		}
+		else {
+			let url = searchUrl + searchTerm;
+			const response = await fetch(url);
+      const data = await response.json();
+			searchResults.set(data[1]);
+			selectedResult = -1;
 		}
 	}
 
@@ -186,6 +188,16 @@
 			return;
 		}
 	}
+
+	function handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      selectedResult = Math.min(selectedResult + 1, $searchResults.length - 1);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      selectedResult = Math.max(selectedResult - 1, 0);
+    }
+	}
 </script>
 
 <svelte:window on:keydown={onEnterPressed} />
@@ -209,14 +221,15 @@
 		<input
 			type="text"
 			class="search-bar"
-			placeholder="Enter the Wikipedia URL here..."
+			placeholder="Enter the Wikipedia page title here..."
 			bind:value={searchTerm}
 			on:input={() => onKeyPress()}
+			on:keydown={(event) => handleKeyDown(event)}
 		/>
 		<div class="search-results-container">
 			<ul>
-			  {#each $searchResults as option}
-					<button class="search-result" on:click={() => onSelectPage(option)}>
+			  {#each $searchResults as option, index}
+					<button class="search-result {index === selectedResult ? 'selected' : ''}" on:click={() => onSelectPage(option)}>
 						{option}
 					</button>
 			  {/each}
