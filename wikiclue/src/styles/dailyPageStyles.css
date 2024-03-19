@@ -85,17 +85,19 @@ button:hover:not([disabled]) {
 
 .search-results-container {
 	height: 15rem;
+	width: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	justify-content: flex-start;
 	overflow-y: auto;
-	padding-left: 1rem; /* Add padding to accommodate the scrollbar width */
 	padding-top: 0;
 	padding-bottom: 1rem;
 }
 
 ul {
+	align-self: center;
+	width: calc(80% + 1rem);
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -104,7 +106,7 @@ ul {
 .search-result {
   display: block;
   background-color: var(--pass);
-  width: 33.5rem; /* Adjust width */
+	width: 100%;
   cursor: pointer;
 	margin: 0;
   padding: 0;
@@ -117,4 +119,8 @@ ul {
 
 .search-result:hover:not([disabled]){
   background-color: var(--search-result-hover);
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
