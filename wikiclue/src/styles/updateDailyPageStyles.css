@@ -1,0 +1,119 @@
+.calendar-container {
+	width: 80%;
+	min-width: 325px;
+	margin: auto;
+}
+
+.calendar {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	grid-gap: 5px;
+	font-family: Arial, sans-serif;
+}
+
+.day {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50px;
+	border: 1px solid #ccc;
+	cursor: pointer;
+}
+
+.day:hover {
+	background-color: #f0f0f0;
+}
+
+.previous-month {
+	color: rgba(0, 0, 0, 0.6);
+}
+
+.calendar-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+	width: 300px;
+	margin: auto;
+}
+
+.calendar-header button {
+	cursor: pointer;
+	background: none;
+	border: none;
+	font-size: 16px;
+}
+
+/* legend */
+.legend {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row;
+	align-items: center;
+	min-width: 300px;
+	max-width: 500px;
+	margin: auto;
+	margin-top: 2vh;
+	margin-bottom: 5vh;
+}
+
+.legend-item {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-right: 10px;
+}
+
+.color-box {
+	width: 20px;
+	height: 20px;
+}
+
+.text {
+	font-size: 20px;
+	margin-right: 5px;
+}
+
+#past {
+	background-color: var(--pass);
+}
+
+#empty {
+	background-color: var(--wrong-answer);
+}
+
+#filled-in {
+	background-color: var(--correct-answer);
+}
+
+/* Edit overlay Styles */
+.input-label {
+	font-size: 1.3rem;
+	margin-top: 1rem;
+	margin-bottom: 0.5rem;
+	margin-left: 10%;
+	align-self: flex-start;
+}
+
+.word-input {
+	padding: 0.5rem;
+	font-size: 1.3rem;
+	width: 80%;
+	border: 1px solid var(--black);
+	background-color: var(--input-background);
+	margin-bottom: 5%;
+}
+
+.save-button {
+	font-size: 1.3rem;
+	background-color: var(--button-background);
+	width: 84%;
+	height: 3rem;
+	border: 0px;
+	cursor: pointer;
+	margin: 2rem;
+}
+
+.save-button:hover {
+	background-color: var(--button-hover);
+}
