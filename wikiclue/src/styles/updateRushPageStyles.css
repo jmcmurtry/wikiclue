@@ -1,0 +1,36 @@
+.settings-container {
+	max-width: 300px;
+	margin: auto;
+	margin-top: 5vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.input-label {
+	font-size: 1.3rem;
+	margin-top: 1rem;
+	margin-bottom: 0.5rem;
+	align-self: flex-start;
+}
+
+.rush-settings-input {
+	width: calc(100% - 17px);
+	padding: 0.5rem;
+	font-size: 1.3rem;
+	border: 1px solid var(--black);
+	background-color: var(--input-background);
+	margin-bottom: 2rem;
+}
+
+.save-changes {
+	height: 46px;
+	margin-top: 1rem;
+	font-size: 1.3rem;
+	border: none;
+	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+	background-color: var(--button-background);
+}
+
+.save-changes:hover {
+	background-color: var(--button-hover);
+}
