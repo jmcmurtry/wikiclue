@@ -12,10 +12,15 @@ h1 {
 
 .guesses-remaining {
 	font-size: 1.5rem;
+	padding-bottom: 0;
+	padding-top: 0.5rem;
+	margin: 0;
 }
 
 .daily-title {
     text-align: center;
+		padding: 0;
+		margin: 0;
 }
 
 .search-container {
@@ -84,7 +89,7 @@ button:hover:not([disabled]) {
 }
 
 .search-results-container {
-	height: 15rem;
+	max-height: 10rem;
 	width: 100%;
 	display: flex;
 	flex-direction: column;

@@ -174,7 +174,7 @@
         storeData();
         return false;
     }
-}
+	}
 
 	function endGame() {
 		formatOverlay();
@@ -182,25 +182,52 @@
 		gameOver = true;
 	}
 
-	function onEnterPressed(event: KeyboardEvent) {
-		if (event.key === 'Enter' && !$isOverlayOpen) {
-			confirmPressed();
-			return;
-		}
-	}
-
 	function handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       selectedResult = Math.min(selectedResult + 1, $searchResults.length - 1);
+			scrollToSelectedResult();
+			return;
     } else if (event.key === 'ArrowUp') {
       event.preventDefault();
       selectedResult = Math.max(selectedResult - 1, 0);
+			scrollToSelectedResult();
+			return;
+    } else if (event.key === 'Enter' && selectedResult !== -1) {
+			event.preventDefault();
+			searchTerm = $searchResults[selectedResult];
+			onKeyPress();
+			selectedResult = -1;
+			return;
+    } else if (event.key === 'Enter' && selectedResult === -1) {
+			event.preventDefault();
+			confirmPressed();
+			return;
     }
 	}
-</script>
 
-<svelte:window on:keydown={onEnterPressed} />
+	function scrollToSelectedResult() {
+    const container = document.querySelector('.search-results-container');
+    const selectedElement = document.querySelector('.search-result.selected');
+
+    if (container && selectedElement) {
+			const containerRect = container.getBoundingClientRect();
+			const selectedRect = selectedElement.getBoundingClientRect();
+
+			// Selected top is higher than container top
+			if ((selectedRect.top - selectedRect.height) < containerRect.top) {
+				// Scroll up
+        container.scrollTop -= (containerRect.top - selectedRect.top + selectedRect.height);
+
+			// Selected bottom is lower than container bottom
+      } else if ((selectedRect.bottom + selectedRect.height) > containerRect.bottom) {
+				// Scroll down
+        container.scrollTop += (selectedRect.bottom - containerRect.bottom + selectedRect.height);
+      }
+		}
+	}
+
+</script>
 
 <HeaderBar />
 <div class="daily-page">
