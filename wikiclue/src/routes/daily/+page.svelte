@@ -7,8 +7,9 @@
 
 	const isOverlayOpen = writable(false);
 	let searchTerm = '';
-	const wordsToFind = ['Sample', 'Words']; // this will need to change to actual algo code
+	const wordsToFind = ['York', 'Times']; // this will need to change to actual algo code
 	let incorrectAnswer = false;
+	let pageDoesNotExist = false;
 	let gameOver = false;
 	let guessesRemaining = 6;
 	let today = new Date();
@@ -32,6 +33,11 @@
 		'November',
 		'December'
 	];
+	let searchUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&origin=*&format=json&search=";
+	let contentUrl ="https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=revisions&rvprop=content&format=json&titles=";
+	const searchResults = writable([])
+	let guess = '';
+	let selectedResult = -1;
 
 	onMount(() => {
 		loadDailyWords();
@@ -45,7 +51,7 @@
 	function getUserInfo() {
 		// Get user info from firebase
 		let lastDate = new Date(); // last date completed daily challenge
-		let savedRemaining = 2; // guesses remaining on daily challenge
+		let savedRemaining = 6; // guesses remaining on daily challenge
 		maxStreak = 7;
 		currentStreak = 5;
 		totalWins = 30;
@@ -68,10 +74,13 @@
 		}
 	}
 
-	function confirmPressed() {
+	async function confirmPressed() {
 		incorrectAnswer = false;
-		// will need to change the if statement to use actual wikipedia api function
-		if (searchTerm.includes(wordsToFind[0]) && searchTerm.includes(wordsToFind[1])) {
+		let pageExists = await getData();
+
+		if (!pageExists) return;
+
+		if (guess.includes(wordsToFind[0].toLowerCase()) && guess.includes(wordsToFind[1].toLowerCase())) {
 			currentStreak++;
 			totalWins++;
 			guessDistribution[6 - guessesRemaining]++;
@@ -115,21 +124,107 @@
 		};
 	}
 
+	async function onKeyPress() {
+		if (searchTerm.replace(/\s/g, '') === '') {
+			searchResults.set([]);
+		} else {
+			let url = searchUrl + searchTerm;
+			const response = await fetch(url);
+			const data = await response.json();
+			searchResults.set(data[1]);
+		}
+	}
+
+	function onSelectPage(word: string) {
+		searchResults.set([]);
+		searchTerm = word;
+	}
+
+	async function getData() {
+		// Check if the search term contains any non-space characters
+		if (!/\S/.test(searchTerm)) {
+			return false;
+		}
+
+		let url = contentUrl + searchTerm;
+
+		try {
+			const response = await fetch(url);
+			const data = await response.json();
+
+			if (data.query.pages && !data.query.pages[-1]) {
+				let htmlContent = data.query.pages[Object.keys(data.query.pages)[0]].revisions[0]['*'];
+
+				// This is to remove html content from api call
+				let tempDiv = document.createElement('div');
+				tempDiv.innerHTML = htmlContent;
+				let textContent = tempDiv.textContent || tempDiv.innerText || '';
+				guess = textContent.replace(/\n/g, ' ').replace(/\s\s+/g, ' ').toLowerCase();
+				return true;
+			} else {
+				throw new Error('Page does not exist.');
+			}
+		} catch (error) {
+			pageDoesNotExist = true;
+			setTimeout(() => {
+				pageDoesNotExist = false;
+			}, 2000);
+			return false;
+		}
+	}
+
 	function endGame() {
 		formatOverlay();
 		isOverlayOpen.set(true);
 		gameOver = true;
 	}
 
-	function onEnterPressed(event: KeyboardEvent) {
-		if (event.key === 'Enter' && !$isOverlayOpen) {
+	function handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      selectedResult = Math.min(selectedResult + 1, $searchResults.length - 1);
+			scrollToSelectedResult();
+			return;
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      selectedResult = Math.max(selectedResult - 1, 0);
+			scrollToSelectedResult();
+			return;
+    } else if (event.key === 'Enter' && selectedResult !== -1) {
+			event.preventDefault();
+			searchTerm = $searchResults[selectedResult];
+			onKeyPress();
+			selectedResult = -1;
+			return;
+    } else if (event.key === 'Enter' && selectedResult === -1) {
+			event.preventDefault();
 			confirmPressed();
 			return;
+    }
+	}
+
+	function scrollToSelectedResult() {
+    const container = document.querySelector('.search-results-container');
+    const selectedElement = document.querySelector('.search-result.selected');
+
+    if (container && selectedElement) {
+			const containerRect = container.getBoundingClientRect();
+			const selectedRect = selectedElement.getBoundingClientRect();
+
+			// Selected top is higher than container top
+			if ((selectedRect.top - selectedRect.height) < containerRect.top) {
+				// Scroll up
+        container.scrollTop -= (containerRect.top - selectedRect.top + selectedRect.height);
+
+			// Selected bottom is lower than container bottom
+      } else if ((selectedRect.bottom + selectedRect.height) > containerRect.bottom) {
+				// Scroll down
+        container.scrollTop += (selectedRect.bottom - containerRect.bottom + selectedRect.height);
+      }
 		}
 	}
-</script>
 
-<svelte:window on:keydown={onEnterPressed} />
+</script>
 
 <HeaderBar />
 <div class="daily-page">
@@ -143,15 +238,27 @@
 				<p class="search-words">{wordsToFind[1]}</p>
 			</div>
 		</div>
+		<p class="incorrect-answer">
+			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
+			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
+		</p>
 		<input
 			type="text"
 			class="search-bar"
-			placeholder="Enter the Wikipedia URL here..."
+			placeholder="Enter the Wikipedia page title here..."
 			bind:value={searchTerm}
+			on:input={() => onKeyPress()}
+			on:keydown={(event) => handleKeyDown(event)}
 		/>
-		<p class="incorrect-answer">
-			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
-		</p>
+		<div class="search-results-container">
+			<ul>
+			  {#each $searchResults as option, index}
+					<button class="search-result {index === selectedResult ? 'selected' : ''}" on:click={() => onSelectPage(option)}>
+						{option}
+					</button>
+			  {/each}
+			</ul>
+		</div>
 	</div>
 	<div class="buttons-container">
 		{#if gameOver}
