@@ -8,6 +8,8 @@
 <div class="user-settings-page">
   <form>
       <h1>User Settings</h1>
+      <button on:click={()=>setTimeout(() => goto('/manage-friends'), 0)}>Manage Friends</button>
+      <button on:click={()=>setTimeout(() => goto('/friend-requests'), 0)}>Friend Requests</button>
       <button on:click={()=>setTimeout(() => goto('/change-password'), 0)}>Change Password</button>
       <button on:click={()=>setTimeout(() => goto('/change-username'), 0)}>Change Username</button>
   </form>
