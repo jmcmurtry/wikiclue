@@ -30,7 +30,7 @@
 </script>
 
 <div class="login-page">
-    <h1>Log in to Your Account</h1>
+    <h1>Log in to Wikiclue</h1>
     <form>
         {#if errorMessage}
         <p class="error-message">{errorMessage}</p>
@@ -41,7 +41,10 @@
         <input type="password" class="login-input" placeholder="Enter your password..." bind:value={password}/>
         <button on:click={() => login()}>Login</button>
         <a href="/forgot-password">Forgot your password?</a>
-        <a href="/signup">Dont have an account? Sign up</a>
+        <hr/>
+        <p id="have-account">Don't have an account?
+            <a href="/signup">Sign up now!</a>
+        </p>
     </form>
 </div>
 

@@ -1,7 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Arbutus+Slab&display=swap');
 
 :root {
-	--black: #000;
+	--app-background: #d9d9d9;
+	--input-border-color: #727272;
+	--color-progressive: rgb(114, 161, 255);
+	--color-progressive--hover: rgb(71, 123, 228);
+	--color-progressive--active: #2a4b8d;
+	--color-progressive--focus: #36c;
+}
+/* old colors */
+/*
+--black: #000;
 	--light-gray: #f1efef;
 	--input-background: #f1efef;
 	--button-background: white;
@@ -13,10 +22,11 @@
 	--wrong-answer: #ccaaaa;
 	--pass: #d9d9d9;
 	--search-result-hover: #a7c7e7;
-}
+*/
 
 body {
 	font-family: 'Arbutus Slab', serif;
+	background-color: var(--app-background);
 }
 
 button {
