@@ -50,38 +50,40 @@ button {
 	background-color: var(--button-background);
 	width: 20rem;
 	height: 3rem;
-	border: 0px;
 	margin-right: 5rem;
 	margin-left: 5rem;
 	font-size: 1.3rem;
 	cursor: pointer;
-}
-
-.popup-button {
-	background-color: var(--button-background);
-	width: 14rem;
-	height: 45px;
-	border: 0px;
-	font-size: 1.3rem;
-	cursor: pointer;
-	margin-top: auto;
-	margin-bottom: 50px;
+	color: var(--button-text-color);
+	border: 2px solid var(--button-text-color);
 }
 
 button:hover {
 	background-color: var(--button-hover);
 }
 
+.popup-button {
+	width: 14rem;
+	height: 45px;
+	font-size: 1.3rem;
+	cursor: pointer;
+	margin-top: auto;
+	margin-bottom: 50px;
+}
+
 .popup-row {
 	display: flex;
 	align-items: center;
 	flex-direction: row;
-	justify-content: space-between;
 	width: 85%;
 	margin-bottom: 2%;
 }
 
+.icon-container {
+	max-width: 20%;
+}
+
 .popup-text {
 	font-size: 1.2rem;
-	margin-left: 7%;
+	margin-left: 10%;
 }

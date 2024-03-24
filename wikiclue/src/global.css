@@ -4,14 +4,15 @@
 	--black: #000;
 	--light-gray: #f1efef;
 	--input-background: #f1efef;
-	--button-background: #ccc8aa;
-	--button-hover: #cbb563;
+	--button-background: white;
+	--button-text-color: #000000;
+	--button-hover: #00000052;
 	--error-color: red;
 	--success-color: green;
 	--correct-answer: #aaccad;
 	--wrong-answer: #ccaaaa;
 	--pass: #d9d9d9;
-	--search-result-hover: #A7C7E7;
+	--search-result-hover: #a7c7e7;
 }
 
 body {
