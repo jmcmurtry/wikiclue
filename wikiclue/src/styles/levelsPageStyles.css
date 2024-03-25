@@ -79,20 +79,18 @@ h1 {
 	margin: 1rem;
 }
 
-button {
-	background-color: var(--button-background);
-	width: 14rem;
-	height: 3rem;
-	border: 0px;
-	margin-right: 5rem;
-	margin-left: 5rem;
-	margin-top: 2rem;
-	font-size: 1.3rem;
+.confirm-answer {
+	background-color: var(--color-progressive);
 	cursor: pointer;
+	border: none;
+	font-size: 1.3rem;
+	padding: 0.5rem;
+	width: 90%;
+	margin: 2rem 0 1rem 0;
 }
 
-button:hover:not([disabled]) {
-	background-color: var(--button-hover);
+.confirm-answer:hover:not([disabled]) {
+	background-color: var(--color-progressive--hover);
 }
 
 @media screen and (max-width: 1200px) {
@@ -100,7 +98,6 @@ button:hover:not([disabled]) {
 		display: none;
 	}
 }
-
 
 .popup-text {
 	font-size: 1.1rem;
@@ -125,20 +122,23 @@ button:hover:not([disabled]) {
 	justify-content: center;
 	flex-direction: column;
 	position: absolute;
-	bottom: 5px;
+	width: 240px;
+	max-width: 85%;
+	bottom: 20px;
+	gap: 10px;
 }
 
-button {
-	background-color: var(--button-background);
-	width: 14.5rem;
-	height: 3rem;
-	border: 0px;
-	font-size: 1.3rem;
+.popup-button {
+	width: 100%;
+	background-color: var(--color-progressive);
 	cursor: pointer;
-	margin: 5px 0;
-	bottom: 0;
+	border: none;
+	font-size: 1.3rem;
+	padding: 0.5rem;
 }
 
-button:hover {
-	background-color: var(--button-hover);
+hr {
+	width: 100%;
+	border: 1px solid var(--input-border-color);
+	margin-top: 1rem;
 }

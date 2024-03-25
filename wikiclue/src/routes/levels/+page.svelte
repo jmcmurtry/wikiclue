@@ -107,11 +107,7 @@
         <p class="incorrect-answer">{incorrectAnswer? "This page does not contain the two words" : "\u00A0"}</p>
     </div>
     <div class="buttons-container">
-        {#if $levelOver}
-            <button disabled={true}>Confirm Answer</button>
-        {:else}
-            <button on:click={()=>confirmPressed()}>Confirm Answer</button>
-        {/if}
+        <button class="confirm-answer" disabled={$levelOver} on:click={()=>confirmPressed()}>Confirm Answer</button>
     </div>
     {#if $isOverlayOpen && $levelOver}
         <Overlay header="Level {$currentLevel}" onClose={() => {isOverlayOpen.set(false);}} displayX={false}>
@@ -128,8 +124,9 @@
             </div>
 
             <div class="bottom-options">
-                <button on:click={() => {playNextLevelClicked()}}>Play Next Level</button>
-                <button on:click={() => {returnToMainMenuClicked()}}>Return to Main Menu</button>
+                <button class="popup-button" on:click={() => {playNextLevelClicked()}}>Play Next Level</button>
+                <hr/>
+                <button class="popup-button" on:click={() => {returnToMainMenuClicked()}}>Return to Main Menu</button>
             </div>
         </Overlay>
     {/if}
