@@ -34,9 +34,17 @@ const guestPlay = {
 	skipsRemaining: guestSkipsRemaining
 };
 
-const theDaily = {
-	// Insert the daily variables if needed
+type theDaily = {
+    maxStreak: number;
+    currentstreak: number;
+    currentGuesses: number;
+    played: number;
+    won: number;
+    lastplay: Date;
+	lastSolve: Date;
+    daily: number[];
 };
+
 
 const rush = {
 	streakCount: rushStreakCount,
@@ -44,4 +52,5 @@ const rush = {
 	skipsRemaining: rushSkipsRemaining
 };
 
-export { guestPlay, rush, currentLevel, levelWords, theDaily };
+export { guestPlay, rush, currentLevel, levelWords };
+export type {theDaily}

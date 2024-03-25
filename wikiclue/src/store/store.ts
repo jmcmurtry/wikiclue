@@ -7,11 +7,12 @@ import {
 	type User
 } from 'firebase/auth';
 import { isAdmin } from './admin';
-import { addDoc, getDoc, Timestamp } from 'firebase/firestore';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { addDoc, getDoc, getDocs, Timestamp, updateDoc } from 'firebase/firestore';
+import { collection, doc, setDoc, query, where } from 'firebase/firestore';
 import { writable } from 'svelte/store';
 import { auth, db } from '../firebase/firebase';
 import { goto } from '$app/navigation';
+import type { theDaily } from './gameplay';
 
 export const authStore = writable<{ user: User | null }>({
 	user: null
@@ -96,5 +97,93 @@ export const authHandlers = {
 		} catch (error) {
 			console.error('Error adding document: ', error);
 		}
+	},
+	getDailyWords: async () => {
+		const currentDate = new Date();
+		currentDate.setHours(0, 0, 0, 0);
+		const todaysTimeStamp = Timestamp.fromDate(currentDate);
+		const dailysCollection = collection(db, 'dailys');
+
+		try {
+			const startOfDayTimestamp = new Timestamp(todaysTimeStamp.seconds, 0);
+			const endOfDayTimestamp = new Timestamp(todaysTimeStamp.seconds + 86399, 999999999); // 86399 seconds = 23 hours, 59 minutes, 59 seconds
+			const dailyQuery = query(
+				dailysCollection,
+				where('day', '>=', startOfDayTimestamp),
+				where('day', '<', endOfDayTimestamp)
+			);
+
+			const querySnapshot = await getDocs(dailyQuery);
+
+			if (!querySnapshot.empty) {
+				const docData = querySnapshot.docs[0].data();
+				return [docData.wordOne, docData.wordTwo];
+			} else {
+				console.error('No daily words found for the specified date.');
+				return [];
+			}
+		} catch (error) {
+			console.error('Error getting daily words: ', error);
+			return [];
+		}
+	},
+	getDailyData: async (id: string) => {
+		const userCollection = collection(db, 'users');
+		const userDocRef = doc(userCollection, id);
+	
+		try {
+			const docSnap = await getDoc(userDocRef);
+			if (docSnap.exists()) {
+				const userData = docSnap.data();
+				const dailyData: theDaily = {
+					maxStreak: userData.gameinfo.maxstreak,
+					currentstreak: userData.gameinfo.daily.currentstreak,
+					currentGuesses: userData.gameinfo.daily.currentGuesses,
+					daily: userData.gameinfo.daily.daily,
+					lastplay: userData.gameinfo.daily.lastplay.toDate(),
+					lastSolve: userData.gameinfo.daily.lastsolve.toDate(),
+					played: userData.gameinfo.daily.played,
+					won: userData.gameinfo.daily.won,
+				}
+	
+				return dailyData;
+	
+			} else {
+				console.error("No such document!");
+			}
+		} catch (error) {
+			console.error('Error getting user daily information', error);
+		}
+	
+		// Return a default theDaily object
+		return {
+			maxStreak: 0,
+			currentstreak: 0,
+			currentGuesses: 0,
+			daily: [],
+			lastplay: new Date(),
+			lastSolve: new Date(),
+			played: 0,
+			won: 0,
+		};
+	},
+	updateDaily: async (userData: theDaily, id: string) => {
+		const userCollection = collection(db, 'users');
+		const userDocRef = doc(userCollection, id);
+		
+		try {
+		await updateDoc(userDocRef, {
+			'gameinfo.maxstreak': userData.maxStreak,
+			'gameinfo.daily.currentGuesses': userData.currentGuesses,
+			'gameinfo.daily.currentstreak': userData.currentstreak,
+			'gameinfo.daily.daily': userData.daily,
+			'gameinfo.daily.lastplay': Timestamp.fromDate(userData.lastplay),
+			'gameinfo.daily.lastsolve': Timestamp.fromDate(userData.lastSolve),
+			'gameinfo.daily.played': userData.played,
+			'gameinfo.daily.won': userData.won,
+		});
+	} catch(error) {
+		console.error('Error adding document: ', error);
 	}
+	},
 };
