@@ -9,23 +9,36 @@
 	import Overlay from "../components/overlay.svelte";
 
     const isOverlayOpen = writable(false);
+    let timeRemaining: number;
+    let skipsRemaining: number;
 
     async function play() {
         if (browser) {
-            guestPlay.streakCount.subscribe(value => {
-                sessionStorage.setItem('streakCount', JSON.stringify(value));
-            });
             guestPlay.timeAllowed.subscribe(value => {
-                sessionStorage.setItem('timeRemaining', JSON.stringify(value));
+                timeRemaining = value;
             });
-
             guestPlay.skipsRemaining.subscribe(value => {
-                sessionStorage.setItem('skipsRemaining', JSON.stringify(value));
+                skipsRemaining = value;
             });
             const response = await fetch("/api/word-generation");
             const words = await response.json();
-            sessionStorage.setItem('firstWord', JSON.stringify(words.word1));
-            sessionStorage.setItem('secondWord', JSON.stringify(words.word2));
+            let variables = {
+                streakCount: 0,
+                timeRemaining: timeRemaining,
+                skipsRemaining: skipsRemaining,
+                wordsToFind: [words.word1, words.word2],
+            }
+            const postResponse = await fetch('/api/rush-variables', {
+            method: 'POST',
+            body: JSON.stringify({ variables }),
+            });
+            if (postResponse.ok) {
+                const responseData = await postResponse.json();
+                const token = responseData.token;
+                sessionStorage.setItem('token', token);
+            } else {
+                console.error('Failed to store token:', postResponse.statusText);
+            }
             goto("/play");
         }
     }

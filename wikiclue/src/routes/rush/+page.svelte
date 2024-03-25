@@ -21,19 +21,30 @@
     let timerInterval: NodeJS.Timeout;
     let correctOverlay = false;
     let skippedOverlay = false;
-    let timeAllowed = 100;
+    let timeAllowed: number;
+    let token: string;
 
     onMount(() => {
-        loadStreakCount();
-        loadTimeRemaining();
-        loadSkipsRemaining();
-        loadWordsToFind();
+        token = sessionStorage.getItem('token') ?? "";
+        loadGameplayVariables();
         rush.timeAllowed.subscribe(value => {
             timeAllowed = value;
         });
         startTimer();
         window.addEventListener('beforeunload', handleBeforeUnload); 
     });
+
+    async function loadGameplayVariables() {
+        const headers = new Headers();
+        headers.append("Authorization", token);
+        const response = await fetch("/api/rush-variables", { method: "GET", headers: headers });
+        const data = await response.json();
+        wordsToFind[0] = data.wordsToFind[0];
+        wordsToFind[1] = data.wordsToFind[1];
+        skipsRemaining = data.skipsRemaining;
+        streakCount = data.streakCount;
+        timeRemaining = data.timeRemaining;
+    }
 
     function handleBeforeUnload(event: BeforeUnloadEvent) {
         if($isOverlayOpen) {
@@ -42,52 +53,6 @@
                 loadNextRound();
             });
         }
-    }
-
-    function loadStreakCount() {
-        if (browser) {
-            const savedStreakCount = sessionStorage.getItem('streakCount');
-            if (savedStreakCount !== null) {
-                streakCount = JSON.parse(savedStreakCount);
-            }
-        }
-    }
-
-    function loadTimeRemaining() {
-        if (browser) {
-            const savedTimeRemaining = sessionStorage.getItem('timeRemaining');
-            if (savedTimeRemaining !== null) {
-                timeRemaining = JSON.parse(savedTimeRemaining);
-            }
-        }
-    }
-
-    function loadSkipsRemaining() {
-        if (browser) {
-            const savedSkipsRemaining = sessionStorage.getItem('skipsRemaining');
-            if (savedSkipsRemaining !== null) {
-                skipsRemaining = JSON.parse(savedSkipsRemaining);
-            }
-            else {
-                skipsRemaining = 0;
-            }
-        }
-    }
-
-    function loadWordsToFind() {
-        if (browser) {
-            const savedFirstWord = sessionStorage.getItem('firstWord');
-            const savedSecondWord = sessionStorage.getItem('secondWord');
-            if (savedFirstWord !== null && savedSecondWord !== null) {
-                wordsToFind[0] = JSON.parse(savedFirstWord);
-                wordsToFind[1] = JSON.parse(savedSecondWord);
-            }
-        }
-    }
-
-    function setWordsToFind() {
-        sessionStorage.setItem('firstWord', JSON.stringify(wordsToFind[0]));
-        sessionStorage.setItem('secondWord', JSON.stringify(wordsToFind[1]));
     }
 
     function startTimer() {
@@ -102,13 +67,10 @@
         }, 1000);
     }
 
-    $: if (browser && streakCount) sessionStorage.setItem('streakCount', JSON.stringify(streakCount));
-    $: if (browser && timeRemaining >= 0) sessionStorage.setItem('timeRemaining', JSON.stringify(timeRemaining));
-    $: if (browser && skipsRemaining >= 0) sessionStorage.setItem('skipsRemaining', JSON.stringify(skipsRemaining));
-
     function skipPressed() {
         if (skipsRemaining > 0) {
             skipsRemaining--;
+            clearInterval(timerInterval);
             isOverlayOpen.set(true);
             skippedOverlay = true;
         }
@@ -141,8 +103,19 @@
         const words = await response.json();
         wordsToFind[0] = words.word1;
         wordsToFind[1] = words.word2;
-        setWordsToFind();
-        setWordsToFind();
+        let variables = {
+            streakCount: streakCount,
+            timeRemaining: timeRemaining,
+            skipsRemaining: skipsRemaining,
+            wordsToFind: [words.word1, words.word2],
+        }
+        const headers = new Headers();
+        headers.append("Authorization", token);
+        await fetch('/api/rush-variables', {
+			method: 'POST',
+            headers: headers,
+			body: JSON.stringify({ variables }),
+		});
         startTimer();
     }
 
@@ -150,6 +123,7 @@
         if (!$isOverlayOpen) {
             gameOver = true;
             // Show end of game pop up and take user back to home page
+            // Also check for refresh logic if user refreshes when end game overlay is open
         }
     }
 
