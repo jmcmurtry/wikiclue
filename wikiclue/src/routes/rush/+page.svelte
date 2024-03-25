@@ -171,7 +171,7 @@
         </div>
     </div>
     <div class="search-container">
-        <p class = "sub-header">Find a Wikipedia page that contains the following words:</p>
+        <p class = "sub-header">Find a Wikipedia page with</p>
         <div class="words-container">
             <p class="search-words">{wordsToFind[0]}</p>
             <p class="search-words">{wordsToFind[1]}</p>

@@ -6,6 +6,10 @@
 	--input-border-color: #727272;
 	--color-progressive: rgb(114, 161, 255);
 	--color-progressive--hover: rgb(71, 123, 228);
+	--skip-hover: #ddcef2;
+	--skip: #afa3bf;
+	--confirm: #96f891;
+	--confirm-hover: #2ac195;
 }
 /* old colors */
 /*
@@ -32,8 +36,19 @@ body {
 
 button {
 	font-family: inherit;
+	color: black;
 }
 
 input {
 	font-family: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: black;
 }

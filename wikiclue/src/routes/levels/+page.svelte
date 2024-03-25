@@ -84,31 +84,20 @@
 <HeaderBar />
 <div class="levels-page">
     <h1>Level Mode</h1>
-    <div class="info-bar">
-        <div class="info-container">
-            <LevelsIcon style="font-size: 2rem; color: black;"/>
-            <p class="info-text">
-                <span class="level-text">Current Level:</span>
-                <span class="streak-content">{$currentLevel}</span>
-            </p>
-        </div>
-    </div>
-    <div class="search-container">
-        <p class = "sub-header">Find a Wikipedia page that contains the following words:</p>
+    <p class="info-text">Current Level: {$currentLevel}</p>
+
+    <div class="game-container">
+        <p class="game-description">Find A Wiki page with</p>
         <div class="words-container">
             <p class="search-words">{wordsToFind[0]}</p>
             <p class="search-words">{wordsToFind[1]}</p>
         </div>
-        {#if !$levelOver}
-            <input type="text" class="search-bar" placeholder="Enter the Wikipedia page title here..." bind:value={searchTerm}/>
-        {:else}
-            <input type="text" class="search-bar" placeholder="Level Over" bind:value={searchTerm} disabled={true}/>
-        {/if}
-        <p class="incorrect-answer">{incorrectAnswer? "This page does not contain the two words" : "\u00A0"}</p>
+        <div class="guess-container">
+            <input disabled={$levelOver} type="text" class="search-bar" placeholder="Wikipedia page name" bind:value={searchTerm}/>
+            <button class="confirm-answer" disabled={$levelOver} on:click={()=>confirmPressed()}>Guess</button>
+        </div>
     </div>
-    <div class="buttons-container">
-        <button class="confirm-answer" disabled={$levelOver} on:click={()=>confirmPressed()}>Confirm Answer</button>
-    </div>
+
     {#if $isOverlayOpen && $levelOver}
         <Overlay header="Level {$currentLevel}" onClose={() => {isOverlayOpen.set(false);}} displayX={false}>
 
@@ -130,6 +119,7 @@
             </div>
         </Overlay>
     {/if}
+
 </div>
 
 <style>

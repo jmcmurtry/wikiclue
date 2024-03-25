@@ -2,50 +2,30 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
-	margin-top: 5rem;
 }
 
 h1 {
-	font-size: 2rem;
-}
-
-.info-bar {
-	display: flex;
-	align-items: center;
-	justify-content: space-evenly;
-	margin-bottom: 20px;
-}
-
-.info-container {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 22vw;
-	gap: 10px;
+	font-size: 2.5rem;
+	text-align: center;
+	margin-top: 15vh;
+	margin-bottom: 0;
 }
 
 .info-text {
 	font-size: 1.2rem;
 }
 
-.search-container {
+.game-container {
+	background-color: white;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
-	background-color: var(--light-gray);
-	margin-top: 3%;
-	background-color: var(--light-gray);
-	box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.2);
-	width: calc(300px + 25vw);
-}
-
-.sub-header {
-	font-size: 1.3rem;
 	text-align: center;
-	margin-right: 2rem;
-	margin-left: 2rem;
+	margin: auto;
+	width: 700px;
+	max-width: 95vw;
+	padding: 2rem 0;
+	box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.2);
 }
 
 .words-container {
@@ -53,50 +33,43 @@ h1 {
 	gap: 10vw;
 }
 
-.search-words {
-	font-size: 1.8rem;
+.guess-container {
+	display: flex;
+	width: 90%;
+	gap: 2%;
 }
 
 .search-bar {
 	width: 80%;
 	padding: 0.5rem;
-	font-size: 1.1rem;
-	border: 1px solid var(--black);
-	background-color: var(--input-background);
-}
-
-.incorrect-answer {
-	font-size: 1.1rem;
-	color: var(--error-color);
-	margin-top: 3%;
-	margin-bottom: 3%;
-}
-
-.buttons-container {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	margin: 1rem;
+	font-size: 1.3rem;
+	border: 1px solid var(--input-border-color);
+	box-sizing: border-box;
 }
 
 .confirm-answer {
-	background-color: var(--color-progressive);
+	background-color: var(--confirm);
 	cursor: pointer;
 	border: none;
-	font-size: 1.3rem;
+	font-size: 1rem;
 	padding: 0.5rem;
-	width: 90%;
-	margin: 2rem 0 1rem 0;
+	min-width: 75px;
+	width: 18%;
 }
 
-.confirm-answer:hover:not([disabled]) {
-	background-color: var(--color-progressive--hover);
+.confirm-answer:hover {
+	background-color: var(--confirm-hover);
 }
 
-@media screen and (max-width: 1200px) {
-	.info-container .level-text {
-		display: none;
-	}
+.search-words {
+	font-size: 2rem;
+	font-weight: 600;
+	font-style: italic;
+}
+
+.game-description {
+	font-size: 1.4rem;
+	margin: 0;
 }
 
 .popup-text {
@@ -135,6 +108,10 @@ h1 {
 	border: none;
 	font-size: 1.3rem;
 	padding: 0.5rem;
+}
+
+.popup-button:hover {
+	background-color: var(--color-progressive--hover);
 }
 
 hr {
