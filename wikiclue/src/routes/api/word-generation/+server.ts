@@ -7,7 +7,7 @@ let allWords: string[];
 async function loadAllWords(filePath: string) {
 	try {
 		const data = await file.promises.readFile(filePath, 'utf8');
-		allWords = data.split('\r\n').filter((word: string) => word.length > 4);
+		allWords = data.split(/\r?\n|\r/).filter((word: string) => word.length > 4);
 	} catch (err) {
 		console.error(err);
 	}
