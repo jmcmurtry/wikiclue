@@ -26,9 +26,11 @@ export const authHandlers = {
 		const userCredential = await signInWithEmailAndPassword(auth, email, password);
 		const userClaims = await userCredential.user.getIdTokenResult();
 		isAdmin.set(userClaims.claims.user_id == import.meta.env.VITE_FIREBASE_ADMIN_ID);
+		sessionStorage.clear();
 	},
 	logout: async () => {
 		await signOut(auth);
+		sessionStorage.clear();
 		goto('/');
 	},
 	forgotPasswordEmail: async (email: string) => {
