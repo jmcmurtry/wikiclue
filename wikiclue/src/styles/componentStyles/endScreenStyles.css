@@ -41,7 +41,7 @@
 }
 
 .guess-bar {
-	background-color: var(--pass);
+	background-color: var(--app-background);
 	width: 20px;
 	height: 100%;
 	left: 10%;
@@ -70,17 +70,18 @@
 	bottom: 5px;
 }
 
-button {
-	background-color: var(--button-background);
-	width: 14.5rem;
-	height: 3rem;
-	border: 0px;
-	font-size: 1.3rem;
+.popup-button {
+	position: absolute;
+	width: 240px;
+	max-width: 85%;
+	bottom: 20px;
+	background-color: var(--color-progressive);
 	cursor: pointer;
-	margin: 5px 0;
-	bottom: 0;
+	border: none;
+	font-size: 1.3rem;
+	padding: 0.5rem;
 }
 
-button:hover {
-	background-color: var(--button-hover);
+.popup-button:hover {
+	background-color: var(--color-progressive--hover);
 }

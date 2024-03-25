@@ -185,40 +185,42 @@
     </div>
     <div class="buttons-container">
         {#if skipsRemaining > 0 && !gameOver}
-            <button on:click={()=>skipPressed()}>Skip</button>
+            <button id="skip-button" on:click={()=>skipPressed()}>Skip</button>
         {:else if gameOver}
-            <button disabled={true}>Skip</button>
+            <button id="skip-button" disabled={true}>Skip</button>
         {:else}
-            <button disabled={true}>No Skips Left</button>
+            <button id="skip-button" disabled={true}>No Skips Left</button>
         {/if}
-        {#if gameOver}
-            <button disabled={true}>Confirm Answer</button>
-        {:else}
-            <button on:click={()=>confirmPressed()}>Confirm Answer</button>
-        {/if}
+        <button id="confirm-button" disabled={gameOver} on:click={()=>confirmPressed()}>Confirm Answer</button>
     </div>
     {#if $isOverlayOpen && correctOverlay}
         <Overlay header="Correct!" onClose={() => {loadNextRound(); isOverlayOpen.set(false); correctOverlay = false}}>
-            <p class="popup-description">You found a page that contains the two words! Keep it up!</p>
-            <div class="popup-container">
-                <RushIcon style="font-size: 2rem; color: black;"/>
-                <p class="popup-text">Current Streak: {streakCount}</p>
+            <div class="popup-info-container">
+                <p class="popup-description">You found a page that contains the two words! Keep it up!</p>
+                <div class="streak-container">
+                    <RushIcon style="font-size: 3.5rem;"/>
+                    <p class="popup-text">Current Streak: {streakCount}</p>
+                </div>
             </div>
-            <button class="button-text" on:click={() => {loadNextRound(); isOverlayOpen.set(false); correctOverlay = false}}>Next Round</button>
+            <button class="popup-button" on:click={() => {loadNextRound(); isOverlayOpen.set(false); correctOverlay = false}}>Next Round</button>
         </Overlay>
     {/if}
     {#if $isOverlayOpen && skippedOverlay}
         <Overlay header="Skipped!" onClose={() => {loadNextRound(); isOverlayOpen.set(false); skippedOverlay = false}}>
-            <p class="popup-description">You have skipped this round!</p>
-            <div class="popup-container">
-                <SkipIcon style="font-size: 2rem; color: black;"/>
-                <p class="popup-text">Skips Remaining: {skipsRemaining}</p>
+            <div class="popup-info-container">
+                <p class="popup-description">You have skipped this round!</p>
+                <div class="streak-container">
+                    <SkipIcon style="font-size: 3.5rem; color: black;"/>
+                    <p class="popup-text">Skips Remaining: {skipsRemaining}</p>
+                </div>
             </div>
-            <button class="button-text" on:click={() => {loadNextRound(); isOverlayOpen.set(false); skippedOverlay = false}}>Next Round</button>
+            
+            <button class="popup-button" on:click={() => {loadNextRound(); isOverlayOpen.set(false); skippedOverlay = false}}>Next Round</button>
         </Overlay>
     {/if}
 </div>
 
 <style>
     @import '../../styles/rushPageStyles.css';
+    @import '../../styles/componentStyles/endScreenStyles.css';
 </style>

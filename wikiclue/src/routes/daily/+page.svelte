@@ -264,7 +264,7 @@
 		{#if gameOver}
 			<button disabled={true}>Confirm Answer</button>
 		{:else}
-			<button on:click={() => confirmPressed()}>Confirm Answer</button>
+			<button class="confirm-button" on:click={() => confirmPressed()}>Confirm Answer</button>
 		{/if}
 	</div>
 	{#if $isOverlayOpen && gameOver}
@@ -297,13 +297,13 @@
 				{/each}
 			</div>
 
-			<div class="bottom-options">
+
 				<button
+				class="popup-button"
 					on:click={() => {
 						goto('/home');
 					}}>Return to Main Menu</button
 				>
-			</div>
 		</Overlay>
 	{/if}
 </div>

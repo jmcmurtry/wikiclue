@@ -79,7 +79,8 @@ h1 {
 	margin: 1rem;
 }
 
-button {
+#confirm-button,
+#skip-button {
 	background-color: var(--button-background);
 	width: 14rem;
 	height: 3rem;
@@ -91,33 +92,37 @@ button {
 	cursor: pointer;
 }
 
-button:hover:not([disabled]) {
+#confirm-button:hover:not([disabled]),
+#skip-button:hover:not([disabled]) {
 	background-color: var(--button-hover);
 }
 
 .popup-description {
 	font-size: 1.3rem;
 	text-align: center;
-	margin-right: 15%;
-	margin-left: 15%;
-	margin-top: 10%;
+	margin: 0 15%;
 }
 
-.popup-container {
+.popup-info-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-evenly;
+	height: 70%;
+	max-width: 90%;
+}
+
+.streak-container {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 10px;
+	gap: 30px;
+	width: 300px;
+	max-width: 100%;
 }
 
 .popup-text {
 	font-size: 1.3rem;
-}
-
-.button-text {
-	font-size: 1.3rem;
-	cursor: pointer;
-	margin-top: 10%;
 }
 
 @media screen and (max-width: 1200px) {

@@ -18,9 +18,9 @@ h1 {
 }
 
 .daily-title {
-    text-align: center;
-		padding: 0;
-		margin: 0;
+	text-align: center;
+	padding: 0;
+	margin: 0;
 }
 
 .search-container {
@@ -42,7 +42,7 @@ h1 {
 }
 
 .words-container {
-  justify-content: center;
+	justify-content: center;
 	display: flex;
 	gap: 10vw;
 }
@@ -55,37 +55,13 @@ h1 {
 	width: 80%;
 	padding: 0.5rem;
 	font-size: 1.1rem;
-	border: 1px solid var(--black);
-	background-color: var(--input-background);
+	border: 1px solid var(--input-border-color);
 }
 
 .incorrect-answer {
 	font-size: 1.1rem;
 	color: var(--error-color);
 	margin: 0;
-}
-
-.buttons-container {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	margin: 1rem;
-}
-
-button {
-	background-color: var(--button-background);
-	width: 14rem;
-	height: 3rem;
-	border: 0px;
-	margin-right: 5rem;
-	margin-left: 5rem;
-	margin-top: 2rem;
-	font-size: 1.3rem;
-	cursor: pointer;
-}
-
-button:hover:not([disabled]) {
-	background-color: var(--button-hover);
 }
 
 .search-results-container {
@@ -109,21 +85,21 @@ ul {
 }
 
 .search-result {
-  display: block;
-  background-color: var(--pass);
+	display: block;
+	background-color: var(--app-background);
 	width: 100%;
-  cursor: pointer;
+	cursor: pointer;
 	margin: 0;
-  padding: 0;
+	padding: 0;
 	padding-left: 0.5rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	text-align: left;
 }
 
-.search-result:hover:not([disabled]){
-  background-color: var(--search-result-hover);
+.search-result:hover:not([disabled]) {
+	background-color: var(--search-result-hover);
 }
 
 .selected {
@@ -131,5 +107,26 @@ ul {
 }
 
 ::-webkit-scrollbar {
-  display: none;
+	display: none;
+}
+
+.buttons-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin: 1rem;
+}
+
+.confirm-button {
+	background-color: var(--color-progressive);
+	cursor: pointer;
+	border: none;
+	font-size: 1.3rem;
+	padding: 0.5rem;
+	width: 90%;
+	margin: 2rem 0 1rem 0;
+}
+
+.confirm-button:hover:not([disabled]) {
+	background-color: var(--color-progressive--hover);
 }

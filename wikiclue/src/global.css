@@ -6,12 +6,12 @@
 	--input-border-color: #727272;
 	--color-progressive: rgb(114, 161, 255);
 	--color-progressive--hover: rgb(71, 123, 228);
-	--color-progressive--active: #2a4b8d;
-	--color-progressive--focus: #36c;
 }
 /* old colors */
 /*
 --black: #000;
+	--color-progressive--active: #2a4b8d;
+	--color-progressive--focus: #36c;
 	--light-gray: #f1efef;
 	--input-background: #f1efef;
 	--button-background: white;
