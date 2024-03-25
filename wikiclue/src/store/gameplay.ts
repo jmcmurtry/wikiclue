@@ -1,7 +1,6 @@
 import { writable } from 'svelte/store';
 
 // Guest Gameplay Variables
-const guestStreakCount = writable(0);
 const guestTimeAllowed = writable(60);
 const guestSkipsRemaining = writable(3);
 
@@ -24,12 +23,10 @@ const currentLevel = writable(1);
 // The Daily Variables if needed
 
 // Rush Variables
-const rushStreakCount = writable(0);
 const rushTimeAllowed = writable(60);
 const rushSkipsRemaining = writable(3);
 
 const guestPlay = {
-	streakCount: guestStreakCount,
 	timeAllowed: guestTimeAllowed,
 	skipsRemaining: guestSkipsRemaining
 };
@@ -39,7 +36,6 @@ const theDaily = {
 };
 
 const rush = {
-	streakCount: rushStreakCount,
 	timeAllowed: rushTimeAllowed,
 	skipsRemaining: rushSkipsRemaining
 };
