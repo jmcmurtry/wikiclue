@@ -6,6 +6,7 @@
 	import { goto } from '$app/navigation';
 	import { authHandlers, authStore } from '../../store/store';
 	import type { theDaily } from '../../store/gameplay';
+	import { getWikiPageContent, getWikiSearchResults } from '../../store/wiki';
 
 	const isOverlayOpen = writable(false);
 	let searchTerm = '';
@@ -33,10 +34,8 @@
 		'November',
 		'December'
 	];
-	let searchUrl =
-		'https://en.wikipedia.org/w/api.php?action=opensearch&origin=*&format=json&search=';
-	let contentUrl =
-		'https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=revisions&rvprop=content&format=json&titles=';
+	let searchUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&origin=*&format=json&search=';
+	let contentUrl = 'https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=revisions&rvprop=content&format=json&titles=';
 	const searchResults = writable([]);
 	let guess = '';
 	let selectedResult = -1;
@@ -99,14 +98,18 @@
 
 	async function confirmPressed() {
 		incorrectAnswer = false;
-		let pageExists = await getData();
+		let pageContent = await getWikiPageContent(searchTerm);
 
-		if (!pageExists) return;
+		if (!pageContent){
+			pageDoesNotExist = true;
+			setTimeout(() => {
+				pageDoesNotExist = false;
+			}, 2000);
+			return;
+		}
 
-		if (
-			guess.includes(wordsToFind[0].toLowerCase()) &&
-			guess.includes(wordsToFind[1].toLowerCase())
-		) {
+		// Found a correct answer
+		if (guess.includes(wordsToFind[0].toLowerCase()) && guess.includes(wordsToFind[1].toLowerCase())) {
 			userData.currentstreak++;
 			userData.won++;
 			userData.daily[6 - guessesRemaining]++;
@@ -115,12 +118,18 @@
 			userData.lastSolve = today;
 			storeData();
 			endGame();
-		} else if (guessesRemaining <= 1) {
+		}
+
+		// Out of guesses
+		else if (guessesRemaining <= 1) {
 			guessesRemaining = userData.currentGuesses = MIN_GUESSES;
 			userData.currentstreak = 0;
 			storeData();
 			endGame();
-		} else {
+		}
+
+		// Did not find a correct answer
+		else {
 			incorrectAnswer = true;
 			guessesRemaining--;
 			userData.currentGuesses--;
@@ -153,52 +162,13 @@
 	}
 
 	async function onKeyPress() {
-		if (searchTerm.replace(/\s/g, '') === '') {
-			searchResults.set([]);
-		} else {
-			let url = searchUrl + searchTerm;
-			const response = await fetch(url);
-			const data = await response.json();
-			searchResults.set(data[1]);
-		}
+		let newSearchResults = await getWikiSearchResults(searchTerm);
+		searchResults.set(newSearchResults);
 	}
 
 	function onSelectPage(word: string) {
 		searchResults.set([]);
 		searchTerm = word;
-	}
-
-	async function getData() {
-		// Check if the search term contains any non-space characters
-		if (!/\S/.test(searchTerm)) {
-			return false;
-		}
-
-		let url = contentUrl + searchTerm;
-
-		try {
-			const response = await fetch(url);
-			const data = await response.json();
-
-			if (data.query.pages && !data.query.pages[-1]) {
-				let htmlContent = data.query.pages[Object.keys(data.query.pages)[0]].revisions[0]['*'];
-
-				// This is to remove html content from api call
-				let tempDiv = document.createElement('div');
-				tempDiv.innerHTML = htmlContent;
-				let textContent = tempDiv.textContent || tempDiv.innerText || '';
-				guess = textContent.replace(/\n/g, ' ').replace(/\s\s+/g, ' ').toLowerCase();
-				return true;
-			} else {
-				throw new Error('Page does not exist.');
-			}
-		} catch (error) {
-			pageDoesNotExist = true;
-			setTimeout(() => {
-				pageDoesNotExist = false;
-			}, 2000);
-			return false;
-		}
 	}
 
 	function endGame() {
