@@ -25,6 +25,9 @@
 
     onMount(() => {
         token = sessionStorage.getItem('token') ?? "";
+        if(token === "") {
+            window.location.href = "/";
+        }
         loadGameplayVariables();
         rush.timeAllowed.subscribe(value => {
             timeAllowed = value;
