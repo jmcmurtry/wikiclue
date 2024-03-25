@@ -47,7 +47,8 @@ h2 {
 	margin: 2rem 0 1rem 0;
 }
 
-.play-button:hover {
+.play-button:hover,
+.popup-button:hover {
 	background-color: var(--color-progressive--hover);
 }
 

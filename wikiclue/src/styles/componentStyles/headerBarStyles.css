@@ -2,29 +2,25 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 100%;
-	height: 40px;
-	background-color: var(--light-gray);
-	border-bottom: 3px solid var(--black);
-}
-
-.content-container {
+	width: 95vw;
+	height: 7vh;
+	background-color: white;
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
 	align-items: center;
-	width: 100%;
-	height: 100%;
+	justify-content: space-between;
+	padding: 0 2.5vw;
 }
 
-a {
-	text-decoration: none;
+#left-align {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 .name {
 	padding-left: 20px;
-	font-size: 20px;
-	color: var(--black);
+	font-size: 1.5rem;
 }
 
 .links-container {
@@ -32,21 +28,18 @@ a {
 	flex-direction: row;
 	justify-content: flex-end;
 	align-items: center;
-	width: 160px;
 	gap: 30px;
 	height: 100%;
-	padding-right: 20px;
 }
 
 button {
-	font-size: 16px;
-	background-color: var(--button-background);
+	background-color: var(--color-progressive);
 	border: 0px;
 	cursor: pointer;
-	height: 75%;
-	width: 80px;
+	font-size: 1.3rem;
+	padding: 0.5rem;
 }
 
 button:hover {
-	background-color: var(--button-hover);
+	background-color: var(--color-progressive--hover);
 }
