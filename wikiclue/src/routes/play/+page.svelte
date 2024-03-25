@@ -20,7 +20,7 @@
     let timerInterval: NodeJS.Timeout;
     let correctOverlay = false;
     let skippedOverlay = false;
-    let timeAllowed = 100;
+    let timeAllowed: number;
     let token: string;
 
     onMount(() => {

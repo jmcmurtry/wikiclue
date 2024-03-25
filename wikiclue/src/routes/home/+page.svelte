@@ -21,6 +21,8 @@
     const isOverlayOpen = writable(false);
     let userLevelsData: any;
     let difficultySelected = "easy";
+    let timeRemaining: number;
+    let skipsRemaining: number;
 
     onMount (async () => {
         await auth.onAuthStateChanged(async (user) => {
@@ -35,20 +37,31 @@
 
     async function playRush() {
         if (browser) {
-            rush.streakCount.subscribe(value => {
-                sessionStorage.setItem('streakCount', JSON.stringify(value));
-            });
             rush.timeAllowed.subscribe(value => {
-                sessionStorage.setItem('timeRemaining', JSON.stringify(value));
+                timeRemaining = value;
             });
-
             rush.skipsRemaining.subscribe(value => {
-                sessionStorage.setItem('skipsRemaining', JSON.stringify(value));
+                skipsRemaining = value;
             });
             const response = await fetch("/api/word-generation");
             const words = await response.json();
-            sessionStorage.setItem('firstWord', JSON.stringify(words.word1));
-            sessionStorage.setItem('secondWord', JSON.stringify(words.word2));
+            let variables = {
+                streakCount: 0,
+                timeRemaining: timeRemaining,
+                skipsRemaining: skipsRemaining,
+                wordsToFind: [words.word1, words.word2],
+            }
+            const postResponse = await fetch('/api/rush-variables', {
+            method: 'POST',
+            body: JSON.stringify({ variables }),
+            });
+            if (postResponse.ok) {
+                const responseData = await postResponse.json();
+                const token = responseData.token;
+                sessionStorage.setItem('token', token);
+            } else {
+                console.error('Failed to store token:', postResponse.statusText);
+            }
             goto("/rush");
         }
     }
