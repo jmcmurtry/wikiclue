@@ -43,7 +43,7 @@
         <a href="/forgot-password">Forgot your password?</a>
         <hr/>
         <p id="have-account">Don't have an account?
-            <a href="/signup">Sign up now!</a>
+            <a href="/signup">Sign up now</a>
         </p>
     </form>
 </div>
