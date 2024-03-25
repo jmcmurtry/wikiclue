@@ -75,7 +75,7 @@
 					}
 					guessesRemaining = userData.currentGuesses;
 				} else {
-					if (isSameDate(userData.lastSolve, yesterday)) {
+					if (!isSameDate(userData.lastSolve, yesterday)) {
 						userData.currentstreak = MIN_GUESSES;
 					}
 					userData.played++;
