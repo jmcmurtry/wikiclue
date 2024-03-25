@@ -76,7 +76,7 @@
 					guessesRemaining = userData.currentGuesses;
 				} else {
 					if (isSameDate(userData.lastSolve, yesterday)) {
-						userData.currentstreak = 0;
+						userData.currentstreak = MIN_GUESSES;
 					}
 					userData.played++;
 					userData.currentGuesses = MAX_GUESSES;
@@ -111,12 +111,12 @@
 			userData.won++;
 			userData.daily[6 - guessesRemaining]++;
 			if (userData.currentstreak > userData.maxStreak) userData.maxStreak = userData.currentstreak;
-			guessesRemaining = userData.currentGuesses = 0;
+			guessesRemaining = userData.currentGuesses = MIN_GUESSES;
 			userData.lastSolve = today;
 			storeData();
 			endGame();
 		} else if (guessesRemaining <= 1) {
-			guessesRemaining = userData.currentGuesses = 0;
+			guessesRemaining = userData.currentGuesses = MIN_GUESSES;
 			userData.currentstreak = 0;
 			storeData();
 			endGame();
