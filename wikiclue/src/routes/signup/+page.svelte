@@ -60,6 +60,7 @@
         <p class ="input-label">Confirm</p>
         <input type="password" class="signup-input" placeholder="Enter password again..." bind:value={confirmPassword}/>
         <button on:click={() => signUp()}>Sign Up</button>
+        <hr/>
         <p id="have-account">Don't have an account?
             <a href="/login">Login</a>
         </p>
