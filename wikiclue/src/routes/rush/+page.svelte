@@ -6,7 +6,6 @@
     import Overlay from "../../components/overlay.svelte";
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
-    import { browser } from '$app/environment';
     import { rush } from "../../store/gameplay";
 	import { authHandlers } from "../../store/store";
 
@@ -26,6 +25,9 @@
 
     onMount(() => {
         token = sessionStorage.getItem('token') ?? "";
+        if(token === "") {
+            window.location.href = "/home";
+        }
         loadGameplayVariables();
         rush.timeAllowed.subscribe(value => {
             timeAllowed = value;
