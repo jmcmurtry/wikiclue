@@ -35,15 +35,9 @@
     <h1>Welcome to WikiClue</h1>
     <div class="content-container">
         <button on:click={()=>isOverlayOpen.set(true)}>Play</button>
-        <div class="divider-container">
-            <div class="divider"/>
-                <p class="divider-text">or</p>
-            <div class="divider"/>
-        </div>
-        <div class="buttons-container">
+        <hr />
             <button on:click={()=>goto("/login")}>Login</button>
             <button on:click={()=>goto("/signup")}>Sign Up</button>
-        </div>
     </div>
     {#if $isOverlayOpen}
         <Overlay header="Play!" onClose={() => {isOverlayOpen.set(false);}}>
