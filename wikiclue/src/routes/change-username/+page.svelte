@@ -10,6 +10,11 @@
 
   // When we have the database set up with users, this would need to occur onload
   let currentUsername = writable(null);
+  const changeWasClicked = writable(false);
+  let newUsername = "";
+  let errorMessage = "";
+  let successMessage = "";
+  
     onMount (async () => {
     	authStore.subscribe(async ({ user }) => {
 			  if (!user) {
@@ -26,10 +31,6 @@
             // depending on if the user selects easy medium or hard
       });
     });
-
-  const changeWasClicked = writable(false);
-  let newUsername = "";
-  let errorMessage = "";
 
   async function changeUsernameClicked(){
     if (!newUsername) {
@@ -48,12 +49,11 @@
     changeWasClicked.set(true);
   }
 
-  let successMessage = "";
-
   async function okClicked(){
     // Would actually update the database here
     try {
       if(await authHandlers.updateUsername($currentUsername, newUsername)){
+        currentUsername.set(newUsername);
         successMessage = "Username changed!"
       }
       else {
@@ -64,7 +64,7 @@
         errorMessage = error;
     }
 
-    setTimeout(() => goto('/home'), 0);
+    changeWasClicked.set(false);
   }
 </script>
 
