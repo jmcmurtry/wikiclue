@@ -1,5 +1,7 @@
 import { writable } from 'svelte/store';
 
+const searchTerm = writable('');
+
 // Guest Gameplay Variables
 const guestTimeAllowed = writable(60);
 const guestSkipsRemaining = writable(3);
@@ -31,13 +33,22 @@ const guestPlay = {
 	skipsRemaining: guestSkipsRemaining
 };
 
-const theDaily = {
-	// Insert the daily variables if needed
+type theDaily = {
+    maxStreak: number;
+    currentstreak: number;
+    currentGuesses: number;
+    played: number;
+    won: number;
+    lastplay: Date;
+	lastSolve: Date;
+    daily: number[];
 };
+
 
 const rush = {
 	timeAllowed: rushTimeAllowed,
 	skipsRemaining: rushSkipsRemaining
 };
 
-export { guestPlay, rush, currentLevel, levelWords, theDaily };
+export { guestPlay, rush, currentLevel, levelWords, searchTerm };
+export type {theDaily}
