@@ -61,7 +61,7 @@
 	margin: 0;
 	padding: 0;
 	padding-left: 0.5rem;
-	var(--card-background)-space: nowrap;
+	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	text-align: left;

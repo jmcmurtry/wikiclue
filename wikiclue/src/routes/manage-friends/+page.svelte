@@ -5,23 +5,24 @@
 
     const friendRemoveOverlayVis = writable(false);
 
-    function removeFriend(){
+    let friends = ['LitLover911', 'Chris_Morroco', 'Bonnie', 'Clyde', 'Kenny', 'LitLover911', 'Chris_Morroco', 'Bonnie', 'Clyde', 'Kenny', 'LitLover911', 'Chris_Morroco', 'Bonnie', 'Clyde', 'Kenny', 'LitLover911', 'Chris_Morroco', 'Bonnie', 'Clyde', 'Kenny'];
+    function removeFriend(friend: string | undefined){
         //remove friend logic
+        console.log('Removed: ', friend);
     }
 </script>
 
 <HeaderBar />
 <div class="manage-friends">
     <h1>Manage Friends</h1>
-    <div class="friendboard-container">
-        <div class="friends-container">
-            <h3>View and manage your friends!</h3>
-            <div class ="users-container">
-                <p class="friend-name">LitLover911<button on:click={() =>{friendRemoveOverlayVis.set(true)}}>Remove</button></p>
-                <p class="friend-name">Chris_Morroco <button on:click={() => {friendRemoveOverlayVis.set(true)}}>Remove</button></p>
-                <p class="friend-name">Bonnie <button on:click={() => {friendRemoveOverlayVis.set(true)}}>Remove</button></p>
-                <p class="friend-name">Clyde <button on:click={() => {friendRemoveOverlayVis.set(true)}}>Remove</button> </p>
-            </div>
+    <div class="friends-container">
+        <p class="info-text">View and manage your friends!</p>
+        <div class ="users-container">
+            <ul class="friend-list">
+                {#each friends as friend}
+                    <li class="friend-item">{friend}<button class="remove-button" on:click={() =>{friendRemoveOverlayVis.set(true)}}>Remove</button></li>
+                {/each}
+            </ul>
         </div>
     </div>
 
@@ -29,8 +30,8 @@
         <Overlay header="Confirm Removal"onClose={() => {friendRemoveOverlayVis.set(false)}}>
             <p class="popup-text">Are you sure you want to remove this friend?</p>
             <div class="button-container">
-            <button class="popup-button" button on:click={() => removeFriend()}>Yes</button>
-            <button class="popup-button" button on:click={() => {friendRemoveOverlayVis.set(false)}}>No</button> 
+            <button class="popup-button" on:click={() => removeFriend('Kenny')}>Yes</button>
+            <button class="popup-button" on:click={() => {friendRemoveOverlayVis.set(false)}}>No</button> 
             </div>
         </Overlay>   
     {/if}
