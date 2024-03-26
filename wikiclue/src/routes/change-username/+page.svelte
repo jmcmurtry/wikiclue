@@ -41,7 +41,7 @@
       {#if errorMessage}
         <p class="error-message">{errorMessage}</p>
       {/if}
-      <h2>Enter your new username</h2>
+      <p class ="input-label">Enter new username</p>
       <input type="text" class="change-username-input" placeholder={$currentUsername} bind:value={newUsername}/>
       <button on:click={() => changeUsernameClicked()}>Change</button>
   </form>
