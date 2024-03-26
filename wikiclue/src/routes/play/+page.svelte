@@ -6,15 +6,17 @@
     import Overlay from "../../components/overlay.svelte";
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
-    import { rush } from "../../store/gameplay";
+    import { rush, searchTerm } from "../../store/gameplay";
 	import { authHandlers } from "../../store/store";
+    import { getWikiPageContent } from '../../store/wiki';
+    import SearchComponent from '../../components/searchComponent.svelte';
 
     const isOverlayOpen = writable(false);
-    let searchTerm = "";
     let wordsToFind = ["", ""];
     let skipsRemaining: number;
     let timeRemaining: number;
     let streakCount: number;
+    let pageDoesNotExist = false;
     let incorrectAnswer = false;
     let gameOver = false;
     let timerInterval: NodeJS.Timeout;
@@ -24,6 +26,7 @@
     let token: string;
 
     onMount(() => {
+        searchTerm.set('');
         token = sessionStorage.getItem('token') ?? "";
         if(token === "") {
             window.location.href = "/";
@@ -78,16 +81,28 @@
         }
     }
 
-    async function confirmPressed() {
+    async function guestRushConfirmFunction() {
         incorrectAnswer = false;
-        // will need to change the if statement to use actual wikipedia api function
-        if (searchTerm.includes(wordsToFind[0]) && searchTerm.includes(wordsToFind[1])) {
+        let pageContent = await getWikiPageContent($searchTerm);
+		if (!pageContent){
+			pageDoesNotExist = true;
+			setTimeout(() => {
+				pageDoesNotExist = false;
+			}, 2000);
+			return;
+		}
+
+        // Found a correct answer
+		if (pageContent.includes(wordsToFind[0].toLowerCase()) && pageContent.includes(wordsToFind[1].toLowerCase())) {
             await authHandlers.updateRushWins(wordsToFind, timeAllowed - timeRemaining, "put-real-wikipedia-url-here");
             clearInterval(timerInterval);
             streakCount++;
             isOverlayOpen.set(true);
             correctOverlay = true;
-        } else {
+        }
+
+        // Did not find a correct answer
+        else {
             incorrectAnswer = true;
             setTimeout(() => {
                 incorrectAnswer = false;
@@ -100,7 +115,7 @@
             timeRemaining = value;
         });
         gameOver = false;
-        searchTerm = "";
+        searchTerm.set("");
         const response = await fetch("/api/word-generation");
         const words = await response.json();
         wordsToFind[0] = words.word1;
@@ -135,16 +150,10 @@
             isOverlayOpen.set(false);
             return;
         }
-        if (event.key === "Enter" && !$isOverlayOpen) {
-            confirmPressed();
-            return;
-        }
     }
 </script>
 
-<svelte:window
-    on:keydown={onEnterPressed}
-/>
+<svelte:window on:keydown={onEnterPressed} />
 
 <GuestHeaderBar />
 <div class="rush-page">
@@ -178,12 +187,11 @@
             <p class="search-words">{wordsToFind[0]}</p>
             <p class="search-words">{wordsToFind[1]}</p>
         </div>
-        {#if !gameOver}
-            <input type="text" class="search-bar" placeholder="Enter the Wikipedia URL here..." bind:value={searchTerm}/>
-        {:else}
-            <input type="text" class="search-bar" placeholder="Game Over" bind:value={searchTerm} disabled={true}/>
-        {/if}
-        <p class="incorrect-answer">{incorrectAnswer? "This page does not contain the two words" : "\u00A0"}</p>
+        <p class="incorrect-answer">
+			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
+			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
+		</p>
+        <SearchComponent confirmFunction={guestRushConfirmFunction} />
     </div>
     <div class="buttons-container">
         {#if skipsRemaining > 0 && !gameOver}
@@ -196,7 +204,7 @@
         {#if gameOver}
             <button disabled={true}>Confirm Answer</button>
         {:else}
-            <button on:click={()=>confirmPressed()}>Confirm Answer</button>
+            <button on:click={()=>guestRushConfirmFunction()}>Confirm Answer</button>
         {/if}
     </div>
     {#if $isOverlayOpen && correctOverlay}
