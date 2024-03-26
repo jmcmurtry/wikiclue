@@ -95,7 +95,7 @@
 
         // Found a correct answer
 		if (pageContent.includes(wordsToFind[0].toLowerCase()) && pageContent.includes(wordsToFind[1].toLowerCase())) {
-            await authHandlers.updateRushWins(wordsToFind, timeAllowed - timeRemaining, "put-real-wikipedia-url-here");
+            await authHandlers.updateRushWins(wordsToFind, timeAllowed - timeRemaining, $searchTerm);
             clearInterval(timerInterval);
             streakCount++;
             isOverlayOpen.set(true);
