@@ -34,10 +34,7 @@
 		'November',
 		'December'
 	];
-	let searchUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&origin=*&format=json&search=';
-	let contentUrl = 'https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=revisions&rvprop=content&format=json&titles=';
 	const searchResults = writable([]);
-	let guess = '';
 	let selectedResult = -1;
 
 	onMount(() => {
@@ -109,7 +106,7 @@
 		}
 
 		// Found a correct answer
-		if (guess.includes(wordsToFind[0].toLowerCase()) && guess.includes(wordsToFind[1].toLowerCase())) {
+		if (pageContent.includes(wordsToFind[0].toLowerCase()) && pageContent.includes(wordsToFind[1].toLowerCase())) {
 			userData.currentstreak++;
 			userData.won++;
 			userData.daily[6 - guessesRemaining]++;
@@ -161,6 +158,12 @@
 		};
 	}
 
+	function endGame() {
+		formatOverlay();
+		isOverlayOpen.set(true);
+		gameOver = true;
+	}
+
 	async function onKeyPress() {
 		let newSearchResults = await getWikiSearchResults(searchTerm);
 		searchResults.set(newSearchResults);
@@ -169,12 +172,6 @@
 	function onSelectPage(word: string) {
 		searchResults.set([]);
 		searchTerm = word;
-	}
-
-	function endGame() {
-		formatOverlay();
-		isOverlayOpen.set(true);
-		gameOver = true;
 	}
 
 	function handleKeyDown(event: KeyboardEvent) {
