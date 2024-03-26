@@ -179,7 +179,7 @@
 			{incorrectAnswer ? 'This page does not contain the two words' : ''}
 			{pageDoesNotExist ? 'This page does not exist' : ''}
 		</p>
-		<SearchComponent confirmFunction={dailyConfirmFunction} />
+		<SearchComponent gameOver={gameOver} confirmFunction={dailyConfirmFunction} />
 	</div>
 	{#if !$isOverlayOpen && gameOver}
 		<Overlay

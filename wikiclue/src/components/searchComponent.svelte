@@ -5,6 +5,8 @@
 
   export let confirmFunction = () => {};
 
+  export let gameOver: boolean;
+
   const searchResults = writable([]);
 	let selectedResult = -1;
 
@@ -64,26 +66,32 @@
 	}
 </script>
 
-<input
-  type="text"
-  class="search-bar"
-  placeholder="Enter the Wikipedia page title here..."
-  bind:value={$searchTerm}
-  on:input={() => onKeyPress()}
-  on:keydown={(event) => handleKeyDown(event)}
-/>
-<div class="search-results-container">
-  <ul class ="search-results-list">
-    {#each $searchResults as option, index}
-      <button
-        class="search-result {index === selectedResult ? 'selected' : ''}"
-        on:click={() => onSelectPage(option)}
-      >
-        {option}
-      </button>
-    {/each}
-  </ul>
+<div class="guess-container">
+	<input
+		type="text"
+		class="search-bar"
+		placeholder="Search Wikipedia Pages"
+		bind:value={$searchTerm}
+		on:input={() => onKeyPress()}
+		on:keydown={(event) => handleKeyDown(event)}
+  />
+  <button class="confirm-answer" disabled={gameOver} on:click={() => confirmFunction()}>Search</button>
 </div>
+
+{#if $searchResults.length > 0}
+	<div class="search-results-container">
+	<ul class ="search-results-list">
+		{#each $searchResults as option, index}
+		<button
+			class="search-result {index === selectedResult ? 'selected' : ''}"
+			on:click={() => onSelectPage(option)}
+		>
+			{option}
+		</button>
+		{/each}
+	</ul>
+</div>
+{/if}
 
 <style>
 	@import '../styles/componentStyles/searchComponentStyles.css';

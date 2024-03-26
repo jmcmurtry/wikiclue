@@ -1,3 +1,81 @@
+.guess-container {
+	display: flex;
+	width: 90%;
+}
+
+.search-bar {
+	width: 80%;
+	padding: 0.5rem;
+	font-size: 1.3rem;
+	border: 1px solid var(--search-border);
+	background-color: var(--search-background);
+	color: var(--search-color);
+	box-sizing: border-box;
+}
+
+.confirm-answer {
+	cursor: pointer;
+	border: 1px solid var(--search-border);
+	background-color: var(--search-background);
+	color: var(--search-color);
+	font-size: 1rem;
+	padding: 0.5rem;
+	min-width: 75px;
+	width: 20%;
+}
+
+.confirm-answer:hover {
+	background-color: var(--search-background-hover);
+	color: var(--search-color-hover);
+}
+
+.search-results-container {
+	max-height: 10rem;
+	width: 90%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+	padding-top: 0;
+	padding-bottom: 1rem;
+}
+
+.search-results-list {
+	width: 99.7%;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	border: 1px solid var(--search-border);
+	z-index: 1;
+}
+
+.search-result {
+	display: block;
+	background-color: var(--search-background-hover);
+	color: var(--search-color);
+	width: 100%;
+	height: 3rem;
+	font-size: 1.3rem;
+	border: 0px;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	padding-left: 0.5rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: left;
+}
+
+.search-result:hover:not([disabled]) {
+	background-color: var(--app-background);
+}
+
+.selected {
+	background-color: var(--app-background);
+}
+
+/*
 .search-bar {
 	width: 80%;
 	padding: 0.5rem;
@@ -58,3 +136,4 @@ button:hover:not([disabled]) {
 ::-webkit-scrollbar {
   display: none;
 }
+*/

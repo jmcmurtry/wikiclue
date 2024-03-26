@@ -8,8 +8,12 @@
 	--color-progressive--hover: rgb(71, 123, 228);
 	--skip-hover: #ddcef2;
 	--skip: #afa3bf;
-	--confirm: #96f891;
-	--confirm-hover: #2ac195;
+
+	--search-border: #a2a9b1;
+	--search-color: #202122;
+	--search-background: #f8f9fa;
+	--search-background-hover: #fff;
+	--search-color-hover: #404244;
 }
 /* old colors */
 /*
@@ -32,6 +36,7 @@
 body {
 	font-family: 'Arbutus Slab', serif;
 	background-color: var(--app-background);
+	overflow-x: hidden;
 }
 
 button {
