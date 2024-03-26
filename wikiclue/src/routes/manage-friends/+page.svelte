@@ -1,14 +1,22 @@
 <script lang="ts">
     import HeaderBar from "../../components/headerBar.svelte";
-    import Overlay from '../../components/overlay.svelte';
     import { writable } from 'svelte/store';
+    import ConfirmOverlay from "../../components/confirmOverlay.svelte";
 
     const friendRemoveOverlayVis = writable(false);
 
     let friends = ['LitLover911', 'Chris_Morroco', 'Bonnie', 'Clyde', 'Kenny', 'LitLover911', 'Chris_Morroco', 'Bonnie', 'Clyde', 'Kenny', 'LitLover911', 'Chris_Morroco', 'Bonnie', 'Clyde', 'Kenny', 'LitLover911', 'Chris_Morroco', 'Bonnie', 'Clyde', 'Kenny'];
     function removeFriend(friend: string | undefined){
-        //remove friend logic
+        friendRemoveOverlayVis.set(false);
         console.log('Removed: ', friend);
+    }
+
+    let friendOnTheBlock = '';
+    let popupText = '';
+    function removeHandler(friend: string) {
+        friendRemoveOverlayVis.set(true);
+        friendOnTheBlock = friend;
+        popupText = 'Are you sure you want to unfriend ' + friend;
     }
 </script>
 
@@ -20,20 +28,20 @@
         <div class ="users-container">
             <ul class="friend-list">
                 {#each friends as friend}
-                    <li class="friend-item">{friend}<button class="remove-button" on:click={() =>{friendRemoveOverlayVis.set(true)}}>Remove</button></li>
+                    <li class="friend-item">{friend}<button class="remove-button" on:click={() => removeHandler(friend)}>Remove</button></li>
                 {/each}
             </ul>
         </div>
     </div>
 
     {#if $friendRemoveOverlayVis}
-        <Overlay header="Confirm Removal"onClose={() => {friendRemoveOverlayVis.set(false)}}>
-            <p class="popup-text">Are you sure you want to remove this friend?</p>
-            <div class="button-container">
-            <button class="popup-button" on:click={() => removeFriend('Kenny')}>Yes</button>
-            <button class="popup-button" on:click={() => {friendRemoveOverlayVis.set(false)}}>No</button> 
-            </div>
-        </Overlay>   
+        <ConfirmOverlay 
+            header="Confirm Unfriending" 
+            onClose={() => {friendRemoveOverlayVis.set(false)}}
+            popupText={popupText}
+            onCancel={() => removeFriend(friendOnTheBlock)}
+            onConfirm={() => {removeFriend(friendOnTheBlock)}}
+        />
     {/if}
 </div>
 

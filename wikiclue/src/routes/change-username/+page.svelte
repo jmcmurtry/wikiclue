@@ -1,6 +1,7 @@
 <script lang="ts">
   import HeaderBar from "../../components/headerBar.svelte";
   import Overlay from "../../components/overlay.svelte";
+  import ConfirmOverlay from "../../components/confirmOverlay.svelte";
   import { writable } from "svelte/store";
   import { goto } from '$app/navigation';
 
@@ -45,14 +46,15 @@
       <input type="text" class="change-username-input" placeholder={$currentUsername} bind:value={newUsername}/>
       <button on:click={() => changeUsernameClicked()}>Change</button>
   </form>
+
   {#if $changeWasClicked}
-    <Overlay header="Are you sure?" onClose={() => {changeWasClicked.set(false);}}>
-      <div class="confirmation-container">
-        <h2>Change username to:</h2>
-        <h2>{newUsername}</h2>
-        <button on:click={() => okClicked()}>OK</button>
-      </div>
-    </Overlay>
+    <ConfirmOverlay 
+      header="Confirm new username" 
+      onClose={() => {changeWasClicked.set(false);}}
+      popupText={"Confirm you would like to change username to: " + newUsername}
+      onCancel={() => {changeWasClicked.set(false);}}
+      onConfirm={() => okClicked()}
+    />
   {/if}
 </div>
 

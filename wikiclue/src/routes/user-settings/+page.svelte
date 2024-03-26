@@ -7,7 +7,7 @@
 
 <div class="user-settings-page">
   <form>
-      <h1>User Settings</h1>
+      <h1>Settings</h1>
      
       <p class ="label">Friends:</p>
        <hr/>
