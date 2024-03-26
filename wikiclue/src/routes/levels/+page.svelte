@@ -4,7 +4,7 @@
     import Overlay from "../../components/overlay.svelte";
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
-    import { currentLevel, levelWords, searchTerm } from '../../store/gameplay';
+    import { searchTerm } from '../../store/gameplay';
     import { goto } from '$app/navigation';
     import { getWikiPageContent } from '../../store/wiki';
     import SearchComponent from '../../components/searchComponent.svelte';
@@ -72,7 +72,6 @@
 	}
 
     function returnToMainMenuClicked() {
-        currentLevel.set(1);
         goto('/home');
 	}
 
@@ -94,7 +93,7 @@
             <LevelsIcon style="font-size: 2rem; color: black;"/>
             <p class="info-text">
                 <span class="level-text">Current Level:</span>
-                <span class="streak-content">{$currentLevel}</span>
+                <span class="streak-content">1</span>
             </p>
         </div>
     </div>
@@ -118,11 +117,11 @@
         {/if}
     </div>
     {#if $isOverlayOpen && $levelOver}
-        <Overlay header="Level {$currentLevel}" onClose={() => {isOverlayOpen.set(false);}} displayX={false}>
+        <Overlay header="Level 1" onClose={() => {isOverlayOpen.set(false);}} displayX={false}>
 
             <p class="popup-text">Congratulations!</p>
             <div class="level-answer">
-                <p class="popup-text">You completed level {$currentLevel}:</p>
+                <p class="popup-text">You completed level 1:</p>
                 <h3 class="score">{wordsToFind[0]}</h3>
                 <h3 class="score">{wordsToFind[1]}</h3>
             </div>
