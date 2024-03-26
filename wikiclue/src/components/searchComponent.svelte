@@ -73,7 +73,7 @@
   on:keydown={(event) => handleKeyDown(event)}
 />
 <div class="search-results-container">
-  <ul>
+  <ul class ="search-results-list">
     {#each $searchResults as option, index}
       <button
         class="search-result {index === selectedResult ? 'selected' : ''}"
