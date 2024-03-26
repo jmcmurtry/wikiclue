@@ -86,5 +86,5 @@
 </div>
 
 <style>
-	@import '../styles/dailyPageStyles.css';
+	@import '../styles/componentStyles/searchComponentStyles.css';
 </style>
