@@ -44,34 +44,6 @@
 	margin: 0;
 }
 
-.guess-container {
-	display: flex;
-	width: 90%;
-	gap: 2%;
-}
-
-.search-bar {
-	width: 80%;
-	padding: 0.5rem;
-	font-size: 1.3rem;
-	border: 1px solid var(--input-border-color);
-	box-sizing: border-box;
-}
-
-.confirm-answer {
-	background-color: var(--confirm);
-	cursor: pointer;
-	border: none;
-	font-size: 1rem;
-	padding: 0.5rem;
-	min-width: 75px;
-	width: 18%;
-}
-
-.confirm-answer:hover {
-	background-color: var(--confirm-hover);
-}
-
 .search-words {
 	font-size: 2rem;
 	font-weight: 600;
