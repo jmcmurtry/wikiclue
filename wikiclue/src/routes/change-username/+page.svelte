@@ -73,12 +73,14 @@
 <div class="change-username-page">
   <h1>Change Username</h1>
   <form>
-      {#if errorMessage}
-        <p class="error-message">{errorMessage}</p>
-      {/if}
-      {#if successMessage}
-        <p class="success-message">{successMessage}</p>
-      {/if}
+    {#if errorMessage}
+      <p class="error-message">{errorMessage}</p>
+      {:else}
+        {#if successMessage}
+          <p class="success-message">{successMessage}</p>
+        {/if}
+    {/if}
+
       <h2>Enter your new username</h2>
       <input type="text" class="change-username-input" placeholder={$currentUsername} bind:value={newUsername}/>
       <button on:click={() => changeUsernameClicked()}>Change</button>
