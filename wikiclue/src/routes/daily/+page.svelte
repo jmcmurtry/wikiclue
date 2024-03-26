@@ -228,45 +228,37 @@
 
 <HeaderBar />
 <div class="daily-page">
-	<h1 class="daily-title">{monthNames[today.getMonth()]} {today.getDate()} Daily Challenge</h1>
-	<h1 class="guesses-remaining">Guesses Remaining: {guessesRemaining}</h1>
-	<div class="search-container">
-		<p class="sub-header">Find a Wikipedia page that contains the following words:</p>
-		<div>
-			<div class="words-container">
-				<p class="search-words">{wordsToFind[0]}</p>
-				<p class="search-words">{wordsToFind[1]}</p>
-			</div>
-		</div>
-		<p class="incorrect-answer">
-			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
-			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
-		</p>
-		<input
-			type="text"
-			class="search-bar"
-			placeholder="Enter the Wikipedia page title here..."
-			bind:value={searchTerm}
-			on:input={() => onKeyPress()}
-			on:keydown={(event) => handleKeyDown(event)}
-		/>
+	<h1 class="daily-title">{monthNames[today.getMonth()]} {today.getDate()}</h1>
+	<p class="info-text">Guesses Remaining: {guessesRemaining}</p>
+
+	<div class="game-container">
+        <p class="game-description">Find A Wiki page with</p>
+        <div class="words-container">
+            <p class="search-words">{wordsToFind[0]}</p>
+            <p class="search-words">{wordsToFind[1]}</p>
+        </div>
+		<div class="guess-container">
+            <input 
+				disabled={gameOver} 
+				type="text" class="search-bar" 
+				placeholder="Wikipedia page name" 
+				bind:value={searchTerm}
+				on:input={() => onKeyPress()}
+				on:keydown={(event) => handleKeyDown(event)}
+			/>
+            <button class="confirm-answer" disabled={gameOver} on:click={()=>confirmPressed()}>Guess</button>
+        </div>
 		<div class="search-results-container">
 			<ul>
-			  {#each $searchResults as option, index}
-					<button class="search-result {index === selectedResult ? 'selected' : ''}" on:click={() => onSelectPage(option)}>
-						{option}
-					</button>
-			  {/each}
+				{#each $searchResults as option, index}
+					  <button class="search-result {index === selectedResult ? 'selected' : ''}" on:click={() => onSelectPage(option)}>
+						  {option}
+					  </button>
+				{/each}
 			</ul>
 		</div>
-	</div>
-	<div class="buttons-container">
-		{#if gameOver}
-			<button disabled={true}>Confirm Answer</button>
-		{:else}
-			<button class="confirm-button" on:click={() => confirmPressed()}>Confirm Answer</button>
-		{/if}
-	</div>
+    </div>
+
 	{#if $isOverlayOpen && gameOver}
 		<Overlay
 			header="Daily Challenge"
@@ -307,6 +299,43 @@
 		</Overlay>
 	{/if}
 </div>
+
+
+<!-- <div class="daily-page">
+	<h1 class="daily-title">{monthNames[today.getMonth()]} {today.getDate()} Daily Challenge</h1>
+	<h1 class="guesses-remaining">Guesses Remaining: {guessesRemaining}</h1>
+	<div class="search-container">
+		<p class="sub-header">Find a Wikipedia page that contains the following words:</p>
+		<div>
+			<div class="words-container">
+				<p class="search-words">{wordsToFind[0]}</p>
+				<p class="search-words">{wordsToFind[1]}</p>
+			</div>
+		</div>
+		<p class="incorrect-answer">
+			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
+			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
+		</p>
+		<input
+			type="text"
+			class="search-bar"
+			placeholder="Enter the Wikipedia page title here..."
+			bind:value={searchTerm}
+			on:input={() => onKeyPress()}
+			on:keydown={(event) => handleKeyDown(event)}
+		/>
+		<div class="search-results-container">
+			<ul>
+			  {#each $searchResults as option, index}
+					<button class="search-result {index === selectedResult ? 'selected' : ''}" on:click={() => onSelectPage(option)}>
+						{option}
+					</button>
+			  {/each}
+			</ul>
+		</div>
+	</div>
+</div>
+-->
 
 <style>
 	@import '../../styles/dailyPageStyles.css';
