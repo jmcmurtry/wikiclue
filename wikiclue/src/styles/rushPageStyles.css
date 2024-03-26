@@ -29,54 +29,44 @@ h1 {
 	font-size: 1.2rem;
 }
 
-.search-container {
+.game-container {
+	background-color: var(--card-background);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
-	background-color: var(--light-gray);
-	margin-top: 3%;
-	background-color: var(--light-gray);
+	text-align: center;
+	margin: auto;
+	width: 700px;
+	max-height: 250px;
+	max-width: 95vw;
+	padding: 2rem 0;
 	box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.2);
-	width: calc(300px + 25vw);
 }
 
-.sub-header {
-	font-size: 1.3rem;
-	text-align: center;
-	margin-right: 2rem;
-	margin-left: 2rem;
+.game-description {
+	font-size: 1.4rem;
+	margin: 0;
 }
 
 .words-container {
 	display: flex;
+	flex-wrap: wrap;
+	max-width: 90%;
+	justify-content: center;
 	gap: 10vw;
+	margin: 2rem 0 1rem 0;
 }
 
 .search-words {
-	font-size: 1.8rem;
-}
-
-.search-bar {
-	width: 80%;
-	padding: 0.5rem;
-	font-size: 1.1rem;
-	border: 1px solid var(--black);
-	background-color: var(--input-background);
+	font-size: 2rem;
+	font-weight: 600;
+	margin: 0;
 }
 
 .incorrect-answer {
 	font-size: 1.1rem;
 	color: var(--error-color);
-	margin-top: 3%;
-	margin-bottom: 3%;
-}
-
-.buttons-container {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	margin: 1rem;
+	margin: 0;
 }
 
 #confirm-button,

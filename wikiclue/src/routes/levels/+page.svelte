@@ -97,8 +97,8 @@
             <p class="search-words">{wordsToFind[1]}</p>
         </div>
 		<p class="incorrect-answer">
-			{incorrectAnswer ? 'This page does not contain the two words' : ''}
-			{pageDoesNotExist ? 'This page does not exist' : ''}
+			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
+			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
 		</p>
 		<SearchComponent gameOver={$levelOver} confirmFunction={levelsConfirmFunction} />
 	</div>

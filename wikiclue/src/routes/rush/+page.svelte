@@ -182,33 +182,18 @@
             </p>
         </div>
     </div>
-    <div class="search-container">
-        <p class = "sub-header">Find a Wikipedia page with</p>
+    <div class="game-container">
+        <p class="game-description">Find A Wiki page with</p>
         <div class="words-container">
             <p class="search-words">{wordsToFind[0]}</p>
             <p class="search-words">{wordsToFind[1]}</p>
         </div>
-        <p class="incorrect-answer">
+		<p class="incorrect-answer">
 			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
 			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
 		</p>
-        <SearchComponent gameOver={gameOver} confirmFunction={rushConfirmFunction} />
-    </div>
-    <div class="buttons-container">
-        {#if skipsRemaining > 0 && !gameOver}
-            <button id="skip-button" on:click={()=>skipPressed()}>Skip</button>
-        {:else if gameOver}
-            <button id="skip-button" disabled={true}>Skip</button>
-        {:else}
-            <button disabled={true}>No Skips Left</button>
-        {/if}
-        {#if gameOver}
-            <button disabled={true}>Confirm Answer</button>
-        {:else}
-            <button on:click={()=>rushConfirmFunction()}>Confirm Answer</button>
-        {/if}
-        <button id="confirm-button" disabled={gameOver} on:click={()=>rushConfirmFunction()}>Confirm Answer</button>
-    </div>
+		<SearchComponent gameOver={gameOver} confirmFunction={rushConfirmFunction} />
+	</div>
     {#if $isOverlayOpen && correctOverlay}
         <Overlay header="Correct!" onClose={() => {loadNextRound(); isOverlayOpen.set(false); correctOverlay = false}}>
             <div class="popup-info-container">
