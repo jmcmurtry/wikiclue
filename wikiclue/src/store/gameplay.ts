@@ -7,20 +7,6 @@ const guestTimeAllowed = writable(60);
 const guestSkipsRemaining = writable(3);
 
 // Levels Variables if needed
-// levelWords is only needed for now until the db is setup
-const levelWords = [
-	['apple', 'banana'],
-	['cat', 'dog'],
-	['sun', 'moon'],
-	['tree', 'flower'],
-	['coffee', 'tea'],
-	['book', 'pen'],
-	['mountain', 'river'],
-	['cake', 'cookie'],
-	['music', 'art'],
-	['computer', 'phone']
-];
-const currentLevel = writable(1);
 
 // The Daily Variables if needed
 
@@ -50,5 +36,5 @@ const rush = {
 	skipsRemaining: rushSkipsRemaining
 };
 
-export { guestPlay, rush, currentLevel, levelWords, searchTerm };
+export { guestPlay, rush, searchTerm };
 export type {theDaily}

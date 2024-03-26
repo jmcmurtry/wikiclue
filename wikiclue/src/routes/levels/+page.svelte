@@ -4,76 +4,80 @@
     import Overlay from "../../components/overlay.svelte";
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
-    import { currentLevel, levelWords } from '../../store/gameplay';
+    import { searchTerm } from '../../store/gameplay';
     import { goto } from '$app/navigation';
+    import { getWikiPageContent } from '../../store/wiki';
+    import SearchComponent from '../../components/searchComponent.svelte';
 
     const isOverlayOpen = writable(false);
     const levelOver = writable(false);
-
-    let wordsToFind = ["",""];
-    let searchTerm = "";
+    let wordsToFind = [''];
     let incorrectAnswer = false;
+	let pageDoesNotExist = false;
 
     onMount(() => {
+        searchTerm.set('');
         // When we use the database we need to get the user's current level instead
 		loadLevelWords();
 	});
 
     function loadLevelWords() {
-        // Load the current level words from firebase, it's just in store/gameplay for now
-        wordsToFind[0] = levelWords[$currentLevel-1][0];
-        wordsToFind[1] = levelWords[$currentLevel-1][1];
+        // Load the current level words from firebase
+        wordsToFind[0] = 'Sandy';
+        wordsToFind[1] = 'Plankton';
     }
 
 
-    function confirmPressed() {
+    async function levelsConfirmFunction() {
         incorrectAnswer = false;
-        // will need to change the if statement to use actual wikipedia api function
-        if (searchTerm.includes(wordsToFind[0]) && searchTerm.includes(wordsToFind[1])) {
+        let pageContent = await getWikiPageContent($searchTerm);
+
+		if (!pageContent){
+			pageDoesNotExist = true;
+			setTimeout(() => {
+				pageDoesNotExist = false;
+			}, 2000);
+			return;
+		}
+
+        // Found a correct answer
+		if (pageContent.includes(wordsToFind[0].toLowerCase()) && pageContent.includes(wordsToFind[1].toLowerCase())) {
+            storeData();
 			endLevel();
-        } else {
-            incorrectAnswer = true;
-            setTimeout(() => {
-                incorrectAnswer = false;
-            }, 2000);
-        }
+		}
+
+        // Did not find a correct answer
+		else {
+			incorrectAnswer = true;
+			setTimeout(() => {
+				incorrectAnswer = false;
+			}, 2000);
+		}
+
     }
 
     function storeData() {
 		// Save level data into database
+        // Update the current level the user is on
 	}
 
     function endLevel() {
-        storeData;
         isOverlayOpen.set(true);
 		levelOver.set(true);
 	}
 
     function playNextLevelClicked() {
-        // Reset when we get to the end for now
-        if ($currentLevel === 10) {
-            currentLevel.set(1);
-        } else {
-            currentLevel.update(n => n + 1);
-        }
-        loadLevelWords();
-        searchTerm= "";
-        levelOver.set(false);
-        isOverlayOpen.set(false);
+        // If the current level is updated correctly in storeData, this should work to populate next level data
+        window.location.reload();
 	}
 
     function returnToMainMenuClicked() {
-        currentLevel.set(1);
         goto('/home');
 	}
 
     function onEnterPressed(event: KeyboardEvent) {
         if (event.key === "Enter" && $levelOver) {
             playNextLevelClicked()
-            return;
-        }
-        if (event.key === "Enter" && !$levelOver) {
-            confirmPressed();
             return;
         }
     }
@@ -89,7 +93,7 @@
             <LevelsIcon style="font-size: 2rem; color: black;"/>
             <p class="info-text">
                 <span class="level-text">Current Level:</span>
-                <span class="streak-content">{$currentLevel}</span>
+                <span class="streak-content">1</span>
             </p>
         </div>
     </div>
@@ -99,32 +103,31 @@
             <p class="search-words">{wordsToFind[0]}</p>
             <p class="search-words">{wordsToFind[1]}</p>
         </div>
-        {#if !$levelOver}
-            <input type="text" class="search-bar" placeholder="Enter the Wikipedia page title here..." bind:value={searchTerm}/>
-        {:else}
-            <input type="text" class="search-bar" placeholder="Level Over" bind:value={searchTerm} disabled={true}/>
-        {/if}
-        <p class="incorrect-answer">{incorrectAnswer? "This page does not contain the two words" : "\u00A0"}</p>
+        <p class="incorrect-answer">
+			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
+			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
+		</p>
+        <SearchComponent confirmFunction={levelsConfirmFunction} />
     </div>
     <div class="buttons-container">
         {#if $levelOver}
             <button disabled={true}>Confirm Answer</button>
         {:else}
-            <button on:click={()=>confirmPressed()}>Confirm Answer</button>
+            <button on:click={()=>levelsConfirmFunction()}>Confirm Answer</button>
         {/if}
     </div>
     {#if $isOverlayOpen && $levelOver}
-        <Overlay header="Level {$currentLevel}" onClose={() => {isOverlayOpen.set(false);}} displayX={false}>
+        <Overlay header="Level 1" onClose={() => {isOverlayOpen.set(false);}} displayX={false}>
 
             <p class="popup-text">Congratulations!</p>
             <div class="level-answer">
-                <p class="popup-text">You completed level {$currentLevel}:</p>
+                <p class="popup-text">You completed level 1:</p>
                 <h3 class="score">{wordsToFind[0]}</h3>
                 <h3 class="score">{wordsToFind[1]}</h3>
             </div>
             <div class="level-answer">
                 <p class="popup-text">With you answer:</p>
-                <h3 class="score">{searchTerm}</h3>
+                <h3 class="score">{$searchTerm}</h3>
             </div>
 
             <div class="bottom-options">
