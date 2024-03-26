@@ -3,9 +3,29 @@
   import Overlay from "../../components/overlay.svelte";
   import { writable } from "svelte/store";
   import { goto } from '$app/navigation';
+  import { authHandlers, authStore } from "../../store/store";
+  import { onMount } from "svelte";
+  import { auth } from "../../firebase/firebase";
+
 
   // When we have the database set up with users, this would need to occur onload
-  const currentUsername = writable("Mr Kenny");
+  let currentUsername = writable(null);
+    onMount (async () => {
+    	authStore.subscribe(async ({ user }) => {
+			  if (!user) {
+				  console.error('Unable to grab user id');
+				  return;
+			  }
+
+			  const uid = user.uid;
+        if(user){
+          const username = await authHandlers.getUsername(uid);
+          currentUsername.set(username);
+          }
+            // Would need to use this functionality to pre load levels data with words from database
+            // depending on if the user selects easy medium or hard
+      });
+    });
 
   const changeWasClicked = writable(false);
   let newUsername = "";
@@ -17,18 +37,33 @@
       return;
     }
     if (newUsername === $currentUsername) {
-      errorMessage = "Cannot enter the same username";
+      errorMessage = "Cannot enter the same username.";
       return;
     }
-    // More error checking that we decide on for usernames
+    if(!await authHandlers.ensureUniqueUsername(newUsername)){
+      errorMessage = "Another user is using this name.";
+      return;
+    }
 
-    currentUsername.set(newUsername);
     changeWasClicked.set(true);
   }
 
-  function okClicked(){
+  let successMessage = "";
+
+  async function okClicked(){
     // Would actually update the database here
-    currentUsername.set(newUsername);
+    try {
+      if(await authHandlers.updateUsername($currentUsername, newUsername)){
+        successMessage = "Username changed!"
+      }
+      else {
+        errorMessage = "Could not change username."
+      }
+    }
+    catch(error){
+        errorMessage = error;
+    }
+
     setTimeout(() => goto('/home'), 0);
   }
 </script>
@@ -40,6 +75,9 @@
   <form>
       {#if errorMessage}
         <p class="error-message">{errorMessage}</p>
+      {/if}
+      {#if successMessage}
+        <p class="success-message">{successMessage}</p>
       {/if}
       <h2>Enter your new username</h2>
       <input type="text" class="change-username-input" placeholder={$currentUsername} bind:value={newUsername}/>

@@ -77,6 +77,52 @@ export const authHandlers = {
 			console.log('Error getting document:', error);
 		}
 	},
+	getUsername: async (id: string) => {
+		const userCollection = collection(db, 'users');
+		const userDocRef = doc(userCollection, id);
+		try {
+			const doc = await getDoc(userDocRef);
+			if (doc.exists()) {
+				const username = doc.data().username;
+				return username;
+			} else {
+				console.log('No such document!');
+			}
+		} catch (error) {
+			console.log('Error getting document:', error);
+		}
+	},
+	ensureUniqueUsername: async (username: string) => {
+		const userCollection = collection(db, 'users');
+		const userReoccurances = await getDocs(query(userCollection, where('username', '==', username)));
+		try{
+			if (userReoccurances.size > 0) {
+            	return false;
+        	} else {
+            	return true;
+        	}
+    	} catch (error) {
+        	console.error('Error checking username uniqueness:', error);
+        	return false;
+    }
+	},
+	updateUsername: async (oldUsername: string, newUsername: string) => {
+		const userCollection = collection(db, 'users');
+		const userInstance = await getDocs(query(userCollection, where('username', '==', oldUsername)));
+		try{
+			if (userInstance.size === 1){
+				const userDoc = userInstance.docs[0];
+				await updateDoc(doc(userCollection, userDoc.id), { username: newUsername });
+				return true;
+			}
+			else{
+				return false;
+			}
+		} 
+		catch (error){
+			console.error('Error changing username:', error);
+		}
+	},
 	verifyLogin: async (email: string, password: string) => {
 		await signInWithEmailAndPassword(auth, email, password);
 	},
