@@ -5,10 +5,11 @@
 	import Overlay from '../../components/overlay.svelte';
 	import { goto } from '$app/navigation';
 	import { authHandlers, authStore } from '../../store/store';
-	import type { theDaily } from '../../store/gameplay';
+	import { type theDaily, searchTerm} from '../../store/gameplay';
+	import { getWikiPageContent } from '../../store/wiki';
+	import SearchComponent from '../../components/searchComponent.svelte';
 
 	const isOverlayOpen = writable(false);
-	let searchTerm = '';
 	let wordsToFind = ['', '']; // this will need to change to actual algo code
 	let incorrectAnswer = false;
 	let pageDoesNotExist = false;
@@ -33,15 +34,9 @@
 		'November',
 		'December'
 	];
-	let searchUrl =
-		'https://en.wikipedia.org/w/api.php?action=opensearch&origin=*&format=json&search=';
-	let contentUrl =
-		'https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=revisions&rvprop=content&format=json&titles=';
-	const searchResults = writable([]);
-	let guess = '';
-	let selectedResult = -1;
 
 	onMount(() => {
+		searchTerm.set('');
 		loadDailyWords();
 		getUserInfo();
 	});
@@ -97,16 +92,20 @@
 		);
 	}
 
-	async function confirmPressed() {
+	async function dailyConfirmFunction() {
 		incorrectAnswer = false;
-		let pageExists = await getData();
+		let pageContent = await getWikiPageContent($searchTerm);
 
-		if (!pageExists) return;
+		if (!pageContent){
+			pageDoesNotExist = true;
+			setTimeout(() => {
+				pageDoesNotExist = false;
+			}, 2000);
+			return;
+		}
 
-		if (
-			guess.includes(wordsToFind[0].toLowerCase()) &&
-			guess.includes(wordsToFind[1].toLowerCase())
-		) {
+		// Found a correct answer
+		if (pageContent.includes(wordsToFind[0].toLowerCase()) && pageContent.includes(wordsToFind[1].toLowerCase())) {
 			userData.currentstreak++;
 			userData.won++;
 			userData.daily[6 - guessesRemaining]++;
@@ -115,12 +114,18 @@
 			userData.lastSolve = today;
 			storeData();
 			endGame();
-		} else if (guessesRemaining <= 1) {
+		}
+
+		// Out of guesses
+		else if (guessesRemaining <= 1) {
 			guessesRemaining = userData.currentGuesses = MIN_GUESSES;
 			userData.currentstreak = 0;
 			storeData();
 			endGame();
-		} else {
+		}
+
+		// Did not find a correct answer
+		else {
 			incorrectAnswer = true;
 			guessesRemaining--;
 			userData.currentGuesses--;
@@ -152,104 +157,10 @@
 		};
 	}
 
-	async function onKeyPress() {
-		if (searchTerm.replace(/\s/g, '') === '') {
-			searchResults.set([]);
-		} else {
-			let url = searchUrl + searchTerm;
-			const response = await fetch(url);
-			const data = await response.json();
-			searchResults.set(data[1]);
-		}
-	}
-
-	function onSelectPage(word: string) {
-		searchResults.set([]);
-		searchTerm = word;
-	}
-
-	async function getData() {
-		// Check if the search term contains any non-space characters
-		if (!/\S/.test(searchTerm)) {
-			return false;
-		}
-
-		let url = contentUrl + searchTerm;
-
-		try {
-			const response = await fetch(url);
-			const data = await response.json();
-
-			if (data.query.pages && !data.query.pages[-1]) {
-				let htmlContent = data.query.pages[Object.keys(data.query.pages)[0]].revisions[0]['*'];
-
-				// This is to remove html content from api call
-				let tempDiv = document.createElement('div');
-				tempDiv.innerHTML = htmlContent;
-				let textContent = tempDiv.textContent || tempDiv.innerText || '';
-				guess = textContent.replace(/\n/g, ' ').replace(/\s\s+/g, ' ').toLowerCase();
-				return true;
-			} else {
-				throw new Error('Page does not exist.');
-			}
-		} catch (error) {
-			pageDoesNotExist = true;
-			setTimeout(() => {
-				pageDoesNotExist = false;
-			}, 2000);
-			return false;
-		}
-	}
-
 	function endGame() {
 		formatOverlay();
 		isOverlayOpen.set(true);
 		gameOver = true;
-	}
-
-	function handleKeyDown(event: KeyboardEvent) {
-		if (event.key === 'ArrowDown') {
-			event.preventDefault();
-			selectedResult = Math.min(selectedResult + 1, $searchResults.length - 1);
-			scrollToSelectedResult();
-			return;
-		} else if (event.key === 'ArrowUp') {
-			event.preventDefault();
-			selectedResult = Math.max(selectedResult - 1, 0);
-			scrollToSelectedResult();
-			return;
-		} else if (event.key === 'Enter' && selectedResult !== -1) {
-			event.preventDefault();
-			searchTerm = $searchResults[selectedResult];
-			onKeyPress();
-			selectedResult = -1;
-			return;
-		} else if (event.key === 'Enter' && selectedResult === -1) {
-			event.preventDefault();
-			confirmPressed();
-			return;
-		}
-	}
-
-	function scrollToSelectedResult() {
-		const container = document.querySelector('.search-results-container');
-		const selectedElement = document.querySelector('.search-result.selected');
-
-		if (container && selectedElement) {
-			const containerRect = container.getBoundingClientRect();
-			const selectedRect = selectedElement.getBoundingClientRect();
-
-			// Selected top is higher than container top
-			if (selectedRect.top - selectedRect.height < containerRect.top) {
-				// Scroll up
-				container.scrollTop -= containerRect.top - selectedRect.top + selectedRect.height;
-
-				// Selected bottom is lower than container bottom
-			} else if (selectedRect.bottom + selectedRect.height > containerRect.bottom) {
-				// Scroll down
-				container.scrollTop += selectedRect.bottom - containerRect.bottom + selectedRect.height;
-			}
-		}
 	}
 </script>
 
@@ -269,32 +180,13 @@
 			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
 			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
 		</p>
-		<input
-			type="text"
-			class="search-bar"
-			placeholder="Enter the Wikipedia page title here..."
-			bind:value={searchTerm}
-			on:input={() => onKeyPress()}
-			on:keydown={(event) => handleKeyDown(event)}
-		/>
-		<div class="search-results-container">
-			<ul>
-				{#each $searchResults as option, index}
-					<button
-						class="search-result {index === selectedResult ? 'selected' : ''}"
-						on:click={() => onSelectPage(option)}
-					>
-						{option}
-					</button>
-				{/each}
-			</ul>
-		</div>
+		<SearchComponent confirmFunction={dailyConfirmFunction} />
 	</div>
 	<div class="buttons-container">
 		{#if gameOver}
 			<button disabled={true}>Confirm Answer</button>
 		{:else}
-			<button on:click={() => confirmPressed()}>Confirm Answer</button>
+			<button on:click={() => dailyConfirmFunction()}>Confirm Answer</button>
 		{/if}
 	</div>
 	{#if $isOverlayOpen && gameOver}
