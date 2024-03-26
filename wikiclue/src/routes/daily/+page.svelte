@@ -181,7 +181,7 @@
 		</p>
 		<SearchComponent gameOver={gameOver} confirmFunction={dailyConfirmFunction} />
 	</div>
-	{#if !$isOverlayOpen && gameOver}
+	{#if $isOverlayOpen && gameOver}
 		<Overlay
 			header="Daily Challenge"
 			onClose={() => {
