@@ -5,11 +5,11 @@
 	import Overlay from '../../components/overlay.svelte';
 	import { goto } from '$app/navigation';
 	import { authHandlers, authStore } from '../../store/store';
-	import type { theDaily } from '../../store/gameplay';
-	import { getWikiPageContent, getWikiSearchResults } from '../../store/wiki';
+	import { type theDaily, searchTerm} from '../../store/gameplay';
+	import { getWikiPageContent } from '../../store/wiki';
+	import SearchComponent from '../../components/searchComponent.svelte';
 
 	const isOverlayOpen = writable(false);
-	let searchTerm = '';
 	let wordsToFind = ['', '']; // this will need to change to actual algo code
 	let incorrectAnswer = false;
 	let pageDoesNotExist = false;
@@ -34,10 +34,9 @@
 		'November',
 		'December'
 	];
-	const searchResults = writable([]);
-	let selectedResult = -1;
 
 	onMount(() => {
+		searchTerm.set('');
 		loadDailyWords();
 		getUserInfo();
 	});
@@ -93,9 +92,9 @@
 		);
 	}
 
-	async function confirmPressed() {
+	async function dailyConfirmFunction() {
 		incorrectAnswer = false;
-		let pageContent = await getWikiPageContent(searchTerm);
+		let pageContent = await getWikiPageContent($searchTerm);
 
 		if (!pageContent){
 			pageDoesNotExist = true;
@@ -163,61 +162,6 @@
 		isOverlayOpen.set(true);
 		gameOver = true;
 	}
-
-	async function onKeyPress() {
-		let newSearchResults = await getWikiSearchResults(searchTerm);
-		searchResults.set(newSearchResults);
-	}
-
-	function onSelectPage(word: string) {
-		searchResults.set([]);
-		searchTerm = word;
-	}
-
-	function handleKeyDown(event: KeyboardEvent) {
-		if (event.key === 'ArrowDown') {
-			event.preventDefault();
-			selectedResult = Math.min(selectedResult + 1, $searchResults.length - 1);
-			scrollToSelectedResult();
-			return;
-		} else if (event.key === 'ArrowUp') {
-			event.preventDefault();
-			selectedResult = Math.max(selectedResult - 1, 0);
-			scrollToSelectedResult();
-			return;
-		} else if (event.key === 'Enter' && selectedResult !== -1) {
-			event.preventDefault();
-			searchTerm = $searchResults[selectedResult];
-			onKeyPress();
-			selectedResult = -1;
-			return;
-		} else if (event.key === 'Enter' && selectedResult === -1) {
-			event.preventDefault();
-			confirmPressed();
-			return;
-		}
-	}
-
-	function scrollToSelectedResult() {
-		const container = document.querySelector('.search-results-container');
-		const selectedElement = document.querySelector('.search-result.selected');
-
-		if (container && selectedElement) {
-			const containerRect = container.getBoundingClientRect();
-			const selectedRect = selectedElement.getBoundingClientRect();
-
-			// Selected top is higher than container top
-			if (selectedRect.top - selectedRect.height < containerRect.top) {
-				// Scroll up
-				container.scrollTop -= containerRect.top - selectedRect.top + selectedRect.height;
-
-				// Selected bottom is lower than container bottom
-			} else if (selectedRect.bottom + selectedRect.height > containerRect.bottom) {
-				// Scroll down
-				container.scrollTop += selectedRect.bottom - containerRect.bottom + selectedRect.height;
-			}
-		}
-	}
 </script>
 
 <HeaderBar />
@@ -236,32 +180,13 @@
 			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
 			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
 		</p>
-		<input
-			type="text"
-			class="search-bar"
-			placeholder="Enter the Wikipedia page title here..."
-			bind:value={searchTerm}
-			on:input={() => onKeyPress()}
-			on:keydown={(event) => handleKeyDown(event)}
-		/>
-		<div class="search-results-container">
-			<ul>
-				{#each $searchResults as option, index}
-					<button
-						class="search-result {index === selectedResult ? 'selected' : ''}"
-						on:click={() => onSelectPage(option)}
-					>
-						{option}
-					</button>
-				{/each}
-			</ul>
-		</div>
+		<SearchComponent confirmFunction={dailyConfirmFunction} />
 	</div>
 	<div class="buttons-container">
 		{#if gameOver}
 			<button disabled={true}>Confirm Answer</button>
 		{:else}
-			<button on:click={() => confirmPressed()}>Confirm Answer</button>
+			<button on:click={() => dailyConfirmFunction()}>Confirm Answer</button>
 		{/if}
 	</div>
 	{#if $isOverlayOpen && gameOver}
