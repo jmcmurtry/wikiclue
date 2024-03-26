@@ -61,7 +61,7 @@
 	margin: 0;
 	padding: 0;
 	padding-left: 0.5rem;
-	white-space: nowrap;
+	var(--card-background)-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	text-align: left;
@@ -119,7 +119,7 @@ button:hover:not([disabled]) {
 	margin: 0;
   padding: 0;
 	padding-left: 0.5rem;
-  white-space: nowrap;
+  var(--card-background)-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 	text-align: left;

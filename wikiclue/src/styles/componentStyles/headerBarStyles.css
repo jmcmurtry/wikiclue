@@ -4,7 +4,7 @@
 	left: 0;
 	width: 95vw;
 	height: 7vh;
-	background-color: white;
+	background-color: var(--card-background);
 	display: flex;
 	flex-direction: row;
 	align-items: center;

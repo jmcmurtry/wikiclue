@@ -24,7 +24,7 @@ h1 {
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
-	background: white;
+	background: var(--card-background);
 	padding: 20px;
 	width: 240px;
 	height: 320px;
@@ -124,5 +124,5 @@ h2 {
 
 .difficulty-selector input[type='radio']:checked ~ label {
 	background-color: black;
-	color: white;
+	color: var(--card-background);
 }
