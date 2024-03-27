@@ -1,6 +1,6 @@
 <script lang="ts">
     import HeaderBar from "../../components/headerBar.svelte";
-    import LevelsIcon from '~icons/carbon/skill-level-advanced'
+    import GameHeader from "../../components/gameHeader.svelte";
     import Overlay from "../../components/overlay.svelte";
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
@@ -87,7 +87,7 @@
 
 <HeaderBar />
 <div class="levels-page">
-    <h1 class="levels-title">Level Mode</h1>
+    <GameHeader header="Rush" arrow={true}/>
 	<p class="info-text">Current Level: 1</p>
 
 	<div class="game-container">

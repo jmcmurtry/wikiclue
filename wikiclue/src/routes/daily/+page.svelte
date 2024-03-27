@@ -1,5 +1,6 @@
 <script lang="ts">
 	import HeaderBar from '../../components/headerBar.svelte';
+	import GameHeader from "../../components/gameHeader.svelte";
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import Overlay from '../../components/overlay.svelte';
@@ -166,7 +167,7 @@
 
 <HeaderBar />
 <div class="daily-page">
-	<h1 class="daily-title">{monthNames[today.getMonth()]} {today.getDate()}</h1>
+	<GameHeader header={monthNames[today.getMonth()] + today.getDate()} arrow={true}/>
 	<p class="info-text">Guesses Remaining: {guessesRemaining}</p>
 
 	<div class="game-container">

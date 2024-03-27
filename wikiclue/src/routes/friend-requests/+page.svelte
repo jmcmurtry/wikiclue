@@ -35,9 +35,9 @@
     <h1>Friend Requests</h1>
         <div class="friends-container">
             <p class="info-text">These users want to be your friend!</p>
-            {#if successMessage}
-                <p class="success-message">{successMessage}</p>
-            {/if}
+            <p class="success-message">
+                {successMessage ? successMessage : '\u00A0'}
+            </p>
             <div class ="users-container">
                 <ul class="friend-list">
                     {#each friends as friend}

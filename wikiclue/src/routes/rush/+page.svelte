@@ -1,5 +1,6 @@
 <script lang="ts">
     import HeaderBar from "../../components/headerBar.svelte";
+    import GameHeader from "../../components/gameHeader.svelte";
     import RushIcon from '~icons/nimbus/fire'
     import TimerIcon from '~icons/material-symbols/timer-outline'
     import SkipIcon from '~icons/bi/skip-forward'
@@ -158,7 +159,7 @@
 
 <HeaderBar />
 <div class="rush-page">
-    <h1>Rush Game</h1>
+    <GameHeader header="Rush" arrow={true}/>
     <div class="info-bar">
         <div class="info-container">
             <RushIcon style="font-size: 2rem; color: black;"/>
@@ -183,6 +184,7 @@
         </div>
     </div>
     <div class="game-container">
+        <button class="skip-button" on:click={() => skipPressed()}>Skip</button>
         <p class="game-description">Find A Wiki page with</p>
         <div class="words-container">
             <p class="search-words">{wordsToFind[0]}</p>
