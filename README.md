@@ -24,6 +24,12 @@ This project is currently in development. Use the following instructions to run 
 ## Icon Library:
 This project utilizes unplugin-icons which can be found [here](https://github.com/unplugin/unplugin-icons). All of the necessary files for using the icons are included when you run `npm install`. If you want to search for icons to use look [here](https://icon-sets.iconify.design/). When selecting an icon to use for the project, ensure that the license specifies "No attribution required" and "Commercial use is allowed." 
 
+## Logo Design: 
+The logo was designed used Canva Pro. However, if WikiClue is to be deployed as a real site with a "trade-mark, design-mark, trade-name, business name or service mark," then we will need to change it as the current license is only good for small personal or university projects. 
+
+## Third Party Software:
+The rush word lists were pulled from this [repository](https://github.com/imsky/wordlists) which is free to use under an MIT License. All files from this repository as well as the license are contained within the static > assets > word-lists folder.
+
 ## UI/UX Design:
 UI/UX designs have been created on Figma. We have separate mockups for [Computer](https://www.figma.com/file/bI5E1qi820KH3M59GDhDcO/Computer?type=design&node-id=0%3A1&mode=design&t=9cHrGGIiWYxIyYot-1) and [Mobile](https://www.figma.com/file/GVt4gFmJDPROsmAa51QyG3/Mobile?type=design&node-id=0%3A1&mode=design&t=yKPYNnlhwFWcsKAp-1)
 
