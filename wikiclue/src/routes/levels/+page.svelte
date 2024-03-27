@@ -1,6 +1,6 @@
 <script lang="ts">
     import HeaderBar from "../../components/headerBar.svelte";
-    import LevelsIcon from '~icons/carbon/skill-level-advanced'
+    import GameHeader from "../../components/gameHeader.svelte";
     import Overlay from "../../components/overlay.svelte";
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
@@ -87,35 +87,22 @@
 
 <HeaderBar />
 <div class="levels-page">
-    <h1>Level Mode</h1>
-    <div class="info-bar">
-        <div class="info-container">
-            <LevelsIcon style="font-size: 2rem; color: black;"/>
-            <p class="info-text">
-                <span class="level-text">Current Level:</span>
-                <span class="streak-content">1</span>
-            </p>
-        </div>
-    </div>
-    <div class="search-container">
-        <p class = "sub-header">Find a Wikipedia page that contains the following words:</p>
+    <GameHeader header="Level Mode" arrow={true}/>
+	<p class="info-text">Current Level: 1</p>
+
+	<div class="game-container">
+        <p class="game-description">Find A Wiki page with</p>
         <div class="words-container">
             <p class="search-words">{wordsToFind[0]}</p>
             <p class="search-words">{wordsToFind[1]}</p>
         </div>
-        <p class="incorrect-answer">
+		<p class="incorrect-answer">
 			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
 			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
 		</p>
-        <SearchComponent confirmFunction={levelsConfirmFunction} />
-    </div>
-    <div class="buttons-container">
-        {#if $levelOver}
-            <button disabled={true}>Confirm Answer</button>
-        {:else}
-            <button on:click={()=>levelsConfirmFunction()}>Confirm Answer</button>
-        {/if}
-    </div>
+		<SearchComponent gameOver={$levelOver} confirmFunction={levelsConfirmFunction} />
+	</div>
+
     {#if $isOverlayOpen && $levelOver}
         <Overlay header="Level 1" onClose={() => {isOverlayOpen.set(false);}} displayX={false}>
 
@@ -131,11 +118,13 @@
             </div>
 
             <div class="bottom-options">
-                <button on:click={() => {playNextLevelClicked()}}>Play Next Level</button>
-                <button on:click={() => {returnToMainMenuClicked()}}>Return to Main Menu</button>
+                <button class="popup-button" on:click={() => {playNextLevelClicked()}}>Play Next Level</button>
+                <hr/>
+                <button class="popup-button" on:click={() => {returnToMainMenuClicked()}}>Return to Main Menu</button>
             </div>
         </Overlay>
     {/if}
+
 </div>
 
 <style>

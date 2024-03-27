@@ -70,30 +70,31 @@
 <HeaderBar />
 <div class="home-page">
     <h1>Welcome to WikiClue</h1>
+    <!-- <div class="buttons-container">
+        <button on:click={()=>goto("/add-friends")}>Add Friends</button>
+        <button on:click={()=>goto("/leaderboard")}>View Leaderboards</button>
+    </div>-->
     <div class="games-container">
         <div class="game-container">
             <h2>Levels</h2>
             <LevelsIcon style="font-size: 2.5em; color: black; padding-top: 5px"/>
             <p class="game-description">Think you can complete 30 levels of increasing difficulty?</p>
-            <button on:click={() => {isOverlayOpen.set(true); levelsOpen = true;}}>Play Levels</button>
+            <button class="play-button" on:click={() => {isOverlayOpen.set(true); levelsOpen = true;}}>Play Levels</button>
         </div>
         <div class="game-container">
             <h2>The Daily</h2>
             <DailyIcon style="font-size: 2.5em; color: black; padding-top: 5px"/>
             <p class="game-description">How fast can you solve the daily problem?</p>
-            <button on:click={() => {isOverlayOpen.set(true); dailyOpen = true;}}>Play The Daily</button>
+            <button class="play-button" on:click={() => {isOverlayOpen.set(true); dailyOpen = true;}}>Play The Daily</button>
         </div>
         <div class="game-container">
             <h2>Rush</h2>
             <RushIcon style="font-size: 2.5em; color: black; padding-top: 5px"/>
             <p class="game-description">How big of a streak can you get?</p>
-            <button on:click={() => {isOverlayOpen.set(true); rushOpen = true;}}>Play Rush</button>
+            <button class="play-button" on:click={() => {isOverlayOpen.set(true); rushOpen = true;}}>Play Rush</button>
         </div>
     </div>
-    <div class="buttons-container">
-        <button on:click={()=>goto("/add-friends")}>Add Friends</button>
-        <button on:click={()=>goto("/leaderboard")}>View Leaderboards</button>
-    </div>
+    
     {#if $isOverlayOpen && levelsOpen}
         <Overlay header="Levels" onClose={() => {isOverlayOpen.set(false); levelsOpen = false;}}>
             <p class="popup-description">In this game mode you will have unlimited time to try and complete 30 levels of increasing difficulty! Are you ready for the challenge?</p>
@@ -128,7 +129,7 @@
                     Please select a difficulty!
                 {/if}
             </p>
-            <LevelsIcon style="font-size: 5.0rem; color: black; margin: 5%"/>
+            <LevelsIcon style="font-size: 5.0rem; color: black; margin: 7.5%"/>
             <button class="popup-button" on:click={() => goto("/levels")}>Play Now!</button>
         </Overlay>   
     {/if}

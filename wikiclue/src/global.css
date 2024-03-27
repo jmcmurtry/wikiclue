@@ -1,27 +1,55 @@
 @import url('https://fonts.googleapis.com/css2?family=Arbutus+Slab&display=swap');
 
 :root {
-	--black: #000;
-	--light-gray: #f1efef;
-	--input-background: #f1efef;
-	--button-background: #ccc8aa;
-	--button-hover: #cbb563;
+	--default-button-color: #ccc8aa;
+	--default-button-color-lighter: #adaa8d;
+
+	--skip: #8f6f97;
+	--skip-hover: #b19bb63b;
+
+	--success-color-hover: rgb(173, 197, 153);
+	--success-color-lighter: #969e97;
+	--success-color-darker: #8c938b;
+
+	--app-background: #d9d9d9;
+	--input-border-color: #727272;
+	--friend-border: #ccc;
+	--card-background: #f8f9fa;
 	--error-color: red;
 	--success-color: green;
-	--correct-answer: #aaccad;
-	--wrong-answer: #ccaaaa;
-	--pass: #d9d9d9;
-	--search-result-hover: #A7C7E7;
+
+	--remove-hover: #dfafaf;
+	--remove-darker: #866262;
+	--remove-lighter: #ad8585;
+
+	--search-border: #a2a9b1;
+	--search-color: #202122;
+	--search-background: #f8f9fa;
+	--search-background-hover: #fff;
+	--search-color-hover: #404244;
 }
 
 body {
 	font-family: 'Arbutus Slab', serif;
+	background-color: var(--app-background);
+	overflow-x: hidden;
 }
 
 button {
 	font-family: inherit;
+	color: black;
 }
 
 input {
 	font-family: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: black;
 }

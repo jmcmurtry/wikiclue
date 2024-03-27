@@ -1,5 +1,6 @@
 <script lang="ts">
     import HeaderBar from "../../components/headerBar.svelte";
+    import GameHeader from "../../components/gameHeader.svelte";
     import RushIcon from '~icons/nimbus/fire'
     import TimerIcon from '~icons/material-symbols/timer-outline'
     import SkipIcon from '~icons/bi/skip-forward'
@@ -158,7 +159,7 @@
 
 <HeaderBar />
 <div class="rush-page">
-    <h1>Rush Game</h1>
+    <GameHeader header="Rush" arrow={true}/>
     <div class="info-bar">
         <div class="info-container">
             <RushIcon style="font-size: 2rem; color: black;"/>
@@ -182,54 +183,47 @@
             </p>
         </div>
     </div>
-    <div class="search-container">
-        <p class = "sub-header">Find a Wikipedia page that contains the following words:</p>
+    <div class="game-container">
+        <button class="skip-button" on:click={() => skipPressed()}>Skip</button>
+        <p class="game-description">Find A Wiki page with</p>
         <div class="words-container">
             <p class="search-words">{wordsToFind[0]}</p>
             <p class="search-words">{wordsToFind[1]}</p>
         </div>
-        <p class="incorrect-answer">
+		<p class="incorrect-answer">
 			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
 			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
 		</p>
-        <SearchComponent confirmFunction={rushConfirmFunction} />
-    </div>
-    <div class="buttons-container">
-        {#if skipsRemaining > 0 && !gameOver}
-            <button on:click={()=>skipPressed()}>Skip</button>
-        {:else if gameOver}
-            <button disabled={true}>Skip</button>
-        {:else}
-            <button disabled={true}>No Skips Left</button>
-        {/if}
-        {#if gameOver}
-            <button disabled={true}>Confirm Answer</button>
-        {:else}
-            <button on:click={()=>rushConfirmFunction()}>Confirm Answer</button>
-        {/if}
-    </div>
+		<SearchComponent gameOver={gameOver} confirmFunction={rushConfirmFunction} />
+	</div>
     {#if $isOverlayOpen && correctOverlay}
         <Overlay header="Correct!" onClose={() => {loadNextRound(); isOverlayOpen.set(false); correctOverlay = false}}>
-            <p class="popup-description">You found a page that contains the two words! Keep it up!</p>
-            <div class="popup-container">
-                <RushIcon style="font-size: 2rem; color: black;"/>
-                <p class="popup-text">Current Streak: {streakCount}</p>
+            <div class="popup-info-container">
+                <p class="popup-description">You found a page that contains the two words! Keep it up!</p>
+                <div class="streak-container">
+                    <RushIcon style="font-size: 3.5rem;"/>
+                    <p class="popup-text">Current Streak: {streakCount}</p>
+                </div>
             </div>
-            <button class="button-text" on:click={() => {loadNextRound(); isOverlayOpen.set(false); correctOverlay = false}}>Next Round</button>
+            <button class="popup-button" on:click={() => {loadNextRound(); isOverlayOpen.set(false); correctOverlay = false}}>Next Round</button>
         </Overlay>
     {/if}
     {#if $isOverlayOpen && skippedOverlay}
         <Overlay header="Skipped!" onClose={() => {loadNextRound(); isOverlayOpen.set(false); skippedOverlay = false}}>
-            <p class="popup-description">You have skipped this round!</p>
-            <div class="popup-container">
-                <SkipIcon style="font-size: 2rem; color: black;"/>
-                <p class="popup-text">Skips Remaining: {skipsRemaining}</p>
+            <div class="popup-info-container">
+                <p class="popup-description">You have skipped this round!</p>
+                <div class="streak-container">
+                    <SkipIcon style="font-size: 3.5rem; color: black;"/>
+                    <p class="popup-text">Skips Remaining: {skipsRemaining}</p>
+                </div>
             </div>
-            <button class="button-text" on:click={() => {loadNextRound(); isOverlayOpen.set(false); skippedOverlay = false}}>Next Round</button>
+            
+            <button class="popup-button" on:click={() => {loadNextRound(); isOverlayOpen.set(false); skippedOverlay = false}}>Next Round</button>
         </Overlay>
     {/if}
 </div>
 
 <style>
     @import '../../styles/rushPageStyles.css';
+    @import '../../styles/componentStyles/endScreenStyles.css';
 </style>

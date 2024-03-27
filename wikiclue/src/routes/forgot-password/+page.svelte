@@ -45,13 +45,14 @@
 		{#if $isOverlayOpen}
 			<Overlay header="Email Sent" displayX={false}>
 				<p class="popup-text">If you don't see the email, please check your junk or spam folder.</p>
-				<EmailIcon style="width: 20%; height: 20%; color: black;"/>
-				<button on:click={() => clearPopup()}>Login</button>
+				<EmailIcon style="width: 30%; height: 30%; color: black;"/>
+				<button  class="popup-button" on:click={() => clearPopup()}>Login</button>
 			</Overlay>
 		{/if}
 		<p class="input-label">Email</p>
 		<input type="text" class="email-input" placeholder="Enter your email..." bind:value={email} />
 		<button on:click={() => sendEmail()}>Send Email</button>
+		<hr />
 		<a href="/login">Back to login</a>
 	</form>
 </div>

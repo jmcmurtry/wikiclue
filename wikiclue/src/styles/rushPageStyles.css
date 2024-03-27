@@ -3,18 +3,24 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	margin-top: 5rem;
+	margin-top: 15vh;
 }
 
-h1 {
-	font-size: 2rem;
+.skip-button {
+	position: absolute;
+	top: 2%;
+	right: 2%;
+	height: 10%;
+	width: 15%;
+	color: var(--skip);
+	border: 1px solid var(--skip-darker);
 }
 
 .info-bar {
 	display: flex;
 	align-items: center;
 	justify-content: space-evenly;
-	margin-bottom: 20px;
+	margin: 3vh 0;
 }
 
 .info-container {
@@ -29,57 +35,62 @@ h1 {
 	font-size: 1.2rem;
 }
 
-.search-container {
+.game-container {
+	background-color: var(--card-background);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
-	background-color: var(--light-gray);
-	margin-top: 3%;
-	background-color: var(--light-gray);
+	text-align: center;
+	margin: auto;
+	width: 700px;
+	max-height: 275px;
+	max-width: 95vw;
+	padding: 2rem 0;
 	box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.2);
-	width: calc(300px + 25vw);
+	position: relative;
 }
 
-.sub-header {
-	font-size: 1.3rem;
-	text-align: center;
-	margin-right: 2rem;
-	margin-left: 2rem;
+.game-description {
+	font-size: 1.4rem;
+	margin: 0;
 }
 
 .words-container {
 	display: flex;
+	flex-wrap: wrap;
+	max-width: 90%;
+	justify-content: center;
 	gap: 10vw;
+	margin: 3rem 0 2rem 0;
 }
 
 .search-words {
-	font-size: 1.8rem;
-}
-
-.search-bar {
-	width: 80%;
-	padding: 0.5rem;
-	font-size: 1.1rem;
-	border: 1px solid var(--black);
-	background-color: var(--input-background);
+	font-size: 2rem;
+	font-weight: 600;
+	margin: 0;
 }
 
 .incorrect-answer {
 	font-size: 1.1rem;
 	color: var(--error-color);
-	margin-top: 3%;
-	margin-bottom: 3%;
+	margin: 0;
 }
 
-.buttons-container {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	margin: 1rem;
+.skip-button {
+	color: var(--skip);
+	border: 1px solid var(--skip);
+	font-size: 1.3rem;
+	cursor: pointer;
+	height: 15%;
+	max-height: 30px;
 }
 
-button {
+.skip-button:hover {
+	background-color: var(--skip-hover);
+}
+
+#confirm-button,
+#skip-button {
 	background-color: var(--button-background);
 	width: 14rem;
 	height: 3rem;
@@ -91,33 +102,37 @@ button {
 	cursor: pointer;
 }
 
-button:hover:not([disabled]) {
+#confirm-button:hover:not([disabled]),
+#skip-button:hover:not([disabled]) {
 	background-color: var(--button-hover);
 }
 
 .popup-description {
 	font-size: 1.3rem;
 	text-align: center;
-	margin-right: 15%;
-	margin-left: 15%;
-	margin-top: 10%;
+	margin: 0 15%;
 }
 
-.popup-container {
+.popup-info-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-evenly;
+	height: 70%;
+	max-width: 90%;
+}
+
+.streak-container {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 10px;
+	gap: 30px;
+	width: 300px;
+	max-width: 100%;
 }
 
 .popup-text {
 	font-size: 1.3rem;
-}
-
-.button-text {
-	font-size: 1.3rem;
-	cursor: pointer;
-	margin-top: 10%;
 }
 
 @media screen and (max-width: 1200px) {

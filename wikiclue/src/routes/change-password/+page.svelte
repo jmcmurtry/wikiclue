@@ -77,18 +77,18 @@
 
 <div class="change-password-page">
   <h1>Change Password</h1>
-  <form>
-      {#if errorMessage}
-      <p class="error-message">{errorMessage}</p>
-      {/if}
-      <p class ="input-label">Current Password</p>
-      <input type="password" class="change-password-input" placeholder="Enter your current password..." bind:value={currentPassword}/>
-      <p class ="input-label">New Password</p>
-      <input type="password" class="change-password-input" placeholder="Enter your new password..." bind:value={newPassword}/>
-      <p class ="input-label">Confirm New Password</p>
-      <input type="password" class="change-password-input" placeholder="Enter your new password again..." bind:value={confirmNewPassword}/>
-      <button on:click={() => changePasswordClicked()}>Change Password</button>
-  </form>
+    <form>
+        {#if errorMessage}
+        <p class="error-message">{errorMessage}</p>
+        {/if}
+        <p class ="input-label">Current Password</p>
+        <input type="password" class="change-password-input" placeholder="Current Password..." bind:value={currentPassword}/>
+        <p class ="input-label">New Password</p>
+        <input type="password" class="change-password-input" placeholder="New Password..." bind:value={newPassword}/>
+        <p class ="input-label">Confirm New Password</p>
+        <input type="password" class="change-password-input" placeholder="New Password..." bind:value={confirmNewPassword}/>
+        <button on:click={() => changePasswordClicked()}>Change Password</button>
+    </form>
   {#if $needRecentLogin}
     <Overlay header="Verify yourself by logging in" onClose={() => {needRecentLogin.set(false);}}>
         {#if recentLoginErrorMessage}
@@ -99,7 +99,6 @@
         <p class ="input-label">Password</p>
         <input type="password" class="login-input" placeholder="Enter your password..." bind:value={recentLoginPassword}/>
         <button on:click={() => recentLogin()}>Verify Me!</button>
-
     </Overlay>
   {/if}
 </div>

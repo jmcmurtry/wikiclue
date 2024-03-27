@@ -1,5 +1,6 @@
 <script lang="ts">
 	import HeaderBar from '../../components/headerBar.svelte';
+	import GameHeader from "../../components/gameHeader.svelte";
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import Overlay from '../../components/overlay.svelte';
@@ -166,28 +167,20 @@
 
 <HeaderBar />
 <div class="daily-page">
-	<h1 class="daily-title">{monthNames[today.getMonth()]} {today.getDate()} Daily Challenge</h1>
-	<h1 class="guesses-remaining">Guesses Remaining: {guessesRemaining}</h1>
-	<div class="search-container">
-		<p class="sub-header">Find a Wikipedia page that contains the following words:</p>
-		<div>
-			<div class="words-container">
-				<p class="search-words">{wordsToFind[0]}</p>
-				<p class="search-words">{wordsToFind[1]}</p>
-			</div>
-		</div>
+	<GameHeader header={monthNames[today.getMonth()] + " " + today.getDate()} arrow={true}/>
+	<p class="info-text">Guesses Remaining: {guessesRemaining}</p>
+
+	<div class="game-container">
+        <p class="game-description">Find A Wiki page with</p>
+        <div class="words-container">
+            <p class="search-words">{wordsToFind[0]}</p>
+            <p class="search-words">{wordsToFind[1]}</p>
+        </div>
 		<p class="incorrect-answer">
 			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
 			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
 		</p>
-		<SearchComponent confirmFunction={dailyConfirmFunction} />
-	</div>
-	<div class="buttons-container">
-		{#if gameOver}
-			<button disabled={true}>Confirm Answer</button>
-		{:else}
-			<button on:click={() => dailyConfirmFunction()}>Confirm Answer</button>
-		{/if}
+		<SearchComponent gameOver={gameOver} confirmFunction={dailyConfirmFunction} />
 	</div>
 	{#if $isOverlayOpen && gameOver}
 		<Overlay
@@ -218,14 +211,12 @@
 					</div>
 				{/each}
 			</div>
-
-			<div class="bottom-options">
 				<button
+				class="popup-button"
 					on:click={() => {
 						goto('/home');
 					}}>Return to Main Menu</button
 				>
-			</div>
 		</Overlay>
 	{/if}
 </div>
