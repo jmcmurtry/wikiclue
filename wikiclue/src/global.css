@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Arbutus+Slab&display=swap');
 
 :root {
-	--default-button-color: #6b8eafab;
-	--default-button-color-lighter: #5a769fab;
+	--default-button-color: #ccc8aa;
+	--default-button-color-lighter: #adaa8d;
 
 	--skip: #8f6f97;
 	--skip-hover: #b19bb63b;
@@ -11,7 +11,7 @@
 	--success-color-lighter: #969e97;
 	--success-color-darker: #8c938b;
 
-	--app-background: #d9d9d9;
+	--app-background: #d9d9d9a1;
 	--input-border-color: #727272;
 	--friend-border: #ccc;
 	--card-background: #f8f9fa;
