@@ -6,7 +6,7 @@
     let errorMessage = "";
     let successMessage = "";
 
-    let friends = ['LitLover911', 'Chris_Morroco', 'Bonnie', 'Clyde', 'Kenny']
+    let friends = ['LitLover911', 'Chris_Morroco', 'Bonnie', 'Clyde', 'Kenny'];
     async function addFriend(friend: string){
 
     // Reset status messages

@@ -69,7 +69,15 @@
 	border: 1px solid var(--remove-darker);
 }
 
+.cancel-button:hover {
+	background-color: var(--remove-hover);
+}
+
 .confirm-button {
 	color: var(--success-color-darker);
 	border: 1px solid var(--success-color-darker);
+}
+
+.confirm-button:hover {
+	background-color: var(--success-color-hover);
 }

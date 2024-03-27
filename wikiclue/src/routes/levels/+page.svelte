@@ -87,7 +87,7 @@
 
 <HeaderBar />
 <div class="levels-page">
-    <GameHeader header="Rush" arrow={true}/>
+    <GameHeader header="Level Mode" arrow={true}/>
 	<p class="info-text">Current Level: 1</p>
 
 	<div class="game-container">

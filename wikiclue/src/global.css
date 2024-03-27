@@ -1,15 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Arbutus+Slab&display=swap');
 
 :root {
-	--default-button-color: #6b8eaf;
-	--default-button-color-lighter: #526a91;
-	--default-button-color-lighter: #5a769f;
+	--default-button-color: #6b8eafab;
+	--default-button-color-lighter: #5a769fab;
 
-	--skip: #8b8680;
-	--skip-lighter: #837e79;
-	--skip-darker: #7a756f;
+	--skip: #8f6f97;
+	--skip-hover: #b19bb63b;
 
-	--success-color: #a2a79e;
+	--success-color-hover: rgb(173, 197, 153);
 	--success-color-lighter: #969e97;
 	--success-color-darker: #8c938b;
 
@@ -18,8 +16,9 @@
 	--friend-border: #ccc;
 	--card-background: #f8f9fa;
 	--error-color: red;
+	--success-color: green;
 
-	--remove: #9e7e7e;
+	--remove-hover: #dfafaf;
 	--remove-darker: #866262;
 	--remove-lighter: #ad8585;
 
@@ -29,23 +28,6 @@
 	--search-background-hover: #fff;
 	--search-color-hover: #404244;
 }
-/* old colors */
-/*
---black: #000;
-	--color-progressive--active: #2a4b8d;
-	--color-progressive--focus: #36c;
-	--light-gray: #f1efef;
-	--input-background: #f1efef;
-	--button-background: white;
-	--button-text-color: #000000;
-	--button-hover: #00000052;
-	--error-color: red;
-	--success-color: green;
-	--correct-answer: #aaccad;
-	--wrong-answer: #ccaaaa;
-	--pass: #d9d9d9;
-	--search-result-hover: #a7c7e7;
-*/
 
 body {
 	font-family: 'Arbutus Slab', serif;

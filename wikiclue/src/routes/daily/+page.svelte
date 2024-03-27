@@ -167,7 +167,7 @@
 
 <HeaderBar />
 <div class="daily-page">
-	<GameHeader header={monthNames[today.getMonth()] + today.getDate()} arrow={true}/>
+	<GameHeader header={monthNames[today.getMonth()] + " " + today.getDate()} arrow={true}/>
 	<p class="info-text">Guesses Remaining: {guessesRemaining}</p>
 
 	<div class="game-container">
