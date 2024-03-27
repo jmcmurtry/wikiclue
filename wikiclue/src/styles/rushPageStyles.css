@@ -10,6 +10,10 @@
 	position: absolute;
 	top: 2%;
 	right: 2%;
+	height: 10%;
+	width: 15%;
+	color: var(--skip);
+	border: 1px solid var(--skip-darker);
 }
 
 .info-bar {

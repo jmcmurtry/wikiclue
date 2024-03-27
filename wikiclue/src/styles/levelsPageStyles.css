@@ -86,7 +86,7 @@
 
 .popup-button {
 	width: 100%;
-	background-color: var(--color-progressive);
+	background-color: var(--default-button-color);
 	cursor: pointer;
 	border: none;
 	font-size: 1.3rem;
@@ -94,7 +94,7 @@
 }
 
 .popup-button:hover {
-	background-color: var(--color-progressive--hover);
+	background-color: var(--default-button-color-lighter);
 }
 
 hr {

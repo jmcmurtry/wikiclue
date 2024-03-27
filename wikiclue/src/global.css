@@ -1,18 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Arbutus+Slab&display=swap');
 
 :root {
-	--color-progressive: rgb(114, 161, 255);
-	--color-progressive--hover: rgb(71, 123, 228);
-	--skip-hover: #ddcef2;
-	--skip: #afa3bf;
+	--default-button-color: #6b8eaf;
+	--default-button-color-lighter: #526a91;
+	--default-button-color-lighter: #5a769f;
 
-	--success-color: green;
+	--skip: #8b8680;
+	--skip-lighter: #837e79;
+	--skip-darker: #7a756f;
+
+	--success-color: #a2a79e;
+	--success-color-lighter: #969e97;
+	--success-color-darker: #8c938b;
+
 	--app-background: #d9d9d9;
 	--input-border-color: #727272;
 	--friend-border: #ccc;
 	--card-background: #f8f9fa;
 	--error-color: red;
-	--remove: #ccaaaa;
+
+	--remove: #9e7e7e;
+	--remove-darker: #866262;
+	--remove-lighter: #ad8585;
+
 	--search-border: #a2a9b1;
 	--search-color: #202122;
 	--search-background: #f8f9fa;

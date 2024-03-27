@@ -33,7 +33,7 @@ hr {
 }
 
 button {
-	background-color: var(--color-progressive);
+	background-color: var(--default-button-color);
 	cursor: pointer;
 	border: none;
 	font-size: 1.3rem;
@@ -43,7 +43,7 @@ button {
 }
 
 button:hover {
-	background-color: var(--color-progressive--hover);
+	background-color: var(--default-button-color-lighter);
 }
 
 .popup-button {

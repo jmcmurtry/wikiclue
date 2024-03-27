@@ -63,3 +63,13 @@
 	padding: 0.5rem;
 	width: 40%;
 }
+
+.cancel-button {
+	color: var(--remove-darker);
+	border: 1px solid var(--remove-darker);
+}
+
+.confirm-button {
+	color: var(--success-color-darker);
+	border: 1px solid var(--success-color-darker);
+}

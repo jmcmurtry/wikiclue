@@ -32,7 +32,7 @@
       {#if successMessage}
         <p class="success-message">{successMessage}</p>
       {/if}
-      <h2>Enter your friend's email</h2>
+      <p class="label">Enter your friend's email</p>
       <input type="text" class="add-friend-input" bind:value={friendEmail}/>
       <button on:click={() => addFriend()}>Add Friend</button>
   </form>
