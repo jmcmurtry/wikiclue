@@ -9,7 +9,7 @@
 
 
   // When we have the database set up with users, this would need to occur onload
-  let currentUsername = writable(null);
+  let currentUsername = "";
   const changeWasClicked = writable(false);
   let newUsername = "";
   let errorMessage = "";
@@ -25,7 +25,7 @@
 			  const uid = user.uid;
         if(user){
           const username = await authHandlers.getUsername(uid);
-          currentUsername.set(username);
+          currentUsername = username;
           }
             // Would need to use this functionality to pre load levels data with words from database
             // depending on if the user selects easy medium or hard
@@ -37,7 +37,7 @@
       errorMessage = "Please enter a new username.";
       return;
     }
-    if (newUsername === $currentUsername) {
+    if (newUsername === currentUsername) {
       errorMessage = "Cannot enter the same username.";
       return;
     }
@@ -52,8 +52,8 @@
   async function okClicked(){
     // Would actually update the database here
     try {
-      if(await authHandlers.updateUsername($currentUsername, newUsername)){
-        currentUsername.set(newUsername);
+      if(await authHandlers.updateUsername(currentUsername, newUsername)){
+        currentUsername = newUsername;
         successMessage = "Username changed!"
       }
       else {
@@ -61,7 +61,7 @@
       }
     }
     catch(error){
-        errorMessage = error;
+        errorMessage = "Error while changing username";
     }
 
     changeWasClicked.set(false);
@@ -82,7 +82,7 @@
     {/if}
 
       <h2>Enter your new username</h2>
-      <input type="text" class="change-username-input" placeholder={$currentUsername} bind:value={newUsername}/>
+      <input type="text" class="change-username-input" placeholder={currentUsername} bind:value={newUsername}/>
       <button on:click={() => changeUsernameClicked()}>Change</button>
   </form>
   {#if $changeWasClicked}
