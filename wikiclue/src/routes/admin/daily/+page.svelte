@@ -2,7 +2,7 @@
     import { getMonth, getYear, getDate, getDay, addDays, subMonths, getDaysInMonth, addMonths } from 'date-fns';
     import { writable } from "svelte/store";
     import AdminHeader from "../../../components/adminHeader.svelte";
-    import HeaderBar from "../../../components/headerBar.svelte";
+    import AdminHeaderBar from "../../../components/adminheaderBar.svelte";
     import Overlay from "../../../components/overlay.svelte";
 
     const isEditOverlayOpen = writable(false);
@@ -87,7 +87,7 @@
 </script>
   
 
-<HeaderBar />
+<AdminHeaderBar />
 <div class="update-daily">
     <AdminHeader header="Update Daily's" arrow={true}/>
     <div class="calendar-container">
