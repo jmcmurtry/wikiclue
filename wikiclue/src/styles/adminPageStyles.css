@@ -29,16 +29,6 @@ h2 {
 	text-align: center;
 }
 
-button {
-	background-color: var(--button-background);
-	width: 14rem;
-	height: 45px;
-	border: 0px;
-	font-size: 1.3rem;
-	cursor: pointer;
-	margin-top: auto;
-	margin-bottom: 20px;
-}
 
 .play-button {
 	background-color: var(--default-button-color);
@@ -55,7 +45,3 @@ button {
 	background-color: var(--default-button-color-lighter);
 }
 
-
-button:hover {
-	background-color: var(--button-hover);
-}

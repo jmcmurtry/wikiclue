@@ -11,10 +11,12 @@
 	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
 	width: 150px;
 	height: 30px;
-	background-color: var(--button-background);
-	border: none;
+	background: var(--card-background);
+	border: 1px solid var(--search-border);
+	border: 1px;
 	font-size: 1.25rem;
 	font-family: inherit;
+	cursor:pointer;
 }
 
 /* Option header */
@@ -38,7 +40,7 @@
 
 .add-level-button {
 	font-size: 1.1rem;
-	background-color: var(--button-background);
+	background-color: var(--default-button-color);
 	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
 	width: 10rem;
 	height: 3rem;
@@ -48,7 +50,7 @@
 }
 
 .add-level-button:hover {
-	background-color: var(--button-hover);
+	background-color: var(--default-button-color-lighter);
 }
 
 /* Update Levels Section */
@@ -93,11 +95,12 @@ h3 {
 	box-sizing: border-box;
 	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
 	aspect-ratio: 1;
-	background-color: var(--button-background);
+	cursor: pointer;
+	background: var(--card-background);
 }
 
 .level:hover {
-	background-color: var(--button-hover);
+	background-color: var(--card-background-darker);
 }
 
 /* Edit overlay Styles */
@@ -113,14 +116,15 @@ h3 {
 	padding: 0.5rem;
 	font-size: 1.3rem;
 	width: 80%;
-	border: 1px solid var(--black);
-	background-color: var(--input-background);
+	border: 1px solid var(--search-border);
+	background-color: var(--search-background);
+	color: var(--search-color);
 	margin-bottom: 5%;
 }
 
 .save-button {
 	font-size: 1.3rem;
-	background-color: var(--button-background);
+	background-color: var(--default-button-color);
 	width: 80%;
 	height: 3rem;
 	border: 0px;
@@ -129,5 +133,5 @@ h3 {
 }
 
 .save-button:hover {
-	background-color: var(--button-hover);
+	background-color: var(--default-button-color-lighter);
 }

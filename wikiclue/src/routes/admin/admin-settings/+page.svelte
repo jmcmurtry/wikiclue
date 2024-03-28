@@ -1,9 +1,9 @@
 <script lang="ts">
-  import HeaderBar from "../../../components/headerBar.svelte";
+  import AdminHeaderBar from "../../../components/adminHeaderBar.svelte";
   import { goto } from '$app/navigation';
 </script>
 
-<HeaderBar />
+<AdminHeaderBar />
 
 <div class="user-settings-page">
   <form>
