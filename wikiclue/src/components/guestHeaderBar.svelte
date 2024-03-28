@@ -1,18 +1,21 @@
-<script>
-	import { goto } from "$app/navigation";
+<script lang ="ts">
+    import logo from '$lib/images/logo.png';
+    import LoginIcon from "~icons/material-symbols/login-sharp"
 </script>
 
 <nav class="header-bar">
-    <div class="content-container">
+    <div id="left-align">
         <a href="/">
-            <p class="name">WikiClue</p>
+            <img src={ logo } alt="WikiClue Logo" />
         </a>
-        <div class="links-container">
-            <button on:click={()=>goto('/login')}>Login</button>
-        </div>
+    </div>
+    <div class="links-container">
+        <a href="/login">
+            <LoginIcon style="font-size: 1.5rem; color: white; padding-top: 5px"/>
+        </a>
     </div>
 </nav>
 
 <style>
-    @import '../styles/componentStyles/headerBarStyles.css';
+    @import '../styles/componentStyles/guestHeaderBarStyles.css';
 </style>

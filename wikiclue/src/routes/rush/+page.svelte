@@ -159,7 +159,7 @@
 
 <HeaderBar />
 <div class="rush-page">
-    <GameHeader header="Rush" arrow={true}/>
+    <GameHeader header="Rush" arrow={true} backLink="/home"/>
     <div class="info-bar">
         <div class="info-container">
             <RushIcon style="font-size: 2rem; color: black;"/>

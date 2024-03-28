@@ -1,4 +1,5 @@
 <script lang="ts">
+	import GuestHeaderBar from "../../components/guestHeaderBar.svelte";
 	import { authHandlers } from '../../store/store';
 	import { writable } from 'svelte/store';
 	import Overlay from '../../components/overlay.svelte';
@@ -36,6 +37,7 @@
 	}
 </script>
 
+<GuestHeaderBar />
 <div class="forgot-password-page">
 	<h1>Reset Password</h1>
 	<form>
