@@ -17,9 +17,10 @@
 	width: calc(100% - 17px);
 	padding: 0.5rem;
 	font-size: 1.3rem;
-	border: 1px solid var(--black);
-	background-color: var(--input-background);
 	margin-bottom: 2rem;
+	border: 1px solid var(--search-border);
+	background-color: var(--search-background);
+	color: var(--search-color);
 }
 
 .save-changes {
@@ -28,9 +29,9 @@
 	font-size: 1.3rem;
 	border: none;
 	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-	background-color: var(--button-background);
+	background-color: var(--default-button-color);
 }
 
 .save-changes:hover {
-	background-color: var(--button-hover);
+	background-color: var(--default-button-color-lighter);
 }
