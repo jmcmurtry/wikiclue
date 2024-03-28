@@ -1,4 +1,5 @@
 <script lang="ts">
+    import GuestHeaderBar from "../components/guestHeaderBar.svelte";
 	import { browser } from "$app/environment";
     import { goto } from "$app/navigation";
 	import { writable } from "svelte/store";
@@ -44,6 +45,7 @@
     }
 </script>
 
+<GuestHeaderBar />
 <div class="landing-page">
     <h1>Welcome to WikiClue</h1>
     <div class="content-container">

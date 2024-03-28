@@ -3,11 +3,12 @@
 
     export let header = "";
     export let arrow: boolean;
+    export let backLink: string;
 </script>
 
 <div class="header-container">
     {#if arrow}
-        <a href="/home">
+        <a href={backLink}>
             <BackIcon style="font-size: 1.5em; color: black"/>
         </a>
     {/if}

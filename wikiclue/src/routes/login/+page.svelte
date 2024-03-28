@@ -1,4 +1,5 @@
 <script lang="ts">
+    import GuestHeaderBar from "../../components/guestHeaderBar.svelte";
     import { authHandlers } from "../../store/store";
 
     let email = "";
@@ -29,6 +30,7 @@
     }
 </script>
 
+<GuestHeaderBar />
 <div class="login-page">
     <h1>Log in to Wikiclue</h1>
     <form>

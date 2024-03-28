@@ -1,4 +1,5 @@
 <script lang="ts">
+    import GuestHeaderBar from "../../components/guestHeaderBar.svelte";
     import { goto } from '$app/navigation';
     import { authHandlers } from "../../store/store";
     import { allowOnMount } from '../../store/mount';
@@ -45,6 +46,7 @@
     }
 </script>
 
+<GuestHeaderBar />
 <div class="signup-page">
     <h1>Create an Account</h1>
     <form>
