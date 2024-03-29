@@ -9,6 +9,7 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+	z-index: 999;
 }
 
 #left-align {
@@ -63,7 +64,6 @@ button:hover {
 	padding-left: 1rem;
 	padding-right: 1rem;
 	margin-right: 1rem;
-	position: absolute;
 }
 
 .burger-menu-items {
@@ -85,8 +85,6 @@ button:hover {
 	width: 100%;
 	text-align: center;
 	font-size: 1rem;
-	position: absolute;
-
 }
 
 .burger-menu-items button {
@@ -98,8 +96,6 @@ button:hover {
 	width: 100%;
 	text-align: center;
 	font-size: 1rem;
-	position: absolute;
-
 }
 
 .burger-menu-items a:hover,
