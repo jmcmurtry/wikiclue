@@ -32,7 +32,7 @@
             <form class="settings-container">
                 <p class ="input-label">Skips</p>
                 <input type="text" class="rush-settings-input" bind:value={skips}/>
-                <p class ="input-label">Time Allowed (s)</p>
+                <p class ="input-label">Time Allowed(s)</p>
                 <input type="text" class="rush-settings-input" bind:value={timeAllowed}/>
                 <button class="save-changes" on:click={() => handleUpdateSettings()}>Save Changes</button>
             </form>
