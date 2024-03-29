@@ -10,8 +10,8 @@
       <h1>Settings</h1>
       <p class ="label">Account:</p>
       <hr/>
-      <button on:click={()=>setTimeout(() => goto('/change-password'), 0)}>Change Password</button>
-      <button on:click={()=>setTimeout(() => goto('/change-username'), 0)}>Change Username</button>
+      <button on:click={()=>setTimeout(() => goto('/admin/change-password'), 0)}>Change Password</button>
+      <button on:click={()=>setTimeout(() => goto('/admin/change-username'), 0)}>Change Username</button>
   </form>
 </div>
 

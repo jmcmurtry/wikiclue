@@ -2,7 +2,7 @@
     import { getMonth, getYear, getDate, getDay, addDays, subMonths, getDaysInMonth, addMonths } from 'date-fns';
     import { writable } from "svelte/store";
     import AdminHeader from "../../../components/adminHeader.svelte";
-    import AdminHeaderBar from "../../../components/adminheaderBar.svelte";
+    import AdminHeaderBar from "../../../components/adminHeaderBar.svelte";
     import Overlay from "../../../components/overlay.svelte";
 
     const isEditOverlayOpen = writable(false);
