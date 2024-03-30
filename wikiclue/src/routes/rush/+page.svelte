@@ -79,7 +79,7 @@
     }
 
     function skipPressed() {
-        if (skipsRemaining > 0) {
+        if (skipsRemaining > 0 && !$isOverlayOpen) {
             skipsRemaining--;
             clearInterval(timerInterval);
             isOverlayOpen.set(true);
@@ -188,9 +188,11 @@
             if(gameOver){
                 return;
             }
-            loadNextRound();
-            isOverlayOpen.set(false);
-            return;
+            if(correctOverlay){
+                loadNextRound();
+                isOverlayOpen.set(false);
+                return;
+            }
         }
     }
 </script>
