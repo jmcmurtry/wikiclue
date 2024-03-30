@@ -1,6 +1,6 @@
 <script lang="ts">
     import AdminHeader from "../../../components/adminHeader.svelte";
-    import HeaderBar from "../../../components/headerBar.svelte";
+    import AdminHeaderBar from "../../../components/adminHeaderBar.svelte";
     import Overlay from "../../../components/overlay.svelte";
     import { writable } from "svelte/store";
 
@@ -32,7 +32,7 @@
 </script>
   
 
-<HeaderBar />
+<AdminHeaderBar />
 <div class="update-level">
     <AdminHeader header="Update Levels" arrow={true}/>
 

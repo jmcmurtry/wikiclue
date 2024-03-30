@@ -18,10 +18,11 @@
 	height: 50px;
 	border: 1px solid #ccc;
 	cursor: pointer;
+	background: var(--card-background);
 }
 
 .day:hover {
-	background-color: #f0f0f0;
+	background-color: var(--card-background-darker);
 }
 
 .previous-month {
@@ -99,14 +100,15 @@
 	padding: 0.5rem;
 	font-size: 1.3rem;
 	width: 80%;
-	border: 1px solid var(--black);
-	background-color: var(--input-background);
+	border: 1px solid var(--search-border);
+	background-color: var(--search-background);
+	color: var(--search-color);
 	margin-bottom: 5%;
 }
 
 .save-button {
 	font-size: 1.3rem;
-	background-color: var(--button-background);
+	background-color: var(--default-button-color);
 	width: 84%;
 	height: 3rem;
 	border: 0px;
@@ -115,5 +117,5 @@
 }
 
 .save-button:hover {
-	background-color: var(--button-hover);
+	background-color: var(--default-button-color-lighter);
 }
