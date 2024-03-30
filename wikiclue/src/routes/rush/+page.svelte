@@ -149,8 +149,6 @@
             clearInterval(timerInterval);
             isOverlayOpen.set(true);
             endOverlay = true;
-            // Show end of game pop up and take user back to home page
-            // Also check for refresh logic if user refreshes when end game overlay is open
         }
     }
 
@@ -185,8 +183,11 @@
         }
     }
 
-    function onEnterPressed(event: KeyboardEvent) {
+    async function onEnterPressed(event: KeyboardEvent) {
         if (event.key === "Enter" && $isOverlayOpen) {
+            if(gameOver){
+                return;
+            }
             loadNextRound();
             isOverlayOpen.set(false);
             return;
@@ -267,6 +268,5 @@
 </div>
 
 <style>
-    @import '../../styles/componentStyles/endScreenStyles.css';
     @import '../../styles/rushPageStyles.css';
 </style>
