@@ -83,7 +83,7 @@ export const authHandlers = {
 		try {
 			const doc = await getDoc(userDocRef);
 			if (doc.exists()) {
-				const maxStreak = doc.data().gameinfo.maxstreak;
+				const maxStreak = doc.data().gameinfo.rush;
 				return maxStreak;
 			} else {
 				console.log('No such document!');
@@ -97,7 +97,7 @@ export const authHandlers = {
 		const userDocRef = doc(userCollection, id);
 		try {
 			await updateDoc(userDocRef, {
-				'gameinfo.maxstreak': maxStreak
+				'gameinfo.rush': maxStreak
 			});
 		} catch (error) {
 			console.error('Error updating document:', error);
