@@ -5,6 +5,7 @@
     export let playAgain = () => {};   
     export let returnToMenu = () => {};
     export let streak: number;
+    export let maxStreak: number;
 </script>
 
 
@@ -15,6 +16,7 @@
         <RushIcon style="font-size: 2rem; color: black; padding-right: 10px"/>
         <p>{streak}</p>
     </h3>
+    <p class="popup-text">Rush All Time Record: {maxStreak}</p>
     <div class="bottom-options">
         <button class="popup-button" on:click={()=>{playAgain()}}>Play Again</button>
         <button class="popup-button" on:click={()=>{returnToMenu()}}>Return to Main Menu</button>

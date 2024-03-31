@@ -14,6 +14,7 @@
     import RushEnd from '../../components/rushEnd.svelte';
 	import { goto } from "$app/navigation";
 	import { browser } from "$app/environment";
+	import { auth } from "../../firebase/firebase";
 
     const isOverlayOpen = writable(false);
     let wordsToFind = ["", ""];
@@ -29,8 +30,13 @@
     let endOverlay = false;
     let timeAllowed: number;
     let token: string;
+    let userData: any;
+    let rushMaxStreak: number;
 
-    onMount(() => {
+    onMount(async () => {
+        await auth.onAuthStateChanged(async (user) => {
+            userData = user;
+        });
         searchTerm.set('');
         token = sessionStorage.getItem('token') ?? "";
         if(token === "") {
@@ -142,11 +148,16 @@
         startTimer();
     }
 
-    function endGame() {
+    async function endGame() {
         if (!$isOverlayOpen) {
             gameOver = true;
             sessionStorage.clear();
             clearInterval(timerInterval);
+            rushMaxStreak = await authHandlers.getUserRushData(userData.uid);
+            if (streakCount > rushMaxStreak) {
+                await authHandlers.updateUserRushData(userData.uid, streakCount);
+                rushMaxStreak = streakCount;
+            }
             isOverlayOpen.set(true);
             endOverlay = true;
         }
@@ -265,7 +276,7 @@
     {/if}
     {#if $isOverlayOpen && endOverlay}
         <RushEnd
-        playAgain={()=>{startNewGame()}} returnToMenu={()=>{goto("/home")}} streak={streakCount}/>
+        playAgain={()=>{startNewGame()}} returnToMenu={()=>{goto("/home")}} streak={streakCount} maxStreak={rushMaxStreak}/>
     {/if}
 </div>
 
