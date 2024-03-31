@@ -1,5 +1,6 @@
 <script lang="ts">
   import HeaderBar from "../../components/headerBar.svelte";
+	import { authHandlers, authStore } from "../../store/store";
 
   let friendEmail = "";
   let errorMessage = "";
@@ -11,13 +12,25 @@
     errorMessage = "";
     successMessage = ""
 
-    try {
-      // Call function that adds the friend here
-      successMessage = `Success! A friend request has been sent to ${friendEmail}`
-      friendEmail = "";
-    } catch (error: any) {
-      errorMessage = error.message;
-    }
+    authStore.subscribe(async ({ user }) => {
+			if (!user) {
+				console.error('Unable to grab user id');
+				return;
+			}
+
+			const uid = user.uid;
+			try {
+				await authHandlers.sendFriendRequest(friendEmail, uid);
+				successMessage = `Success! A friend request has been sent to ${friendEmail}`
+        friendEmail = "";
+
+				setTimeout(() => {
+					successMessage = '';
+				}, 1500);
+			} catch (error: any) {
+				errorMessage = error.message;
+			}
+		});
   }
 </script>
 
