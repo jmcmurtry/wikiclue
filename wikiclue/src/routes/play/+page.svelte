@@ -27,6 +27,8 @@
     let maxTime: number;
     let maxSkips: number;
     let correctAnswer = false;
+    let skipButtonPressed = false;
+    let autoSkipUsed = false;
     let skipPressedClass = '';
     let correctAnswerClass = "";
 
@@ -60,9 +62,17 @@
             if (timeRemaining > 0) {
                 timeRemaining -= 1;
             } else {
-                gameOver = true;
-                clearInterval(timerInterval);
-                endGame();
+                if (skipsRemaining > 0) {
+                    autoSkipUsed = true;
+                    setTimeout(() => {
+                        autoSkipUsed = false;
+                    }, 2000);
+                    skipPressed();
+                } else {
+                    gameOver = true;
+                    clearInterval(timerInterval);
+                    endGame();
+                }
             }
         }, 1000);
     }
@@ -76,6 +86,11 @@
             }, 2000);
             clearInterval(timerInterval);
             loadNextRound();
+        } else {
+            skipButtonPressed = true;
+            setTimeout(() => {
+                skipButtonPressed = false;
+            }, 2000);
         }
     }
 
@@ -110,29 +125,30 @@
     }
 
     async function loadNextRound() {
-        timeRemaining = maxTime;
-        gameOver = false;
-        searchTerm.set("");
-        const response = await fetch("/api/word-generation");
-        const words = await response.json();
-        wordsToFind[0] = words.word1;
-        wordsToFind[1] = words.word2;
-        let variables = {
-            streakCount: streakCount,
-            timeRemaining: timeRemaining,
-            skipsRemaining: skipsRemaining,
-            maxTime: maxTime,
-            maxSkips: maxSkips,
-            wordsToFind: [words.word1, words.word2],
+        if (!gameOver){
+            timeRemaining = maxTime;
+            searchTerm.set("");
+            const response = await fetch("/api/word-generation");
+            const words = await response.json();
+            wordsToFind[0] = words.word1;
+            wordsToFind[1] = words.word2;
+            let variables = {
+                streakCount: streakCount,
+                timeRemaining: timeRemaining,
+                skipsRemaining: skipsRemaining,
+                maxTime: maxTime,
+                maxSkips: maxSkips,
+                wordsToFind: [words.word1, words.word2],
+            }
+            const headers = new Headers();
+            headers.append("Authorization", token);
+            await fetch('/api/rush-variables', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({ variables }),
+            });
+            startTimer();
         }
-        const headers = new Headers();
-        headers.append("Authorization", token);
-        await fetch('/api/rush-variables', {
-			method: 'POST',
-            headers: headers,
-			body: JSON.stringify({ variables }),
-		});
-        startTimer();
     }
 
     function endGame() {
@@ -208,10 +224,14 @@
 		<p class="message-container">
             {#if correctAnswer}
                 <span class="correct-answer-message">Correct Answer!</span>
+            {:else if autoSkipUsed}
+                <span class="auto-skip-message">Round automatically skipped!</span>
             {:else if incorrectAnswer}
                 <span class="incorrect-answer">This page does not contain the two words!</span>
             {:else if pageDoesNotExist}
                 <span class="page-not-exist">This page does not exist!</span>
+            {:else if skipButtonPressed && skipsRemaining <= 0}
+                <span class="no-skips">You have no skips remaining!</span>
             {:else}
                 <span class="placeholder">{'\u00A0'}</span>
             {/if}

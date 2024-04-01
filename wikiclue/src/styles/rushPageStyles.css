@@ -79,11 +79,19 @@
 	color: var(--success-color);
 }
 
+.auto-skip-message {
+	color: var(--skip);
+}
+
 .incorrect-answer {
 	color: var(--error-color);
 }
 
 .page-not-exist {
+	color: var(--error-color);
+}
+
+.no-skips {
 	color: var(--error-color);
 }
 
