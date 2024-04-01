@@ -2,6 +2,7 @@
     import AdminHeader from "../../../components/adminHeader.svelte";
     import AdminHeaderBar from "../../../components/adminHeaderBar.svelte";
     import { rush } from "../../../../src/store/gameplay";
+    import { writable } from 'svelte/store';
     import { authHandlers } from "../../../store/store";
     import { onMount } from "svelte";
 
