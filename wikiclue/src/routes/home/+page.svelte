@@ -9,7 +9,6 @@
     import { goto } from '$app/navigation';
 	import { writable } from "svelte/store";
     import { browser } from '$app/environment';
-    import { rush } from "../../store/gameplay";
 	import { auth } from "../../firebase/firebase";
 	import { onMount } from "svelte";
     import { authHandlers } from "../../store/store";
@@ -37,12 +36,9 @@
 
     async function playRush() {
         if (browser) {
-            rush.timeAllowed.subscribe(value => {
-                timeRemaining = value;
-            });
-            rush.skipsRemaining.subscribe(value => {
-                skipsRemaining = value;
-            });
+            let rushData = await authHandlers.getRushSettings();
+            skipsRemaining = rushData?.skips;
+            timeRemaining = rushData?.timeAllowed;
             const response = await fetch("/api/word-generation");
             const words = await response.json();
             let variables = {

@@ -25,6 +25,7 @@
     let skippedOverlay = false;
     let timeAllowed: number;
     let token: string;
+    let maxTime: number;
 
     onMount(() => {
         searchTerm.set('');
@@ -33,14 +34,13 @@
             window.location.href = "/";
         }
         loadGameplayVariables();
-        rush.timeAllowed.subscribe(value => {
-            timeAllowed = value;
-        });
         startTimer();
         window.addEventListener('beforeunload', handleBeforeUnload); 
     });
 
     async function loadGameplayVariables() {
+        let rushData = await authHandlers.getRushSettings();
+        maxTime = rushData?.timeAllowed;
         const headers = new Headers();
         headers.append("Authorization", token);
         const response = await fetch("/api/rush-variables", { method: "GET", headers: headers });
@@ -54,9 +54,7 @@
 
     async function handleBeforeUnload(event: BeforeUnloadEvent) {
         if($isOverlayOpen) {
-            rush.timeAllowed.subscribe(value => {
-                timeRemaining = value;
-            });
+            timeRemaining = maxTime;
             await loadNextRound();
         }
     }
@@ -112,9 +110,7 @@
     }
 
     async function loadNextRound() {
-        rush.timeAllowed.subscribe(value => {
-            timeRemaining = value;
-        });
+        timeRemaining = maxTime;
         gameOver = false;
         searchTerm.set("");
         const response = await fetch("/api/word-generation");

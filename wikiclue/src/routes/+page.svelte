@@ -8,6 +8,7 @@
     import TimerIcon from '~icons/material-symbols/timer-outline'
     import SkipIcon from '~icons/bi/skip-forward'
 	import Overlay from "../components/overlay.svelte";
+    import { authHandlers } from "../store/store";
 
     const isOverlayOpen = writable(false);
     let timeRemaining: number;
@@ -15,12 +16,9 @@
 
     async function play() {
         if (browser) {
-            guestPlay.timeAllowed.subscribe(value => {
-                timeRemaining = value;
-            });
-            guestPlay.skipsRemaining.subscribe(value => {
-                skipsRemaining = value;
-            });
+            let rushData = await authHandlers.getRushSettings();
+            skipsRemaining = rushData?.skips;
+            timeRemaining = rushData?.timeAllowed;
             const response = await fetch("/api/word-generation");
             const words = await response.json();
             let variables = {
