@@ -14,6 +14,8 @@ import { auth, db } from '../firebase/firebase';
 import { goto } from '$app/navigation';
 import type { theDaily } from './gameplay';
 
+const RUSH_SETTINGS_ID = '23kITe5rnUkXhAnBlf7W';
+
 export const authStore = writable<{ user: User | null }>({
 	user: null
 });
@@ -94,32 +96,32 @@ export const authHandlers = {
 	},
 	ensureUniqueUsername: async (username: string) => {
 		const userCollection = collection(db, 'users');
-		const userReoccurances = await getDocs(query(userCollection, where('username', '==', username)));
-		try{
+		const userReoccurances = await getDocs(
+			query(userCollection, where('username', '==', username))
+		);
+		try {
 			if (userReoccurances.size > 0) {
-            	return false;
-        	} else {
-            	return true;
-        	}
-    	} catch (error) {
-        	console.error('Error checking username uniqueness:', error);
-        	return false;
-    }
+				return false;
+			} else {
+				return true;
+			}
+		} catch (error) {
+			console.error('Error checking username uniqueness:', error);
+			return false;
+		}
 	},
 	updateUsername: async (oldUsername: string, newUsername: string) => {
 		const userCollection = collection(db, 'users');
 		const userInstance = await getDocs(query(userCollection, where('username', '==', oldUsername)));
-		try{
-			if (userInstance.size === 1){
+		try {
+			if (userInstance.size === 1) {
 				const userDoc = userInstance.docs[0];
 				await updateDoc(doc(userCollection, userDoc.id), { username: newUsername });
 				return true;
-			}
-			else{
+			} else {
 				return false;
 			}
-		} 
-		catch (error){
+		} catch (error) {
 			console.error('Error changing username:', error);
 		}
 	},
@@ -178,7 +180,7 @@ export const authHandlers = {
 	getDailyData: async (id: string) => {
 		const userCollection = collection(db, 'users');
 		const userDocRef = doc(userCollection, id);
-	
+
 		try {
 			const docSnap = await getDoc(userDocRef);
 			if (docSnap.exists()) {
@@ -191,18 +193,17 @@ export const authHandlers = {
 					lastplay: userData.gameinfo.daily.lastplay.toDate(),
 					lastSolve: userData.gameinfo.daily.lastsolve.toDate(),
 					played: userData.gameinfo.daily.played,
-					won: userData.gameinfo.daily.won,
-				}
-	
+					won: userData.gameinfo.daily.won
+				};
+
 				return dailyData;
-	
 			} else {
-				console.error("No such document!");
+				console.error('No such document!');
 			}
 		} catch (error) {
 			console.error('Error getting user daily information', error);
 		}
-	
+
 		// Return a default theDaily object
 		return {
 			maxStreak: 0,
@@ -212,26 +213,50 @@ export const authHandlers = {
 			lastplay: new Date(),
 			lastSolve: new Date(),
 			played: 0,
-			won: 0,
+			won: 0
 		};
 	},
 	updateDaily: async (userData: theDaily, id: string) => {
 		const userCollection = collection(db, 'users');
 		const userDocRef = doc(userCollection, id);
-		
+
 		try {
-		await updateDoc(userDocRef, {
-			'gameinfo.maxstreak': userData.maxStreak,
-			'gameinfo.daily.currentGuesses': userData.currentGuesses,
-			'gameinfo.daily.currentstreak': userData.currentstreak,
-			'gameinfo.daily.daily': userData.daily,
-			'gameinfo.daily.lastplay': Timestamp.fromDate(userData.lastplay),
-			'gameinfo.daily.lastsolve': Timestamp.fromDate(userData.lastSolve),
-			'gameinfo.daily.played': userData.played,
-			'gameinfo.daily.won': userData.won,
-		});
-	} catch(error) {
-		console.error('Error adding document: ', error);
-	}
+			await updateDoc(userDocRef, {
+				'gameinfo.maxstreak': userData.maxStreak,
+				'gameinfo.daily.currentGuesses': userData.currentGuesses,
+				'gameinfo.daily.currentstreak': userData.currentstreak,
+				'gameinfo.daily.daily': userData.daily,
+				'gameinfo.daily.lastplay': Timestamp.fromDate(userData.lastplay),
+				'gameinfo.daily.lastsolve': Timestamp.fromDate(userData.lastSolve),
+				'gameinfo.daily.played': userData.played,
+				'gameinfo.daily.won': userData.won
+			});
+		} catch (error) {
+			console.error('Error adding document: ', error);
+		}
 	},
+	getRushSettings: async () => {
+		const rushSettingsCollection = collection(db, 'rush-settings');
+		const settingsDoc = doc(rushSettingsCollection, RUSH_SETTINGS_ID);
+		try {
+			const docSnap = await getDoc(settingsDoc);
+			const rushData = docSnap.data();
+			return rushData;
+		} catch (error) {
+			console.error('Error getting rush document: ', error);
+		}
+	},
+	updateRushSettings: async (skips: number, time: number) => {
+		const rushSettingsCollection = collection(db, 'rush-settings');
+		const settingsDoc = doc(rushSettingsCollection, RUSH_SETTINGS_ID);
+
+		try {
+			await updateDoc(settingsDoc, {
+				skips: skips,
+				timeAllowed: time
+			});
+		} catch (error) {
+			console.error('Error updating rush settings: ', error);
+		}
+	}
 };
