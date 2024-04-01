@@ -7,6 +7,8 @@ class Session {
 	streakCount: number;
 	timeRemaining: number;
 	skipsRemaining: number;
+	maxTime: number;
+	maxSkips: number;
 	wordsToFind: string[];
 	timerInterval?: NodeJS.Timeout;
 	token: string;
@@ -15,6 +17,8 @@ class Session {
 		this.streakCount = 0;
 		this.timeRemaining = 0;
 		this.skipsRemaining = 0;
+		this.maxTime = 0;
+		this.maxSkips = 0;
 		this.wordsToFind = [];
 		this.token = '';
 	}
@@ -54,6 +58,8 @@ export async function POST({ request }) {
 	session.streakCount = results.variables.streakCount;
 	session.timeRemaining = results.variables.timeRemaining;
 	session.skipsRemaining = results.variables.skipsRemaining;
+	session.maxTime = results.variables.maxTime;
+	session.maxSkips = results.variables.maxSkips;
 	session.wordsToFind = results.variables.wordsToFind;
 	session.startTimer();
 	return json({ status: 201, token });
@@ -66,6 +72,8 @@ export async function GET({ request }) {
 		streakCount: session.streakCount,
 		timeRemaining: session.timeRemaining,
 		skipsRemaining: session.skipsRemaining,
+		maxTime: session.maxTime,
+		maxSkips: session.maxSkips,
 		wordsToFind: session.wordsToFind
 	});
 }

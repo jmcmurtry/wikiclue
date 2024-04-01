@@ -25,6 +25,8 @@
                 streakCount: 0,
                 timeRemaining: timeRemaining,
                 skipsRemaining: skipsRemaining,
+                maxTime: timeRemaining,
+                maxSkips: skipsRemaining,
                 wordsToFind: [words.word1, words.word2],
             }
             const postResponse = await fetch('/api/rush-variables', {

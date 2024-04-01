@@ -44,9 +44,6 @@
     });
 
     async function loadGameplayVariables() {
-        let rushData = await authHandlers.getRushSettings();
-        maxTime = rushData?.timeAllowed;
-        maxSkips = rushData?.skips;
         const headers = new Headers();
         headers.append("Authorization", token);
         const response = await fetch("/api/rush-variables", { method: "GET", headers: headers });
@@ -56,6 +53,8 @@
         skipsRemaining = data.skipsRemaining;
         streakCount = data.streakCount;
         timeRemaining = data.timeRemaining;
+        maxTime = data.maxTime;
+        maxSkips = data.maxSkips;
     }
 
     async function handleBeforeUnload(event: BeforeUnloadEvent) {
