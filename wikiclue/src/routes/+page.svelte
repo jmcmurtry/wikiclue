@@ -3,11 +3,11 @@
 	import { browser } from "$app/environment";
     import { goto } from "$app/navigation";
 	import { writable } from "svelte/store";
-	import { guestPlay } from "../store/gameplay";
     import RushIcon from '~icons/nimbus/fire'
     import TimerIcon from '~icons/material-symbols/timer-outline'
     import SkipIcon from '~icons/bi/skip-forward'
 	import Overlay from "../components/overlay.svelte";
+    import { authHandlers } from "../store/store";
 
     const isOverlayOpen = writable(false);
     let timeRemaining: number;
@@ -15,18 +15,17 @@
 
     async function play() {
         if (browser) {
-            guestPlay.timeAllowed.subscribe(value => {
-                timeRemaining = value;
-            });
-            guestPlay.skipsRemaining.subscribe(value => {
-                skipsRemaining = value;
-            });
+            let rushData = await authHandlers.getRushSettings();
+            skipsRemaining = rushData?.skips;
+            timeRemaining = rushData?.timeAllowed;
             const response = await fetch("/api/word-generation");
             const words = await response.json();
             let variables = {
                 streakCount: 0,
                 timeRemaining: timeRemaining,
                 skipsRemaining: skipsRemaining,
+                maxTime: timeRemaining,
+                maxSkips: skipsRemaining,
                 wordsToFind: [words.word1, words.word2],
             }
             const postResponse = await fetch('/api/rush-variables', {

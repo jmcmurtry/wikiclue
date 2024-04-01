@@ -3,22 +3,20 @@
     import AdminHeaderBar from "../../../components/adminHeaderBar.svelte";
     import { rush } from "../../../../src/store/gameplay";
     import { writable } from 'svelte/store';
+    import { authHandlers } from "../../../store/store";
     import { onMount } from "svelte";
 
     let skips: number;
     let timeAllowed: number;
-    const isButtonEnabled = writable(false);
 
-    rush.skipsRemaining.subscribe(value => {
-        skips = value;
+    onMount (async () => {
+    	let rushData = await authHandlers.getRushSettings();
+        skips = rushData?.skips;
+        timeAllowed = rushData?.timeAllowed;
     });
 
-    rush.timeAllowed.subscribe(value => {
-        timeAllowed = value;
-    });
-
-    function handleUpdateSettings() {
-        console.log('Update settings code will go here')
+    async function handleUpdateSettings() {
+        await authHandlers.updateRushSettings(Number(skips), Number(timeAllowed));
     }
     
 
