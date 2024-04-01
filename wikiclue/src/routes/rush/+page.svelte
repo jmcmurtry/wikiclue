@@ -11,6 +11,10 @@
 	import { authHandlers } from "../../store/store";
     import { getWikiPageContent } from '../../store/wiki';
     import SearchComponent from '../../components/searchComponent.svelte';
+    import RushEnd from '../../components/rushEnd.svelte';
+	import { goto } from "$app/navigation";
+	import { browser } from "$app/environment";
+	import { auth } from "../../firebase/firebase";
 
     const isOverlayOpen = writable(false);
     let wordsToFind = ["", ""];
@@ -23,10 +27,16 @@
     let timerInterval: NodeJS.Timeout;
     let correctOverlay = false;
     let skippedOverlay = false;
+    let endOverlay = false;
     let timeAllowed: number;
     let token: string;
+    let userData: any;
+    let rushMaxStreak: number;
 
-    onMount(() => {
+    onMount(async () => {
+        await auth.onAuthStateChanged(async (user) => {
+            userData = user;
+        });
         searchTerm.set('');
         token = sessionStorage.getItem('token') ?? "";
         if(token === "") {
@@ -67,6 +77,7 @@
             if (timeRemaining > 0) {
                 timeRemaining -= 1;
             } else {
+                gameOver = true;
                 clearInterval(timerInterval);
                 endGame();
             }
@@ -74,7 +85,7 @@
     }
 
     function skipPressed() {
-        if (skipsRemaining > 0) {
+        if (skipsRemaining > 0 && !$isOverlayOpen) {
             skipsRemaining--;
             clearInterval(timerInterval);
             isOverlayOpen.set(true);
@@ -116,7 +127,6 @@
         rush.timeAllowed.subscribe(value => {
             timeRemaining = value;
         });
-        gameOver = false;
         searchTerm.set('');
         const response = await fetch("/api/word-generation");
         const words = await response.json();
@@ -138,19 +148,62 @@
         startTimer();
     }
 
-    function endGame() {
+    async function endGame() {
         if (!$isOverlayOpen) {
             gameOver = true;
-            // Show end of game pop up and take user back to home page
-            // Also check for refresh logic if user refreshes when end game overlay is open
+            sessionStorage.clear();
+            clearInterval(timerInterval);
+            rushMaxStreak = await authHandlers.getUserRushData(userData.uid);
+            if (streakCount > rushMaxStreak) {
+                await authHandlers.updateUserRushData(userData.uid, streakCount);
+                rushMaxStreak = streakCount;
+            }
+            isOverlayOpen.set(true);
+            endOverlay = true;
         }
     }
 
-    function onEnterPressed(event: KeyboardEvent) {
+    async function startNewGame() {
+        if (browser) {
+            rush.timeAllowed.subscribe(value => {
+                timeRemaining = value;
+            });
+            rush.skipsRemaining.subscribe(value => {
+                skipsRemaining = value;
+            });
+            const response = await fetch("/api/word-generation");
+            const words = await response.json();
+            let variables = {
+                streakCount: 0,
+                timeRemaining: timeRemaining,
+                skipsRemaining: skipsRemaining,
+                wordsToFind: [words.word1, words.word2],
+            }
+            const postResponse = await fetch('/api/rush-variables', {
+            method: 'POST',
+            body: JSON.stringify({ variables }),
+            });
+            if (postResponse.ok) {
+                const responseData = await postResponse.json();
+                const token = responseData.token;
+                sessionStorage.setItem('token', token);
+            } else {
+                console.error('Failed to store token:', postResponse.statusText);
+            }
+            window.location.reload();
+        }
+    }
+
+    async function onEnterPressed(event: KeyboardEvent) {
         if (event.key === "Enter" && $isOverlayOpen) {
-            loadNextRound();
-            isOverlayOpen.set(false);
-            return;
+            if(gameOver){
+                return;
+            }
+            if(correctOverlay){
+                loadNextRound();
+                isOverlayOpen.set(false);
+                return;
+            }
         }
     }
 </script>
@@ -221,9 +274,12 @@
             <button class="popup-button" on:click={() => {loadNextRound(); isOverlayOpen.set(false); skippedOverlay = false}}>Next Round</button>
         </Overlay>
     {/if}
+    {#if $isOverlayOpen && endOverlay}
+        <RushEnd
+        playAgain={()=>{startNewGame()}} returnToMenu={()=>{goto("/home")}} streak={streakCount} maxStreak={rushMaxStreak}/>
+    {/if}
 </div>
 
 <style>
     @import '../../styles/rushPageStyles.css';
-    @import '../../styles/componentStyles/endScreenStyles.css';
 </style>
