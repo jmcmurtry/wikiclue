@@ -89,24 +89,6 @@
 	background-color: var(--skip-hover);
 }
 
-#confirm-button,
-#skip-button {
-	background-color: var(--button-background);
-	width: 14rem;
-	height: 3rem;
-	border: 0px;
-	margin-right: 5rem;
-	margin-left: 5rem;
-	margin-top: 2rem;
-	font-size: 1.3rem;
-	cursor: pointer;
-}
-
-#confirm-button:hover:not([disabled]),
-#skip-button:hover:not([disabled]) {
-	background-color: var(--button-hover);
-}
-
 .popup-description {
 	font-size: 1.3rem;
 	text-align: center;
@@ -141,4 +123,20 @@
 	.info-container .skips-text {
 		display: none;
 	}
+}
+
+.popup-button {
+	position: absolute;
+	width: 240px;
+	max-width: 85%;
+	bottom: 20px;
+	background-color: var(--default-button-color);
+	cursor: pointer;
+	border: none;
+	font-size: 1.3rem;
+	padding: 0.5rem;
+}
+
+.popup-button:hover {
+	background-color: var(--default-button-color-lighter);
 }

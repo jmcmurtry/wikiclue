@@ -79,6 +79,32 @@ export const authHandlers = {
 			console.log('Error getting document:', error);
 		}
 	},
+	getUserRushData: async (id: string) => {
+		const userCollection = collection(db, 'users');
+		const userDocRef = doc(userCollection, id);
+		try {
+			const doc = await getDoc(userDocRef);
+			if (doc.exists()) {
+				const maxStreak = doc.data().gameinfo.rush;
+				return maxStreak;
+			} else {
+				console.log('No such document!');
+			}
+		} catch (error) {
+			console.log('Error getting document:', error);
+		}
+	},
+	updateUserRushData: async (id: string, maxStreak: number) => {
+		const userCollection = collection(db, 'users');
+		const userDocRef = doc(userCollection, id);
+		try {
+			await updateDoc(userDocRef, {
+				'gameinfo.rush': maxStreak
+			});
+		} catch (error) {
+			console.error('Error updating document:', error);
+		}
+	},
 	getUsername: async (id: string) => {
 		const userCollection = collection(db, 'users');
 		const userDocRef = doc(userCollection, id);
