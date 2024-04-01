@@ -31,6 +31,7 @@
     let timeAllowed: number;
     let token: string;
     let maxTime: number;
+    let maxSkips: number;
     let userData: any;
     let rushMaxStreak: number;
 
@@ -51,6 +52,7 @@
     async function loadGameplayVariables() {
         let rushData = await authHandlers.getRushSettings();
         maxTime = rushData?.timeAllowed;
+        maxSkips = rushData?.skips;
         const headers = new Headers();
         headers.append("Authorization", token);
         const response = await fetch("/api/rush-variables", { method: "GET", headers: headers });
@@ -162,12 +164,8 @@
 
     async function startNewGame() {
         if (browser) {
-            rush.timeAllowed.subscribe(value => {
-                timeRemaining = value;
-            });
-            rush.skipsRemaining.subscribe(value => {
-                skipsRemaining = value;
-            });
+            timeRemaining = maxTime;
+            skipsRemaining = maxSkips;
             const response = await fetch("/api/word-generation");
             const words = await response.json();
             let variables = {
