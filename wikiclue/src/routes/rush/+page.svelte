@@ -7,7 +7,7 @@
     import Overlay from "../../components/overlay.svelte";
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
-    import { rush, searchTerm } from "../../store/gameplay";
+    import { searchTerm } from "../../store/gameplay";
 	import { authHandlers } from "../../store/store";
     import { getWikiPageContent } from '../../store/wiki';
     import SearchComponent from '../../components/searchComponent.svelte';
@@ -134,6 +134,8 @@
             streakCount: streakCount,
             timeRemaining: timeRemaining,
             skipsRemaining: skipsRemaining,
+            maxTime: maxTime,
+            maxSkips: maxSkips,
             wordsToFind: [words.word1, words.word2],
         }
         const headers = new Headers();

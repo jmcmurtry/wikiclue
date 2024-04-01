@@ -3,7 +3,6 @@
 	import { browser } from "$app/environment";
     import { goto } from "$app/navigation";
 	import { writable } from "svelte/store";
-	import { guestPlay } from "../store/gameplay";
     import RushIcon from '~icons/nimbus/fire'
     import TimerIcon from '~icons/material-symbols/timer-outline'
     import SkipIcon from '~icons/bi/skip-forward'
