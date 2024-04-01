@@ -27,7 +27,6 @@
     let maxTime: number;
     let maxSkips: number;
     let correctAnswer = false;
-    let skipUsed = false;
     let skipPressedClass = '';
     let correctAnswerClass = "";
 
@@ -71,10 +70,8 @@
     function skipPressed() {
         if (skipsRemaining > 0) {
             skipsRemaining--;
-            skipUsed = true;
             skipPressedClass = 'skip-pressed';
             setTimeout(() => {
-                skipUsed = false;
                 skipPressedClass = '';
             }, 2000);
             clearInterval(timerInterval);
@@ -183,21 +180,21 @@
             <RushIcon style="font-size: 2rem; color: black;"/>
             <p class="info-text">
                 <span class="streak-text">Current Streak:</span>
-                <span class="streak-content">{streakCount !== undefined ? streakCount : 0}</span>
+                <span class="streak-content">{streakCount !== undefined ? streakCount : ""}</span>
             </p>
         </div>
         <div class="info-container">
             <TimerIcon style="font-size: 2rem; color: black;"/>
             <p class="info-text">
                 <span class="time-text">Time Remaining:</span>
-                <span class="time-content">{timeRemaining !== undefined ? timeRemaining : "00"}</span>
+                <span class="time-content">{timeRemaining !== undefined ? timeRemaining : ""}</span>
             </p>
         </div>
         <div class="info-container {skipPressedClass}">
             <SkipIcon style="font-size: 2rem; color: black;"/>
             <p class="info-text">
                 <span class="skips-text">Skips Remaining:</span>
-                <span class="skips-content">{skipsRemaining !== undefined ? skipsRemaining : 0}</span>
+                <span class="skips-content">{skipsRemaining !== undefined ? skipsRemaining : ""}</span>
             </p>
         </div>
     </div>
