@@ -4,8 +4,6 @@
     import RushIcon from '~icons/nimbus/fire'
     import TimerIcon from '~icons/material-symbols/timer-outline'
     import SkipIcon from '~icons/bi/skip-forward'
-    import Overlay from "../../components/overlay.svelte";
-	import { writable } from "svelte/store";
     import { onMount } from "svelte";
     import { searchTerm } from "../../store/gameplay";
 	import { authHandlers } from "../../store/store";
@@ -16,7 +14,6 @@
 	import { browser } from "$app/environment";
 	import { auth } from "../../firebase/firebase";
 
-    const isOverlayOpen = writable(false);
     let wordsToFind = ["", ""];
     let skipsRemaining: number;
     let timeRemaining: number;
@@ -25,8 +22,6 @@
     let incorrectAnswer = false;
     let gameOver = false;
     let timerInterval: NodeJS.Timeout;
-    let correctOverlay = false;
-    let skippedOverlay = false;
     let endOverlay = false;
     let timeAllowed: number;
     let token: string;
@@ -34,6 +29,10 @@
     let maxSkips: number;
     let userData: any;
     let rushMaxStreak: number;
+    let correctAnswer = false;
+    let skipUsed = false;
+    let skipPressedClass = '';
+    let correctAnswerClass = "";
 
     onMount(async () => {
         await auth.onAuthStateChanged(async (user) => {
@@ -46,7 +45,6 @@
         }
         loadGameplayVariables();
         startTimer();
-        window.addEventListener('beforeunload', handleBeforeUnload); 
     });
 
     async function loadGameplayVariables() {
@@ -63,13 +61,6 @@
         maxSkips = data.maxSkips;
     }
 
-    function handleBeforeUnload(event: BeforeUnloadEvent) {
-        if($isOverlayOpen) {
-            timeRemaining = maxTime;
-            loadNextRound();
-        }
-    }
-
     function startTimer() {
         clearInterval(timerInterval);
         timerInterval = setInterval(() => {
@@ -84,18 +75,22 @@
     }
 
     function skipPressed() {
-        if (skipsRemaining > 0 && !$isOverlayOpen) {
+        if (skipsRemaining > 0) {
             skipsRemaining--;
+            skipUsed = true;
+            skipPressedClass = 'skip-pressed';
+            setTimeout(() => {
+                skipUsed = false;
+                skipPressedClass = '';
+            }, 2000);
             clearInterval(timerInterval);
-            isOverlayOpen.set(true);
-            skippedOverlay = true;
+            loadNextRound();
         }
     }
 
     async function rushConfirmFunction() {
         incorrectAnswer = false;
         let pageContent = await getWikiPageContent($searchTerm);
-
 		if (!pageContent){
 			pageDoesNotExist = true;
 			setTimeout(() => {
@@ -103,17 +98,18 @@
 			}, 2000);
 			return;
 		}
-
-        // Found a correct answer
 		if (pageContent.includes(wordsToFind[0].toLowerCase()) && pageContent.includes(wordsToFind[1].toLowerCase())) {
+            correctAnswer = true;
+            correctAnswerClass = "correct-answer";
+            setTimeout(() => {
+                correctAnswer = false;
+                correctAnswerClass = "";
+            }, 2000);
             await authHandlers.updateRushWins(wordsToFind, timeAllowed - timeRemaining, $searchTerm);
             clearInterval(timerInterval);
             streakCount++;
-            isOverlayOpen.set(true);
-            correctOverlay = true;
+            await loadNextRound();
         }
-
-        // Did not find a correct answer
         else {
             incorrectAnswer = true;
             setTimeout(() => {
@@ -149,18 +145,15 @@
     }
 
     async function endGame() {
-        if (!$isOverlayOpen) {
-            gameOver = true;
-            sessionStorage.clear();
-            clearInterval(timerInterval);
-            rushMaxStreak = await authHandlers.getUserRushData(userData.uid);
-            if (streakCount > rushMaxStreak) {
-                await authHandlers.updateUserRushData(userData.uid, streakCount);
-                rushMaxStreak = streakCount;
-            }
-            isOverlayOpen.set(true);
-            endOverlay = true;
+        gameOver = true;
+        sessionStorage.clear();
+        clearInterval(timerInterval);
+        rushMaxStreak = await authHandlers.getUserRushData(userData.uid);
+        if (streakCount > rushMaxStreak) {
+            await authHandlers.updateUserRushData(userData.uid, streakCount);
+            rushMaxStreak = streakCount;
         }
+        endOverlay = true;
     }
 
     async function startNewGame() {
@@ -191,28 +184,13 @@
             window.location.reload();
         }
     }
-
-    async function onEnterPressed(event: KeyboardEvent) {
-        if (event.key === "Enter" && $isOverlayOpen) {
-            if(gameOver){
-                return;
-            }
-            if(correctOverlay){
-                loadNextRound();
-                isOverlayOpen.set(false);
-                return;
-            }
-        }
-    }
 </script>
-
-<svelte:window on:keydown={onEnterPressed}/>
 
 <HeaderBar />
 <div class="rush-page">
     <GameHeader header="Rush" arrow={true} backLink="/home"/>
     <div class="info-bar">
-        <div class="info-container">
+        <div class="info-container {correctAnswerClass}">
             <RushIcon style="font-size: 2rem; color: black;"/>
             <p class="info-text">
                 <span class="streak-text">Current Streak:</span>
@@ -226,7 +204,7 @@
                 <span class="time-content">{timeRemaining !== undefined ? timeRemaining : "00"}</span>
             </p>
         </div>
-        <div class="info-container">
+        <div class="info-container {skipPressedClass}">
             <SkipIcon style="font-size: 2rem; color: black;"/>
             <p class="info-text">
                 <span class="skips-text">Skips Remaining:</span>
@@ -241,38 +219,20 @@
             <p class="search-words">{wordsToFind[0]}</p>
             <p class="search-words">{wordsToFind[1]}</p>
         </div>
-		<p class="incorrect-answer">
-			{incorrectAnswer ? 'This page does not contain the two words' : '\u00A0'}
-			{pageDoesNotExist ? 'This page does not exist' : '\u00A0'}
-		</p>
+		<p class="message-container">
+            {#if correctAnswer}
+                <span class="correct-answer-message">Correct Answer!</span>
+            {:else if incorrectAnswer}
+                <span class="incorrect-answer">This page does not contain the two words!</span>
+            {:else if pageDoesNotExist}
+                <span class="page-not-exist">This page does not exist!</span>
+            {:else}
+                <span class="placeholder">{'\u00A0'}</span>
+            {/if}
+        </p>
 		<SearchComponent gameOver={gameOver} confirmFunction={rushConfirmFunction} />
 	</div>
-    {#if $isOverlayOpen && correctOverlay}
-        <Overlay header="Correct!" onClose={() => {loadNextRound(); isOverlayOpen.set(false); correctOverlay = false}}>
-            <div class="popup-info-container">
-                <p class="popup-description">You found a page that contains the two words! Keep it up!</p>
-                <div class="streak-container">
-                    <RushIcon style="font-size: 3.5rem;"/>
-                    <p class="popup-text">Current Streak: {streakCount}</p>
-                </div>
-            </div>
-            <button class="popup-button" on:click={() => {loadNextRound(); isOverlayOpen.set(false); correctOverlay = false}}>Next Round</button>
-        </Overlay>
-    {/if}
-    {#if $isOverlayOpen && skippedOverlay}
-        <Overlay header="Skipped!" onClose={() => {loadNextRound(); isOverlayOpen.set(false); skippedOverlay = false}}>
-            <div class="popup-info-container">
-                <p class="popup-description">You have skipped this round!</p>
-                <div class="streak-container">
-                    <SkipIcon style="font-size: 3.5rem; color: black;"/>
-                    <p class="popup-text">Skips Remaining: {skipsRemaining}</p>
-                </div>
-            </div>
-            
-            <button class="popup-button" on:click={() => {loadNextRound(); isOverlayOpen.set(false); skippedOverlay = false}}>Next Round</button>
-        </Overlay>
-    {/if}
-    {#if $isOverlayOpen && endOverlay}
+    {#if endOverlay}
         <RushEnd
         playAgain={()=>{startNewGame()}} returnToMenu={()=>{goto("/home")}} streak={streakCount} maxStreak={rushMaxStreak}/>
     {/if}
