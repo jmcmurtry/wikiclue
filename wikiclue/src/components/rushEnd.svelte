@@ -1,32 +1,30 @@
 <script lang="ts">
     import Overlay from "./overlay.svelte";
-	import { writable } from "svelte/store";
-    export let rushOpen = false;
-    let distribution = ['correct', 'pass', 'pass', 'correct', 'wrong', 'correct', 'pass', 'pass', 'correct', 'wrong','correct', 'pass', 'pass', 'correct', 'wrong'];
+    import RushIcon from '~icons/nimbus/fire'
 
-    const isOverlayOpen = writable(false);
+    export let playAgain = () => {};   
+    export let returnToMenu = () => {};
+    export let streak: number;
+    export let maxStreak: any = null;
 </script>
 
 
-<Overlay header="Rush" onClose={() => {isOverlayOpen.set(false); rushOpen = false;}}>
-    <p class="popup-text">Congratulations!</p>
+<Overlay header="Rush" onClose={() => {}} displayX={false}>
+    <p class="popup-text">Game Over!</p>
     <p class="popup-text">You completed your rush game with a streak of:</p>
-    <h3 class="score">5</h3>
-    <p class="popup-text">Guess Distribution</p>
-    <div class="distribution-container">
-        {#each distribution as guess, index}
-            <div class="guess {guess}">
-                <h4 class="guess-number">{index + 1}</h4>
-            </div>
-        {/each}
-    </div>
+    <h3 class="score">
+        <RushIcon style="font-size: 2rem; color: black; padding-right: 10px"/>
+        <p>{streak}</p>
+    </h3>
+    {#if maxStreak}
+        <p class="popup-text">Rush All Time Record: {maxStreak}</p>
+    {/if}
     <div class="bottom-options">
-        <button>Play Again</button>
-        <button>Return to Main Menu</button>
+        <button class="popup-button" on:click={()=>{playAgain()}}>Play Again</button>
+        <button class="popup-button" on:click={()=>{returnToMenu()}}>Return to Main Menu</button>
     </div>
-    
 </Overlay>
 
 <style>
-    @import '../styles/componentStyles/endScreenStyles.css';
+    @import '../styles/componentStyles/rushEndStyles.css';
 </style>
