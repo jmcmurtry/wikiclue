@@ -14,6 +14,8 @@ import { auth, db } from '../firebase/firebase';
 import { goto } from '$app/navigation';
 import type { theDaily } from './gameplay';
 
+const RUSH_SETTINGS_ID = '23kITe5rnUkXhAnBlf7W';
+
 export const authStore = writable<{ user: User | null }>({
 	user: null
 });
@@ -261,6 +263,30 @@ export const authHandlers = {
 			console.error('Error adding document: ', error);
 		}
 	},
+	getRushSettings: async () => {
+		const rushSettingsCollection = collection(db, 'rush-settings');
+		const settingsDoc = doc(rushSettingsCollection, RUSH_SETTINGS_ID);
+		try {
+			const docSnap = await getDoc(settingsDoc);
+			const rushData = docSnap.data();
+			return rushData;
+		} catch (error) {
+			console.error('Error getting rush document: ', error);
+		}
+	},
+	updateRushSettings: async (skips: number, time: number) => {
+		const rushSettingsCollection = collection(db, 'rush-settings');
+		const settingsDoc = doc(rushSettingsCollection, RUSH_SETTINGS_ID);
+
+		try {
+			await updateDoc(settingsDoc, {
+				skips: skips,
+				timeAllowed: time
+			});
+		} catch (error) {
+			console.error('Error updating rush settings: ', error);
+		}
+	},
 	sendFriendRequest: async (friendEmail: string, uid: string) => {
 		try {
 			// User data
@@ -342,8 +368,6 @@ export const authHandlers = {
 			throw error;
 		}
 	},
-
-	// If is pending is true, grabs pending list, otherwise just grabs friend list
 	getFriendUsernames: async (uid: string, isPending: boolean) => {
 		// Data structure to grab friends names
 		interface UserData {
@@ -383,8 +407,6 @@ export const authHandlers = {
 			return [];
 		}
 	},
-
-	// If true removes from friend list, if false removes from pending
 	removeFriends: async (username: string, uid: string, isFriend: boolean) => {
 		try {
 			//User data

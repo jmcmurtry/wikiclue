@@ -7,7 +7,7 @@
     import Overlay from "../../components/overlay.svelte";
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
-    import { rush, searchTerm } from "../../store/gameplay";
+    import { searchTerm } from "../../store/gameplay";
 	import { authHandlers } from "../../store/store";
     import { getWikiPageContent } from '../../store/wiki';
     import SearchComponent from '../../components/searchComponent.svelte';
@@ -30,6 +30,8 @@
     let endOverlay = false;
     let timeAllowed: number;
     let token: string;
+    let maxTime: number;
+    let maxSkips: number;
     let userData: any;
     let rushMaxStreak: number;
 
@@ -43,9 +45,6 @@
             window.location.href = "/home";
         }
         loadGameplayVariables();
-        rush.timeAllowed.subscribe(value => {
-            timeAllowed = value;
-        });
         startTimer();
         window.addEventListener('beforeunload', handleBeforeUnload); 
     });
@@ -60,14 +59,14 @@
         skipsRemaining = data.skipsRemaining;
         streakCount = data.streakCount;
         timeRemaining = data.timeRemaining;
+        maxTime = data.maxTime;
+        maxSkips = data.maxSkips;
     }
 
     function handleBeforeUnload(event: BeforeUnloadEvent) {
         if($isOverlayOpen) {
-            rush.timeAllowed.subscribe(value => {
-                timeRemaining = value;
-                loadNextRound();
-            });
+            timeRemaining = maxTime;
+            loadNextRound();
         }
     }
 
@@ -124,9 +123,8 @@
     }
 
     async function loadNextRound() {
-        rush.timeAllowed.subscribe(value => {
-            timeRemaining = value;
-        });
+        timeRemaining = maxTime;
+        gameOver = false;
         searchTerm.set('');
         const response = await fetch("/api/word-generation");
         const words = await response.json();
@@ -136,6 +134,8 @@
             streakCount: streakCount,
             timeRemaining: timeRemaining,
             skipsRemaining: skipsRemaining,
+            maxTime: maxTime,
+            maxSkips: maxSkips,
             wordsToFind: [words.word1, words.word2],
         }
         const headers = new Headers();
@@ -165,18 +165,16 @@
 
     async function startNewGame() {
         if (browser) {
-            rush.timeAllowed.subscribe(value => {
-                timeRemaining = value;
-            });
-            rush.skipsRemaining.subscribe(value => {
-                skipsRemaining = value;
-            });
+            timeRemaining = maxTime;
+            skipsRemaining = maxSkips;
             const response = await fetch("/api/word-generation");
             const words = await response.json();
             let variables = {
                 streakCount: 0,
                 timeRemaining: timeRemaining,
                 skipsRemaining: skipsRemaining,
+                maxTime: maxTime,
+                maxSkips: maxSkips,
                 wordsToFind: [words.word1, words.word2],
             }
             const postResponse = await fetch('/api/rush-variables', {
