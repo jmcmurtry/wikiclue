@@ -258,5 +258,42 @@ export const authHandlers = {
 		} catch (error) {
 			console.error('Error adding document: ', error);
 		}
+	},
+	getLevels: async (difficulty: string) => {
+		const levelsCollection = collection(db, 'levels');
+		const levelsDocRef = doc(levelsCollection, difficulty);
+
+		try {
+			const docSnap = await getDoc(levelsDocRef);
+			const data = docSnap.data();
+			return data?.levels;
+		} catch (error) {
+			console.error('Error getting level document: ', error);
+		}
+	},
+	updateLevel: async (
+		difficulty: string,
+		index: number,
+		words: { wordOne: string; wordTwo: string }
+	) => {
+		const levelsCollection = collection(db, 'levels');
+		const levelsDocRef = doc(levelsCollection, difficulty);
+
+		try {
+			const docSnap = await getDoc(levelsDocRef);
+			const levelsData = docSnap.data();
+			if (levelsData && levelsData.levels) {
+				// Update an existing index
+				if (levelsData.levels[index]) {
+					levelsData.levels[index] = words;
+				} else {
+					// Add a new index
+					levelsData.levels.push(words);
+				}
+				await updateDoc(levelsDocRef, { levels: levelsData.levels });
+			}
+		} catch (error) {
+			console.error('Error updating level document: ', error);
+		}
 	}
 };

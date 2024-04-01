@@ -3,6 +3,7 @@
     import AdminHeaderBar from "../../../components/adminHeaderBar.svelte";
     import { rush } from "../../../../src/store/gameplay";
     import { writable } from 'svelte/store';
+    import { onMount } from "svelte";
 
     let skips: number;
     let timeAllowed: number;
