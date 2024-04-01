@@ -6,6 +6,9 @@
     import { onMount } from "svelte";
     import { searchTerm } from '../../../store/gameplay';
     import { goto } from '$app/navigation';
+    import { page } from '$app/stores';
+    import { authHandlers } from "../../../store/store";
+    import { auth } from "../../../firebase/firebase";
     import { getWikiPageContent } from '../../../store/wiki';
     import SearchComponent from '../../../components/searchComponent.svelte';
 
@@ -14,17 +17,39 @@
     let wordsToFind = [''];
     let incorrectAnswer = false;
 	let pageDoesNotExist = false;
+    let levelData: any[];
+    let currentUserLevel: number;
 
-    onMount(() => {
+   // Extract the difficulty slug from url
+   const difficulty = $page.params.difficulty;
+
+    onMount(async () => {
         searchTerm.set('');
-        // When we use the database we need to get the user's current level instead
+
+        await auth.onAuthStateChanged(async (user) => {
+            const userData = user;
+            if(userData){
+                let userLevelsData = await authHandlers.getUserCurrentLevelsData(userData.uid);
+                if (userLevelsData && difficulty === "easy"){
+                    currentUserLevel = userLevelsData[0];
+                }
+                else if (userLevelsData && difficulty === "medium"){
+                    currentUserLevel = userLevelsData[1];
+                }
+                else if (userLevelsData && difficulty === "hard"){
+                    currentUserLevel = userLevelsData[2];
+                }
+            }
+        });
+
+        levelData = await authHandlers.getLevels(difficulty);
 		loadLevelWords();
 	});
 
     function loadLevelWords() {
         // Load the current level words from firebase
-        wordsToFind[0] = 'Sandy';
-        wordsToFind[1] = 'Plankton';
+        wordsToFind[0] = levelData[currentUserLevel-1].wordOne;
+        wordsToFind[1] = levelData[currentUserLevel-1].wordTwo;
     }
 
 
@@ -87,8 +112,8 @@
 
 <HeaderBar />
 <div class="levels-page">
-    <GameHeader header="Level Mode" arrow={true} backLink="/home"/>
-	<p class="info-text">Current Level: 1</p>
+    <GameHeader header="Level: {difficulty} {currentUserLevel}" arrow={true} backLink="/home"/>
+	<p class="info-text">ahh placeholder</p>
 
 	<div class="game-container">
         <p class="game-description">Find A Wiki page with</p>
