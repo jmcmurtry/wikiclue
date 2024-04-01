@@ -128,7 +128,7 @@
                 {/if}
             </p>
             <LevelsIcon style="font-size: 5.0rem; color: black; margin: 7.5%"/>
-            <button class="popup-button" on:click={() => goto("/levels")}>Play Now!</button>
+            <button class="popup-button" on:click={() => goto(`/levels/${difficultySelected}`)}>Play Now!</button>
         </Overlay>   
     {/if}
     {#if $isOverlayOpen && dailyOpen}
