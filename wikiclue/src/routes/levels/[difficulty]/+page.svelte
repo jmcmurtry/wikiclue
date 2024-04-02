@@ -4,7 +4,7 @@
     import Overlay from "../../../components/overlay.svelte";
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
-    import { searchTerm } from '../../../store/gameplay';
+    import { searchTerm, searchResults } from '../../../store/gameplay';
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
     import { authHandlers } from "../../../store/store";
@@ -31,6 +31,7 @@
 
     async function setupLevel(){
         searchTerm.set('');
+        searchResults.set([]);
         await new Promise<void>((resolve) => {
         auth.onAuthStateChanged(async (user) => {
             userData = user;
