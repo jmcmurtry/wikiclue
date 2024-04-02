@@ -113,8 +113,10 @@
 
 <HeaderBar />
 <div class="levels-page">
-    <GameHeader header="Level: {difficulty} {currentUserLevel}" arrow={true} backLink="/home"/>
-	<p class="info-text">Ahh placeholder</p>
+    <GameHeader header="Level: {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} {currentUserLevel}" arrow={true} backLink="/home"/>
+    {#if levelData}
+    <p class="info-text">You have completed {currentUserLevel-1}/{levelData.length} levels</p>
+    {/if}
 
 	<div class="game-container">
         <p class="game-description">Find A Wiki page with</p>
