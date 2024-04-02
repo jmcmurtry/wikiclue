@@ -20,6 +20,7 @@
     let levelData: any[];
     let currentUserLevel: number;
     let userData: any;
+    let userLevelsData: any;
 
    // Extract the difficulty slug from url
    const difficulty = $page.params.difficulty;
@@ -30,10 +31,11 @@
 
     async function setupLevel(){
         searchTerm.set('');
-        await auth.onAuthStateChanged(async (user) => {
+        await new Promise<void>((resolve) => {
+        auth.onAuthStateChanged(async (user) => {
             userData = user;
             if(userData){
-                let userLevelsData = await authHandlers.getUserCurrentLevelsData(userData.uid);
+                userLevelsData = await authHandlers.getUserCurrentLevelsData(userData.uid);
                 if (userLevelsData && difficulty === "easy"){
                     currentUserLevel = userLevelsData[0];
                 }
@@ -44,13 +46,14 @@
                     currentUserLevel = userLevelsData[2];
                 }
             }
+            resolve();
         });
+    });
         levelData = await authHandlers.getLevels(difficulty);
 		loadLevelWords();
     }
 
     function loadLevelWords() {
-        // Load the current level words from firebase
         wordsToFind[0] = levelData[currentUserLevel-1].wordOne;
         wordsToFind[1] = levelData[currentUserLevel-1].wordTwo;
     }
@@ -93,8 +96,8 @@
     async function playNextLevelClicked() {
         // Restart page so that the updated data is used
         isOverlayOpen.set(false);
-		levelOver.set(false);
         await setupLevel();
+        levelOver.set(false);
 	}
 
     function returnToMainMenuClicked() {
@@ -102,7 +105,7 @@
 	}
 
     function onEnterPressed(event: KeyboardEvent) {
-        if (event.key === "Enter" && $levelOver) {
+        if (event.key === "Enter" && $levelOver && !$isOverlayOpen) {
             playNextLevelClicked()
             return;
         }
@@ -132,11 +135,11 @@
 	</div>
 
     {#if $isOverlayOpen && $levelOver}
-        <Overlay header="Level 1" onClose={() => {isOverlayOpen.set(false);}} displayX={false}>
+        <Overlay header="Level {currentUserLevel}" displayX={false}>
 
             <p class="popup-text">Congratulations!</p>
             <div class="level-answer">
-                <p class="popup-text">You completed level 1:</p>
+                <p class="popup-text">You completed level {currentUserLevel}:</p>
                 <h3 class="score">{wordsToFind[0]}</h3>
                 <h3 class="score">{wordsToFind[1]}</h3>
             </div>
