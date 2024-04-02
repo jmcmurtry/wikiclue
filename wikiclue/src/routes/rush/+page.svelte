@@ -5,7 +5,7 @@
     import TimerIcon from '~icons/material-symbols/timer-outline'
     import SkipIcon from '~icons/bi/skip-forward'
     import { onMount } from "svelte";
-    import { searchTerm } from "../../store/gameplay";
+    import { searchTerm, searchResults } from "../../store/gameplay";
 	import { authHandlers } from "../../store/store";
     import { getWikiPageContent } from '../../store/wiki';
     import SearchComponent from '../../components/searchComponent.svelte';
@@ -135,6 +135,7 @@
             timeRemaining = maxTime;
             gameOver = false;
             searchTerm.set('');
+            searchResults.set([]);
             const response = await fetch("/api/word-generation");
             const words = await response.json();
             wordsToFind[0] = words.word1;

@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
-  import { searchTerm} from '../store/gameplay';
+  import { searchTerm, searchResults } from '../store/gameplay';
   import { getWikiSearchResults } from '../store/wiki';
 
   export let confirmFunction = () => {};
-
   export let gameOver: boolean;
 
-  const searchResults = writable([]);
+  // const searchResults = writable([]);
 	let selectedResult = -1;
 
   async function onKeyPress() {
