@@ -24,12 +24,12 @@
 		if (event.key === 'ArrowDown') {
 			event.preventDefault();
 			selectedResult = Math.min(selectedResult + 1, $searchResults.length - 1);
-			scrollToSelectedResult();
+			scrollToSelectedResult("down");
 			return;
 		} else if (event.key === 'ArrowUp') {
 			event.preventDefault();
 			selectedResult = Math.max(selectedResult - 1, 0);
-			scrollToSelectedResult();
+			scrollToSelectedResult("up");
 			return;
 		} else if (event.key === 'Enter' && selectedResult !== -1) {
 			event.preventDefault();
@@ -44,8 +44,8 @@
 		}
 	}
 
-	function scrollToSelectedResult() {
-		const container = document.querySelector('.search-results-container');
+	function scrollToSelectedResult(key: string) {
+		const container = document.querySelector('.search-results-list');
 		const selectedElement = document.querySelector('.search-result.selected');
 
 		if (container && selectedElement) {
@@ -54,16 +54,24 @@
 
 			// Selected top is higher than container top
 			if (selectedRect.top - selectedRect.height < containerRect.top) {
-				// Scroll up
-				container.scrollTop -= containerRect.top - selectedRect.top + selectedRect.height;
+				// Only auto-scroll if up was clicked
+				if(key === "up") {
+					// Scroll up
+					container.scrollTop -= containerRect.top - selectedRect.top + selectedRect.height;
+				}
+			}
 
-				// Selected bottom is lower than container bottom
-			} else if (selectedRect.bottom + selectedRect.height > containerRect.bottom) {
-				// Scroll down
-				container.scrollTop += selectedRect.bottom - containerRect.bottom + selectedRect.height;
+			// Selected bottom is lower than container bottom
+			if (selectedRect.bottom + selectedRect.height > containerRect.bottom) {
+				// Only auto-scroll if down was clicked
+				if(key === "down") {
+					// Scroll down
+					container.scrollTop += selectedRect.bottom - containerRect.bottom + selectedRect.height;
+				}
 			}
 		}
 	}
+
 </script>
 
 <div class="guess-container">
