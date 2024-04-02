@@ -287,6 +287,32 @@ export const authHandlers = {
 			console.error('Error adding document: ', error);
 		}
 	},
+	getDailyPuzzles: async () => {
+		const dailyCollection = collection(db, 'dailys');
+		const collectionSnapshot = await getDocs(dailyCollection);
+		const documents = collectionSnapshot.docs.map((doc) => doc.data());
+		return documents;
+	},
+	updateDailyPuzzle: async (date: Date, wordOne: string, wordTwo: string) => {
+		const dailyCollection = collection(db, 'dailys');
+		const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+		const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+
+		const dailyQuery = query(
+			dailyCollection,
+			where('day', '>=', startOfDay),
+			where('day', '<', endOfDay)
+		);
+		const dailyDoc = await getDocs(dailyQuery);
+
+		if (dailyDoc.empty) {
+			await addDoc(dailyCollection, { wordOne, wordTwo, day: startOfDay });
+		} else {
+			dailyDoc.forEach(async (doc) => {
+				await updateDoc(doc.ref, { wordOne, wordTwo });
+			});
+		}
+	},
 	getLevels: async (difficulty: string) => {
 		const levelsCollection = collection(db, 'levels');
 		const levelsDocRef = doc(levelsCollection, difficulty);

@@ -4,20 +4,40 @@
     import AdminHeader from "../../../components/adminHeader.svelte";
     import AdminHeaderBar from "../../../components/adminHeaderBar.svelte";
     import Overlay from "../../../components/overlay.svelte";
+    import { authHandlers } from "../../../store/store";
+    import { onMount } from "svelte";
 
     const isEditOverlayOpen = writable(false);
     let wordOne = '';
     let wordTwo = '';
     let dateSelected: string | undefined;
+    let updatedDate: Date;
 
     let currentDate = new Date();
+    let dateMap: { [key: string]: { wordOne: string, wordTwo: string } } = {};
+
+    onMount (async () => {
+    	await initializeData();
+    });
+
+    async function initializeData() {
+        let dailyData = await authHandlers.getDailyPuzzles();
+        await dailyData.forEach(doc => {
+            const timestamp = new Date(doc.day.seconds * 1000).toLocaleDateString();
+            dateMap[timestamp] = {wordOne: doc.wordOne, wordTwo: doc.wordTwo};
+        });
+        currentDate = subMonths(currentDate, 0);
+    }
+
 
     function goToPreviousMonth() {
         currentDate = subMonths(currentDate, 1);
+        getDaysForCalendar(currentDate.getFullYear(), currentDate.getMonth());
     }
 
     function goToNextMonth() {
         currentDate = addMonths(currentDate, 1);
+        getDaysForCalendar(currentDate.getFullYear(), currentDate.getMonth());
     }
 
     function getFormattedDay(day: number) {
@@ -39,24 +59,46 @@
         const monthString = date.toLocaleString('default', { month: 'long' });
         const dayOfMonth = getFormattedDay(date.getDate());
         
+        updatedDate = date;
         dateSelected = monthString + " " + dayOfMonth;
+        
+        const puzzleData = dateMap[date.toLocaleDateString()];
+        wordOne = puzzleData?.wordOne;
+        wordTwo = puzzleData?.wordTwo;
         isEditOverlayOpen.set(true);
+    }
+
+    async function updateDaily() {
+        await authHandlers.updateDailyPuzzle(updatedDate, wordOne, wordTwo);
+        await initializeData()
+        isEditOverlayOpen.set(false);
+    }
+
+    function getFilterColor(day: Date) {
+        const today = new Date();
+        if (day < today) {
+            return 'past';
+        } else if (dateMap[day.toLocaleDateString()] !== undefined) {
+            return 'filled-in';
+        }
+        return 'empty';
     }
 
     function getDaysForCalendar(year: number, month: number) {
         const firstDayOfMonth = new Date(year, month, 1);
         const startDay = getDay(firstDayOfMonth);
         const daysInMonth = getDaysInMonth(firstDayOfMonth);
-        const daysFromPreviousMonth = startDay === 0 ? 6 : startDay - 1;
-        
+        const daysFromPreviousMonth = startDay === 0 ? 6 : startDay;
         const days = [];
+
         for (let i = daysFromPreviousMonth; i > 0; i--) {
             const previousDay = addDays(firstDayOfMonth, -i);
-            
+
             days.push({
                 date: previousDay,
                 day: getDate(previousDay),
-                fromOtherMonth: true
+                fromOtherMonth: true,
+                color: getFilterColor(previousDay)
             });
         }
 
@@ -65,7 +107,8 @@
             days.push({
                 date: currentDay,
                 day: i,
-                fromOtherMonth: false
+                fromOtherMonth: false,
+                color: getFilterColor(currentDay)
             });
         }
 
@@ -77,7 +120,8 @@
                 days.push({
                     date: nextDay,
                     day: i,
-                    fromOtherMonth: true
+                    fromOtherMonth: true,
+                    color: getFilterColor(nextDay)
                 });
             }
         }
@@ -114,15 +158,15 @@
     
         <div class="calendar">
             <!-- svelte-ignore a11y-no-static-element-interactions -->
-            {#each getDaysForCalendar(getYear(currentDate), getMonth(currentDate)) as { date, day, fromOtherMonth }}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            {#if fromOtherMonth}
-                <div class="day previous-month" class:selected="{date.toDateString() === new Date().toDateString()}" on:click={() => selectDate(date)}>{day}</div>
-            {/if}
-            {#if !fromOtherMonth}
+            {#each getDaysForCalendar(getYear(currentDate), getMonth(currentDate)) as { date, day, fromOtherMonth, color }}
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div class="day" class:selected="{date.toDateString() === new Date().toDateString()}" on:click={() => selectDate(date)}>{day}</div>
-            {/if}
+                {#if fromOtherMonth}
+                    <div class="day previous-month {color}" class:selected="{date.toDateString() === new Date().toDateString()}" on:click={() => selectDate(date)}>{day}</div>
+                {/if}
+                {#if !fromOtherMonth}
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <div class="day {color}" class:selected="{date.toDateString() === new Date().toDateString()}" on:click={() => selectDate(date)}>{day}</div>
+                {/if}
             {/each}
         </div>
     </div>
@@ -133,7 +177,7 @@
         <input type="text" class="word-input" bind:value={wordOne}/>
         <p class ="input-label">Second Word</p>
         <input type="text" class="word-input" bind:value={wordTwo}/>
-        <button class="save-button">Save Daily</button>
+        <button class="save-button" on:click={updateDaily}>Save Daily</button>
     </Overlay>   
 {/if}
 </div>
