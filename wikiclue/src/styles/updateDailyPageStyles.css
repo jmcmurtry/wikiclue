@@ -75,16 +75,29 @@
 	margin-right: 5px;
 }
 
-#past {
-	background-color: var(--pass);
+#past,
+.past {
+	background-color: var(--remove-hover);
 }
 
-#empty {
-	background-color: var(--wrong-answer);
+.past:hover {
+	color: var(--remove-darker);
+	border: 1px solid var(--remove-darker);
 }
 
-#filled-in {
-	background-color: var(--correct-answer);
+#empty,
+.empty {
+	background: var(--card-background);
+}
+
+#filled-in,
+.filled-in {
+	background-color: var(--success-color-hover);
+}
+
+.filled-in:hover {
+	color: var(--success-color-darker);
+	border: 1px solid var(--success-color-darker);
 }
 
 /* Edit overlay Styles */
