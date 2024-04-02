@@ -22,10 +22,11 @@
 
     async function initializeData() {
         let dailyData = await authHandlers.getDailyPuzzles();
-        dailyData.forEach(doc => {
+        await dailyData.forEach(doc => {
             const timestamp = new Date(doc.day.seconds * 1000).toLocaleDateString();
             dateMap[timestamp] = {wordOne: doc.wordOne, wordTwo: doc.wordTwo};
         });
+        
     }
 
 
