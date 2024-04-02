@@ -82,6 +82,29 @@ export const authHandlers = {
 			console.log('Error getting document:', error);
 		}
 	},
+	updateUserLevelsData: async (id: string, difficulty:string, maxLevel: number) => {
+		const userCollection = collection(db, 'users');
+		const userDocRef = doc(userCollection, id);
+		try {
+			if (difficulty === 'easy'){
+				await updateDoc(userDocRef, {
+					'gameinfo.currenteasylevel': maxLevel
+				});
+			}
+			else if (difficulty === 'medium'){
+				await updateDoc(userDocRef, {
+					'gameinfo.currentmediumlevel': maxLevel
+				});
+			}
+			else if (difficulty === 'hard'){
+				await updateDoc(userDocRef, {
+					'gameinfo.currenthardlevel': maxLevel
+				});
+			}
+		} catch (error) {
+			console.error('Error updating document:', error);
+		}
+	},
 	getUserRushData: async (id: string) => {
 		const userCollection = collection(db, 'users');
 		const userDocRef = doc(userCollection, id);
