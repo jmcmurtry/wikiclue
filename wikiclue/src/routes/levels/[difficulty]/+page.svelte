@@ -19,15 +19,19 @@
 	let pageDoesNotExist = false;
     let levelData: any[];
     let currentUserLevel: number;
+    let userData: any;
 
    // Extract the difficulty slug from url
    const difficulty = $page.params.difficulty;
 
     onMount(async () => {
-        searchTerm.set('');
+        await setupLevel();
+	});
 
+    async function setupLevel(){
+        searchTerm.set('');
         await auth.onAuthStateChanged(async (user) => {
-            const userData = user;
+            userData = user;
             if(userData){
                 let userLevelsData = await authHandlers.getUserCurrentLevelsData(userData.uid);
                 if (userLevelsData && difficulty === "easy"){
@@ -41,10 +45,9 @@
                 }
             }
         });
-
         levelData = await authHandlers.getLevels(difficulty);
 		loadLevelWords();
-	});
+    }
 
     function loadLevelWords() {
         // Load the current level words from firebase
@@ -67,7 +70,6 @@
 
         // Found a correct answer
 		if (pageContent.includes(wordsToFind[0].toLowerCase()) && pageContent.includes(wordsToFind[1].toLowerCase())) {
-            storeData();
 			endLevel();
 		}
 
@@ -81,19 +83,18 @@
 
     }
 
-    function storeData() {
+    async function endLevel() {
 		// Save level data into database
-        // Update the current level the user is on
-	}
-
-    function endLevel() {
         isOverlayOpen.set(true);
 		levelOver.set(true);
+        await authHandlers.updateUserLevelsData(userData.uid, difficulty, currentUserLevel + 1);
 	}
 
-    function playNextLevelClicked() {
-        // If the current level is updated correctly in storeData, this should work to populate next level data
-        window.location.reload();
+    async function playNextLevelClicked() {
+        // Restart page so that the updated data is used
+        isOverlayOpen.set(false);
+		levelOver.set(false);
+        await setupLevel();
 	}
 
     function returnToMainMenuClicked() {
@@ -113,7 +114,7 @@
 <HeaderBar />
 <div class="levels-page">
     <GameHeader header="Level: {difficulty} {currentUserLevel}" arrow={true} backLink="/home"/>
-	<p class="info-text">ahh placeholder</p>
+	<p class="info-text">Ahh placeholder</p>
 
 	<div class="game-container">
         <p class="game-description">Find A Wiki page with</p>
