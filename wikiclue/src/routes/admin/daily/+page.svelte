@@ -26,7 +26,7 @@
             const timestamp = new Date(doc.day.seconds * 1000).toLocaleDateString();
             dateMap[timestamp] = {wordOne: doc.wordOne, wordTwo: doc.wordTwo};
         });
-        
+        currentDate = subMonths(currentDate, 0);
     }
 
 
