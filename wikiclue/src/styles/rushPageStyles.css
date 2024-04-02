@@ -70,10 +70,29 @@
 	margin: 0;
 }
 
-.incorrect-answer {
+.message-container {
 	font-size: 1.1rem;
-	color: var(--error-color);
 	margin: 0;
+}
+
+.correct-answer-message {
+	color: var(--success-color);
+}
+
+.auto-skip-message {
+	color: var(--skip);
+}
+
+.incorrect-answer {
+	color: var(--error-color);
+}
+
+.page-not-exist {
+	color: var(--error-color);
+}
+
+.no-skips {
+	color: var(--error-color);
 }
 
 .skip-button {
@@ -139,4 +158,32 @@
 
 .popup-button:hover {
 	background-color: var(--default-button-color-lighter);
+}
+
+.skip-pressed {
+	background-color: var(--skip);
+	animation: skippedFadeOut 2s forwards;
+}
+
+.correct-answer {
+	background-color: var(--success-color);
+	animation: correctFadeOut 2s forwards;
+}
+
+@keyframes correctFadeOut {
+	from {
+		background-color: var(--success-color);
+	}
+	to {
+		background-color: transparent;
+	}
+}
+
+@keyframes skippedFadeOut {
+	from {
+		background-color: var(--skip);
+	}
+	to {
+		background-color: transparent;
+	}
 }
