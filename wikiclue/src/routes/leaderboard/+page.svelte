@@ -9,6 +9,11 @@
     let hardLevels: Map<string,number> = new Map<string,number>();
     let daily: Map<string,number> = new Map<string,number>();
     let rush: Map<string,number> = new Map<string,number>();
+    let selectedDifficulty = 'easy';
+
+   async function handleOptionChange(event: { target: any; }) {
+        selectedDifficulty = event.target.value;
+    }
 
     async function getFriendsScores(uid: string) {
         try {
@@ -32,10 +37,8 @@
 
 			  const uid = user.uid;
         if(user){
-          const username = await getFriendsScores(uid);
-          }
-            // Would need to use this functionality to pre load levels data with words from database
-            // depending on if the user selects easy medium or hard
+          getFriendsScores(uid);
+          } 
       });
     });
 
@@ -82,12 +85,34 @@ function sortMapByGuesses(map: Map<string, number>): Map<string, number> {
     <div class="leaderboard-container">
         <div class="leader-container">
             <h2>Levels</h2>
+            <div class="change-difficulty">
+                <h3>Difficulty:</h3>
+                <div class="select">
+                    <select class="dropdown" on:change={handleOptionChange}>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                    <span class="focus"></span>
+                </div>                
+            </div>
             <p class="leader-description">Highest Level your friends have reached</p>
             <div class ="users-container">
-                <p class="leader-name">LitLover911 <span class ="leader-score">Hard 77</span></p>
-                <p class="leader-name">Chris_Morroco <span class ="leader-score"> Hard 1</span></p>
-                <p class="leader-name">Bonnie <span class ="leader-score">Medium 211</span></p>
-                <p class="leader-name">Clyde <span class ="leader-score">Easy 5</span></p>
+                <ul class = "list-container">
+                    {#if selectedDifficulty === "easy"}
+                        {#each easyLevels.entries() as [key, value]}
+                        <li class = "leader-name">{key} <span class = "leader-score">{value}</span></li>
+                        {/each}
+                    {:else if selectedDifficulty === "medium"}
+                        {#each mediumLevels.entries() as [key, value]}
+                        <li class = "leader-name">{key} <span class = "leader-score">{value}</span></li>
+                        {/each}
+                    {:else}
+                        {#each hardLevels.entries() as [key, value]}
+                        <li class = "leader-name">{key} <span class = "leader-score">{value}</span></li>
+                        {/each}
+                    {/if}
+                </ul>
             </div>
         </div>
         <div class="leader-container">
