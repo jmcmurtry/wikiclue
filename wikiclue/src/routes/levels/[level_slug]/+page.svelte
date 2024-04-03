@@ -14,11 +14,12 @@
 
     const isOverlayOpen = writable(false);
     const levelOver = writable(false);
+    const nextLevelAvailable = writable(true);
     let wordsToFind = [''];
     let incorrectAnswer = false;
 	let pageDoesNotExist = false;
     let levelData: any[];
-    let currentUserLevel: number;
+    let maxLevel: number;
     let userData: any;
     let userLevelsData: any;
 
@@ -35,24 +36,24 @@
         searchTerm.set('');
         searchResults.set([]);
 
-        // await new Promise<void>((resolve) => {
-        //     auth.onAuthStateChanged(async (user) => {
-        //         userData = user;
-        //         if(userData){
-        //             userLevelsData = await authHandlers.getUserCurrentLevelsData(userData.uid);
-        //             if (userLevelsData && difficulty === "easy"){
-        //                 currentUserLevel = userLevelsData[0];
-        //             }
-        //             else if (userLevelsData && difficulty === "medium"){
-        //                 currentUserLevel = userLevelsData[1];
-        //             }
-        //             else if (userLevelsData && difficulty === "hard"){
-        //                 currentUserLevel = userLevelsData[2];
-        //             }
-        //         }
-        //         resolve();
-        //     });
-        // });
+        await new Promise<void>((resolve) => {
+            auth.onAuthStateChanged(async (user) => {
+                userData = user;
+                if(userData){
+                    userLevelsData = await authHandlers.getUserCurrentLevelsData(userData.uid);
+                    if (userLevelsData && difficulty === "easy"){
+                        maxLevel = userLevelsData[0];
+                    }
+                    else if (userLevelsData && difficulty === "medium"){
+                        maxLevel = userLevelsData[1];
+                    }
+                    else if (userLevelsData && difficulty === "hard"){
+                        maxLevel = userLevelsData[2];
+                    }
+                }
+                resolve();
+            });
+        });
 
         levelData = await authHandlers.getLevels(difficulty);
 		loadLevelWords();
@@ -78,7 +79,12 @@
 
         // Found a correct answer
 		if (pageContent.includes(wordsToFind[0].toLowerCase()) && pageContent.includes(wordsToFind[1].toLowerCase())) {
-			endLevel();
+            if(levelNumber >= levelData.length){
+                nextLevelAvailable.set(false);
+            }
+            isOverlayOpen.set(true);
+            levelOver.set(true);
+            // await authHandlers.updateUserLevelsData(userData.uid, difficulty, currentUserLevel + 1);
 		}
 
         // Did not find a correct answer
@@ -90,13 +96,6 @@
 		}
 
     }
-
-    async function endLevel() {
-		// Save level data into database
-        isOverlayOpen.set(true);
-		levelOver.set(true);
-        // await authHandlers.updateUserLevelsData(userData.uid, difficulty, currentUserLevel + 1);
-	}
 
     async function playNextLevelClicked() {
         // Restart page so that the updated data is used
@@ -137,11 +136,11 @@
 	</div>
 
     {#if $isOverlayOpen && $levelOver}
-        <Overlay header="Level {currentUserLevel}" displayX={false}>
+        <Overlay header="Level {levelNumber}" displayX={false}>
 
             <p class="popup-text">Congratulations!</p>
             <div class="level-answer">
-                <p class="popup-text">You completed level {currentUserLevel}:</p>
+                <p class="popup-text">You completed level {levelNumber}:</p>
                 <h3 class="score">{wordsToFind[0]}</h3>
                 <h3 class="score">{wordsToFind[1]}</h3>
             </div>
@@ -151,8 +150,9 @@
             </div>
 
             <div class="bottom-options">
-                <button class="popup-button" on:click={() => {playNextLevelClicked()}}>Play Next Level</button>
-                <hr/>
+                {#if $nextLevelAvailable}
+                    <button class="popup-button" on:click={() => {playNextLevelClicked()}}>Play Next Level</button>
+                {/if}
                 <button class="popup-button" on:click={() => {returnToMainMenuClicked()}}>Return to Main Menu</button>
             </div>
         </Overlay>

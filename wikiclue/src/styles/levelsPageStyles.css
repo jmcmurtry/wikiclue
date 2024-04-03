@@ -5,11 +5,6 @@
 	margin-top: 15vh;
 }
 
-.info-text {
-	font-size: 1.2rem;
-	margin: 3vh 0;
-}
-
 .game-container {
 	background-color: var(--card-background);
 	margin-top: 20px;
@@ -77,7 +72,7 @@
 	width: 240px;
 	max-width: 85%;
 	bottom: 20px;
-	gap: 10px;
+	gap: 30px;
 }
 
 .popup-button {
@@ -91,10 +86,4 @@
 
 .popup-button:hover {
 	background-color: var(--default-button-color-lighter);
-}
-
-hr {
-	width: 100%;
-	border: 1px solid var(--input-border-color);
-	margin-top: 1rem;
 }
