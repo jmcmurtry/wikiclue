@@ -42,7 +42,6 @@
                 }
 
                 if (user && nonAuthRoutes.includes(currentPath)) {
-                    console.log("aquie");
                     window.location.href = '/home';
                     return;
                 }
