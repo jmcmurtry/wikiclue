@@ -1,6 +1,7 @@
 <script lang="ts">
   import HeaderBar from "../../components/headerBar.svelte";
   import GameHeader from "../../components/gameHeader.svelte";
+  import { goto } from '$app/navigation';
   import { writable } from "svelte/store";
   import { authHandlers } from "../../store/store";
   import { onMount } from "svelte";
@@ -84,6 +85,7 @@
           <p>Loading...</p>
       {/if}
   </div>
+  <button class="popup-button" on:click={() => goto(`/levels/${selectedDifficulty}`)}>GOOO!</button>
 </div>
 
 <style>
