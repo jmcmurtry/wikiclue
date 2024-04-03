@@ -61,3 +61,7 @@ h3 {
 .level:hover {
 	background-color: var(--card-background-darker);
 }
+
+.level:disabled {
+	background-color: var(--card-background-locked);
+}

@@ -34,6 +34,7 @@
     async function setupLevel(){
         searchTerm.set('');
         searchResults.set([]);
+
         // await new Promise<void>((resolve) => {
         //     auth.onAuthStateChanged(async (user) => {
         //         userData = user;
