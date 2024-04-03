@@ -24,17 +24,26 @@
     let userLevelsData: any;
 
    // Extract the level slug from url
-   const level_slug = $page.params.level_slug;
-   const [difficulty, levelStr] = level_slug.split("-");
-   const levelNumber = parseInt(levelStr);
+   let level_slug = $page.params.level_slug;
+   let [difficulty, levelStr] = level_slug.split("-");
+   let levelNumber = parseInt(levelStr);
 
     onMount(async () => {
         await setupLevel();
 	});
 
     async function setupLevel(){
+        // Clear search
         searchTerm.set('');
         searchResults.set([]);
+
+        // Reset page
+        isOverlayOpen.set(false);
+        levelOver.set(false);
+
+        level_slug = $page.params.level_slug;
+        [difficulty, levelStr] = level_slug.split("-");
+        levelNumber = parseInt(levelStr);
 
         await new Promise<void>((resolve) => {
             auth.onAuthStateChanged(async (user) => {
@@ -79,12 +88,19 @@
 
         // Found a correct answer
 		if (pageContent.includes(wordsToFind[0].toLowerCase()) && pageContent.includes(wordsToFind[1].toLowerCase())) {
+
+            // Don't go past the available levels
             if(levelNumber >= levelData.length){
                 nextLevelAvailable.set(false);
+            } else {
+                // Update database
+                if(levelNumber > maxLevel){
+                    await authHandlers.updateUserLevelsData(userData.uid, difficulty, levelNumber);
+                }
             }
+
             isOverlayOpen.set(true);
             levelOver.set(true);
-            // await authHandlers.updateUserLevelsData(userData.uid, difficulty, currentUserLevel + 1);
 		}
 
         // Did not find a correct answer
@@ -99,9 +115,8 @@
 
     async function playNextLevelClicked() {
         // Restart page so that the updated data is used
-        isOverlayOpen.set(false);
-        await setupLevel();
-        levelOver.set(false);
+        await goto(`/levels/${difficulty}-${levelNumber+1}`);
+        setupLevel();
 	}
 
     function returnToMainMenuClicked() {

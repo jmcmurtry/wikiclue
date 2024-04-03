@@ -71,7 +71,7 @@
   <div class="level-options-container">
       {#if levelData}
           {#each Object.keys(levelData) as level, index}
-              {#if index < maxLevel}
+              {#if index <= maxLevel}
                   <button class="level" on:click={() => handleLevelClick(index)}>
                     {index+1}
                   </button>
