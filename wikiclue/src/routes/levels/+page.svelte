@@ -1,7 +1,6 @@
 <script lang="ts">
   import HeaderBar from "../../components/headerBar.svelte";
   import GameHeader from "../../components/gameHeader.svelte";
-  import { levelNumber } from "../../store/gameplay";
   import { goto } from '$app/navigation';
   import { writable } from "svelte/store";
   import { authHandlers } from "../../store/store";
@@ -20,9 +19,7 @@
   }
 
   function handleLevelClick(level: number) {
-      console.log("clicked level " + level);
-      levelNumber.set(level);
-      goto(`/levels/${selectedDifficulty}`);
+      goto(`/levels/${selectedDifficulty}-${level+1}`);
   }
 
 </script>

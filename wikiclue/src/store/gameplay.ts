@@ -8,8 +8,7 @@ const searchResults = writable([]);
 const guestTimeAllowed = writable(60);
 const guestSkipsRemaining = writable(3);
 
-// Levels Variables
-const levelNumber = writable(0);
+// Levels Variables if needed
 
 // The Daily Variables if needed
 
@@ -39,5 +38,5 @@ const rush = {
 	skipsRemaining: rushSkipsRemaining
 };
 
-export { guestPlay, rush, searchTerm, searchResults, levelNumber };
+export { guestPlay, rush, searchTerm, searchResults };
 export type {theDaily}

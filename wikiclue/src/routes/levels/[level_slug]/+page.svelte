@@ -4,7 +4,7 @@
     import Overlay from "../../../components/overlay.svelte";
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
-    import { searchTerm, searchResults, levelNumber } from '../../../store/gameplay';
+    import { searchTerm, searchResults } from '../../../store/gameplay';
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
     import { authHandlers } from "../../../store/store";
@@ -22,8 +22,10 @@
     let userData: any;
     let userLevelsData: any;
 
-   // Extract the difficulty slug from url
-   const difficulty = $page.params.difficulty;
+   // Extract the level slug from url
+   const level_slug = $page.params.level_slug;
+   const [difficulty, levelStr] = level_slug.split("-");
+   const levelNumber = parseInt(levelStr);
 
     onMount(async () => {
         await setupLevel();
@@ -56,10 +58,8 @@
     }
 
     function loadLevelWords() {
-        // wordsToFind[0] = levelData[currentUserLevel-1].wordOne;
-        // wordsToFind[1] = levelData[currentUserLevel-1].wordTwo;
-        wordsToFind[0] = levelData[$levelNumber].wordOne;
-        wordsToFind[1] = levelData[$levelNumber].wordTwo;
+        wordsToFind[0] = levelData[levelNumber-1].wordOne;
+        wordsToFind[1] = levelData[levelNumber-1].wordTwo;
     }
 
 
@@ -120,11 +120,7 @@
 
 <HeaderBar />
 <div class="levels-page">
-    <GameHeader header="Level: {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} {$levelNumber + 1}" arrow={true} backLink="/levels"/>
-    {#if levelData}
-    <!-- <p class="info-text">You have completed {currentUserLevel-1}/{levelData.length} levels</p> -->
-    <p class="info-text">You have completed X/{levelData.length} levels</p>
-    {/if}
+    <GameHeader header="Level: {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} {levelNumber}" arrow={true} backLink="/levels"/>
 
 	<div class="game-container">
         <p class="game-description">Find A Wiki page with</p>
