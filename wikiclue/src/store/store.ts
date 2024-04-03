@@ -495,6 +495,66 @@ export const authHandlers = {
 			return [];
 		}
 	},
+
+	getScoresForFriends: async (uid: string) => {
+		// Data structure to grab friends names
+		interface UserData {
+			username: string;
+			gameinfo: {
+				[key: string]: number;
+			};
+		}
+		try {
+			//User information
+			const userCollection = collection(db, 'users');
+			const userDocRef = doc(userCollection, uid);
+			const userDocSnapshot = await getDoc(userDocRef);
+
+			if (!userDocSnapshot.exists()) {
+				console.error('No user found with the given UID.');
+				return [];
+			}
+
+			const userData = userDocSnapshot.data();
+			const friendsList = userData.friends;
+
+			if (!friendsList || friendsList.length === 0) {
+				return new Map<string, Map<string, number>>();;
+			}
+
+			// eslint-disable-next-line prefer-const
+			let friendScores = new Map<string, Map<string, number>>();;
+			let easyLevels = new Map<string, number>();
+			let mediumLevels = new Map<string, number>();
+			let hardLevels = new Map<string, number>();
+			let daily = new Map<string, number>();
+			let rush = new Map<string, number>();
+
+			for (const friendRef of friendsList) {
+				const friendDocSnapshot = await getDoc(friendRef);
+				if (friendDocSnapshot.exists()) {
+					const friendData = friendDocSnapshot.data() as UserData;
+					const gameInfo = friendData.gameinfo;
+						easyLevels.set(friendData.username, gameInfo.currenteasylevel);
+						mediumLevels.set(friendData.username, gameInfo.currentmediumlevel);
+						hardLevels.set(friendData.username, gameInfo.currenthardlevel);
+						daily.set(friendData.username, gameInfo.maxstreak);
+						rush.set(friendData.username, gameInfo.rush);
+				}
+			}
+
+			friendScores.set("Levels:Easy", easyLevels);
+			friendScores.set("Levels:Medium", mediumLevels);
+			friendScores.set("Levels:Hard", hardLevels);
+			friendScores.set("Daily",daily);
+			friendScores.set("Rush", rush);
+
+			return friendScores;
+		} catch (error) {
+			console.error('Error retrieving friend scores:', error);
+			return [];
+		}
+	},
 	removeFriends: async (username: string, uid: string, isFriend: boolean) => {
 		try {
 			//User data
