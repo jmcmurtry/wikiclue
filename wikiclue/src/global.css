@@ -29,6 +29,8 @@
 	--search-background: #f8f9fa;
 	--search-background-hover: #fff;
 	--search-color-hover: #404244;
+
+	--plain-white: #fff;
 }
 
 body {
