@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 
+// Search Variables
 const searchTerm = writable('');
 const searchResults = writable([]);
 
@@ -7,7 +8,8 @@ const searchResults = writable([]);
 const guestTimeAllowed = writable(60);
 const guestSkipsRemaining = writable(3);
 
-// Levels Variables if needed
+// Levels Variables
+const levelNumber = writable(0);
 
 // The Daily Variables if needed
 
@@ -37,5 +39,5 @@ const rush = {
 	skipsRemaining: rushSkipsRemaining
 };
 
-export { guestPlay, rush, searchTerm, searchResults };
+export { guestPlay, rush, searchTerm, searchResults, levelNumber };
 export type {theDaily}

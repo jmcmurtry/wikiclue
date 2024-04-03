@@ -4,7 +4,7 @@
     import Overlay from "../../../components/overlay.svelte";
 	import { writable } from "svelte/store";
     import { onMount } from "svelte";
-    import { searchTerm, searchResults } from '../../../store/gameplay';
+    import { searchTerm, searchResults, levelNumber } from '../../../store/gameplay';
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
     import { authHandlers } from "../../../store/store";
@@ -32,31 +32,34 @@
     async function setupLevel(){
         searchTerm.set('');
         searchResults.set([]);
-        await new Promise<void>((resolve) => {
-        auth.onAuthStateChanged(async (user) => {
-            userData = user;
-            if(userData){
-                userLevelsData = await authHandlers.getUserCurrentLevelsData(userData.uid);
-                if (userLevelsData && difficulty === "easy"){
-                    currentUserLevel = userLevelsData[0];
-                }
-                else if (userLevelsData && difficulty === "medium"){
-                    currentUserLevel = userLevelsData[1];
-                }
-                else if (userLevelsData && difficulty === "hard"){
-                    currentUserLevel = userLevelsData[2];
-                }
-            }
-            resolve();
-        });
-    });
+        // await new Promise<void>((resolve) => {
+        //     auth.onAuthStateChanged(async (user) => {
+        //         userData = user;
+        //         if(userData){
+        //             userLevelsData = await authHandlers.getUserCurrentLevelsData(userData.uid);
+        //             if (userLevelsData && difficulty === "easy"){
+        //                 currentUserLevel = userLevelsData[0];
+        //             }
+        //             else if (userLevelsData && difficulty === "medium"){
+        //                 currentUserLevel = userLevelsData[1];
+        //             }
+        //             else if (userLevelsData && difficulty === "hard"){
+        //                 currentUserLevel = userLevelsData[2];
+        //             }
+        //         }
+        //         resolve();
+        //     });
+        // });
+
         levelData = await authHandlers.getLevels(difficulty);
 		loadLevelWords();
     }
 
     function loadLevelWords() {
-        wordsToFind[0] = levelData[currentUserLevel-1].wordOne;
-        wordsToFind[1] = levelData[currentUserLevel-1].wordTwo;
+        // wordsToFind[0] = levelData[currentUserLevel-1].wordOne;
+        // wordsToFind[1] = levelData[currentUserLevel-1].wordTwo;
+        wordsToFind[0] = levelData[$levelNumber].wordOne;
+        wordsToFind[1] = levelData[$levelNumber].wordTwo;
     }
 
 
@@ -91,7 +94,7 @@
 		// Save level data into database
         isOverlayOpen.set(true);
 		levelOver.set(true);
-        await authHandlers.updateUserLevelsData(userData.uid, difficulty, currentUserLevel + 1);
+        // await authHandlers.updateUserLevelsData(userData.uid, difficulty, currentUserLevel + 1);
 	}
 
     async function playNextLevelClicked() {
@@ -117,9 +120,10 @@
 
 <HeaderBar />
 <div class="levels-page">
-    <GameHeader header="Level: {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} {currentUserLevel}" arrow={true} backLink="/home"/>
+    <GameHeader header="Level: {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} {$levelNumber + 1}" arrow={true} backLink="/levels"/>
     {#if levelData}
-    <p class="info-text">You have completed {currentUserLevel-1}/{levelData.length} levels</p>
+    <!-- <p class="info-text">You have completed {currentUserLevel-1}/{levelData.length} levels</p> -->
+    <p class="info-text">You have completed X/{levelData.length} levels</p>
     {/if}
 
 	<div class="game-container">

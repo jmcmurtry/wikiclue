@@ -17,25 +17,13 @@
 	cursor:pointer;
 }
 
-/* Option header */
-
-.options-container {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: center;
-	width: 70vw;
-	margin: 20px;
-	/* margin-bottom: 10px; */
-	min-width: 350px;
-}
-
 /* Update Levels Section */
 
 .change-difficulty {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	margin: 20px;
 }
 
 h3 {
@@ -63,9 +51,9 @@ h3 {
 	max-width: 125px;
 	max-height: 125px;
 	margin: 1%;
+	border: none;
 	box-sizing: border-box;
 	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-	aspect-ratio: 1;
 	cursor: pointer;
 	background: var(--card-background);
 }
