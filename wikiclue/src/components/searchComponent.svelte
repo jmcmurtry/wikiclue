@@ -81,6 +81,7 @@
 		bind:value={$searchTerm}
 		on:input={() => onKeyPress()}
 		on:keydown={(event) => handleKeyDown(event)}
+		disabled={gameOver}
   />
   <button class="confirm-answer" disabled={gameOver} on:click={() => confirmFunction()}>Search</button>
 </div>
@@ -92,6 +93,7 @@
 		<button
 			class="search-result {index === selectedResult ? 'selected' : ''}"
 			on:click={() => onSelectPage(option)}
+			disabled={gameOver}
 		>
 			{option}
 		</button>

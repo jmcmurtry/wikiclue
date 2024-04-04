@@ -12,7 +12,6 @@
     import { getWikiPageContent } from '../../../store/wiki';
     import SearchComponent from '../../../components/searchComponent.svelte';
 
-    const isOverlayOpen = writable(false);
     const levelOver = writable(false);
     const nextLevelAvailable = writable(true);
     let wordsToFind = [''];
@@ -33,12 +32,9 @@
 	});
 
     async function setupLevel(){
-        // Clear search
+        // Reset Page
         searchTerm.set('');
         searchResults.set([]);
-
-        // Reset page
-        isOverlayOpen.set(false);
         levelOver.set(false);
 
         level_slug = $page.params.level_slug;
@@ -92,7 +88,6 @@
                     await authHandlers.updateUserLevelsData(userData.uid, difficulty, levelNumber);
                 }
             }
-            isOverlayOpen.set(true);
             levelOver.set(true);
 		}
 
@@ -111,16 +106,7 @@
         await goto(`/levels/${difficulty}-${levelNumber+1}`);
         setupLevel();
 	}
-
-    function onEnterPressed(event: KeyboardEvent) {
-        if (event.key === "Enter" && $levelOver && !$isOverlayOpen) {
-            playNextLevelClicked();
-            return;
-        }
-    }
 </script>
-
-<svelte:window on:keydown={onEnterPressed} />
 
 <HeaderBar />
 <div class="levels-page">
@@ -139,7 +125,7 @@
 		<SearchComponent gameOver={$levelOver} confirmFunction={levelsConfirmFunction} />
 	</div>
 
-    {#if $isOverlayOpen && $levelOver}
+    {#if $levelOver}
         <Overlay header="Level {levelNumber}" displayX={false}>
 
             <p class="popup-text">Congratulations!</p>
