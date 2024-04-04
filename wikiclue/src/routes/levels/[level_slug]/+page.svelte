@@ -60,6 +60,10 @@
             });
         });
 
+        if(levelNumber > maxLevel + 1){
+            goto("/levels");
+        }
+
         levelData = await authHandlers.getLevels(difficulty);
         wordsToFind[0] = levelData[levelNumber-1].wordOne;
         wordsToFind[1] = levelData[levelNumber-1].wordTwo;
