@@ -10,7 +10,7 @@
         </a>
     </div>
     <div class="links-container">
-        <a href="/login">
+        <a href="/login" title="Login">
             <LoginIcon style="font-size: 1.5rem; color: white; padding-top: 5px"/>
         </a>
     </div>
