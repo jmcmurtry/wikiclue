@@ -146,6 +146,7 @@
             <div class="bottom-options">
                 {#if $nextLevelAvailable}
                     <button class="popup-button" on:click={() => {playNextLevelClicked()}}>Play Next Level</button>
+                    <hr/>
                 {/if}
                 <button class="popup-button" on:click={() => {goto("/levels")}}>Return to Level Menu</button>
             </div>
