@@ -23,10 +23,10 @@
     let userData: any;
     let userLevelsData: any;
 
-   // Extract the level slug from url
-   let level_slug = $page.params.level_slug;
-   let [difficulty, levelStr] = level_slug.split("-");
-   let levelNumber = parseInt(levelStr);
+    // Extract the level slug from url
+    let level_slug = $page.params.level_slug;
+    let [difficulty, levelStr] = level_slug.split("-");
+    let levelNumber = parseInt(levelStr);
 
     onMount(async () => {
         await setupLevel();
@@ -65,14 +65,9 @@
         });
 
         levelData = await authHandlers.getLevels(difficulty);
-		loadLevelWords();
-    }
-
-    function loadLevelWords() {
         wordsToFind[0] = levelData[levelNumber-1].wordOne;
         wordsToFind[1] = levelData[levelNumber-1].wordTwo;
     }
-
 
     async function levelsConfirmFunction() {
         incorrectAnswer = false;
@@ -88,7 +83,6 @@
 
         // Found a correct answer
 		if (pageContent.includes(wordsToFind[0].toLowerCase()) && pageContent.includes(wordsToFind[1].toLowerCase())) {
-
             // Don't go past the available levels
             if(levelNumber >= levelData.length){
                 nextLevelAvailable.set(false);
@@ -98,7 +92,6 @@
                     await authHandlers.updateUserLevelsData(userData.uid, difficulty, levelNumber);
                 }
             }
-
             isOverlayOpen.set(true);
             levelOver.set(true);
 		}
@@ -119,13 +112,9 @@
         setupLevel();
 	}
 
-    function returnToMainMenuClicked() {
-        goto('/home');
-	}
-
     function onEnterPressed(event: KeyboardEvent) {
         if (event.key === "Enter" && $levelOver && !$isOverlayOpen) {
-            playNextLevelClicked()
+            playNextLevelClicked();
             return;
         }
     }
@@ -168,7 +157,7 @@
                 {#if $nextLevelAvailable}
                     <button class="popup-button" on:click={() => {playNextLevelClicked()}}>Play Next Level</button>
                 {/if}
-                <button class="popup-button" on:click={() => {returnToMainMenuClicked()}}>Return to Main Menu</button>
+                <button class="popup-button" on:click={() => {goto("/levels")}}>Return to Level Menu</button>
             </div>
         </Overlay>
     {/if}
