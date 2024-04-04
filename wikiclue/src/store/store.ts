@@ -56,9 +56,9 @@ export const authHandlers = {
 					lastplay: Timestamp.fromDate(new Date(new Date().getTime() - 86400000)),
 					currentGuesses: 6
 				},
-				currenteasylevel: 1,
-				currentmediumlevel: 1,
-				currenthardlevel: 1,
+				currenteasylevel: 0,
+				currentmediumlevel: 0,
+				currenthardlevel: 0,
 				totallevels: 0,
 				maxstreak: 0,
 				rush: 0

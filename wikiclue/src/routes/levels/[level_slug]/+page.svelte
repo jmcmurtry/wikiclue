@@ -12,53 +12,62 @@
     import { getWikiPageContent } from '../../../store/wiki';
     import SearchComponent from '../../../components/searchComponent.svelte';
 
-    const isOverlayOpen = writable(false);
     const levelOver = writable(false);
+    const nextLevelAvailable = writable(true);
     let wordsToFind = [''];
     let incorrectAnswer = false;
 	let pageDoesNotExist = false;
     let levelData: any[];
-    let currentUserLevel: number;
+    let maxLevel: number;
     let userData: any;
     let userLevelsData: any;
 
-   // Extract the difficulty slug from url
-   const difficulty = $page.params.difficulty;
+    // Extract the level slug from url
+    let level_slug = $page.params.level_slug;
+    let [difficulty, levelStr] = level_slug.split("-");
+    let levelNumber = parseInt(levelStr);
 
     onMount(async () => {
         await setupLevel();
 	});
 
     async function setupLevel(){
+        // Reset Page
         searchTerm.set('');
         searchResults.set([]);
+        levelOver.set(false);
+
+        level_slug = $page.params.level_slug;
+        [difficulty, levelStr] = level_slug.split("-");
+        levelNumber = parseInt(levelStr);
+
         await new Promise<void>((resolve) => {
-        auth.onAuthStateChanged(async (user) => {
-            userData = user;
-            if(userData){
-                userLevelsData = await authHandlers.getUserCurrentLevelsData(userData.uid);
-                if (userLevelsData && difficulty === "easy"){
-                    currentUserLevel = userLevelsData[0];
+            auth.onAuthStateChanged(async (user) => {
+                userData = user;
+                if(userData){
+                    userLevelsData = await authHandlers.getUserCurrentLevelsData(userData.uid);
+                    if (userLevelsData && difficulty === "easy"){
+                        maxLevel = userLevelsData[0];
+                    }
+                    else if (userLevelsData && difficulty === "medium"){
+                        maxLevel = userLevelsData[1];
+                    }
+                    else if (userLevelsData && difficulty === "hard"){
+                        maxLevel = userLevelsData[2];
+                    }
                 }
-                else if (userLevelsData && difficulty === "medium"){
-                    currentUserLevel = userLevelsData[1];
-                }
-                else if (userLevelsData && difficulty === "hard"){
-                    currentUserLevel = userLevelsData[2];
-                }
-            }
-            resolve();
+                resolve();
+            });
         });
-    });
+
+        if(levelNumber > maxLevel + 1){
+            goto("/levels");
+        }
+
         levelData = await authHandlers.getLevels(difficulty);
-		loadLevelWords();
+        wordsToFind[0] = levelData[levelNumber-1].wordOne;
+        wordsToFind[1] = levelData[levelNumber-1].wordTwo;
     }
-
-    function loadLevelWords() {
-        wordsToFind[0] = levelData[currentUserLevel-1].wordOne;
-        wordsToFind[1] = levelData[currentUserLevel-1].wordTwo;
-    }
-
 
     async function levelsConfirmFunction() {
         incorrectAnswer = false;
@@ -74,7 +83,16 @@
 
         // Found a correct answer
 		if (pageContent.includes(wordsToFind[0].toLowerCase()) && pageContent.includes(wordsToFind[1].toLowerCase())) {
-			endLevel();
+            // Don't go past the available levels
+            if(levelNumber >= levelData.length){
+                nextLevelAvailable.set(false);
+            } else {
+                // Update database
+                if(levelNumber > maxLevel){
+                    await authHandlers.updateUserLevelsData(userData.uid, difficulty, levelNumber);
+                }
+            }
+            levelOver.set(true);
 		}
 
         // Did not find a correct answer
@@ -87,40 +105,16 @@
 
     }
 
-    async function endLevel() {
-		// Save level data into database
-        isOverlayOpen.set(true);
-		levelOver.set(true);
-        await authHandlers.updateUserLevelsData(userData.uid, difficulty, currentUserLevel + 1);
-	}
-
     async function playNextLevelClicked() {
         // Restart page so that the updated data is used
-        isOverlayOpen.set(false);
-        await setupLevel();
-        levelOver.set(false);
+        await goto(`/levels/${difficulty}-${levelNumber+1}`);
+        setupLevel();
 	}
-
-    function returnToMainMenuClicked() {
-        goto('/home');
-	}
-
-    function onEnterPressed(event: KeyboardEvent) {
-        if (event.key === "Enter" && $levelOver && !$isOverlayOpen) {
-            playNextLevelClicked()
-            return;
-        }
-    }
 </script>
-
-<svelte:window on:keydown={onEnterPressed} />
 
 <HeaderBar />
 <div class="levels-page">
-    <GameHeader header="Level: {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} {currentUserLevel}" arrow={true} backLink="/home"/>
-    {#if levelData}
-    <p class="info-text">You have completed {currentUserLevel-1}/{levelData.length} levels</p>
-    {/if}
+    <GameHeader header="Level: {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} {levelNumber}" arrow={true} backLink="/levels"/>
 
 	<div class="game-container">
         <p class="game-description">Find A Wiki page with</p>
@@ -135,12 +129,12 @@
 		<SearchComponent gameOver={$levelOver} confirmFunction={levelsConfirmFunction} />
 	</div>
 
-    {#if $isOverlayOpen && $levelOver}
-        <Overlay header="Level {currentUserLevel}" displayX={false}>
+    {#if $levelOver}
+        <Overlay header="Level {levelNumber}" displayX={false}>
 
             <p class="popup-text">Congratulations!</p>
             <div class="level-answer">
-                <p class="popup-text">You completed level {currentUserLevel}:</p>
+                <p class="popup-text">You completed level {levelNumber}:</p>
                 <h3 class="score">{wordsToFind[0]}</h3>
                 <h3 class="score">{wordsToFind[1]}</h3>
             </div>
@@ -150,9 +144,10 @@
             </div>
 
             <div class="bottom-options">
-                <button class="popup-button" on:click={() => {playNextLevelClicked()}}>Play Next Level</button>
-                <hr/>
-                <button class="popup-button" on:click={() => {returnToMainMenuClicked()}}>Return to Main Menu</button>
+                {#if $nextLevelAvailable}
+                    <button class="popup-button" on:click={() => {playNextLevelClicked()}}>Play Next Level</button>
+                {/if}
+                <button class="popup-button" on:click={() => {goto("/levels")}}>Return to Level Menu</button>
             </div>
         </Overlay>
     {/if}

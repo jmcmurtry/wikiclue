@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 
+// Search Variables
 const searchTerm = writable('');
 const searchResults = writable([]);
 

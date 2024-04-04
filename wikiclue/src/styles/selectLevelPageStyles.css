@@ -1,0 +1,67 @@
+.select-level-page {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 15vh;
+}
+
+.dropdown {
+	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+	width: 150px;
+	height: 30px;
+	background: var(--card-background);
+	border: 1px solid var(--search-border);
+	border: 1px;
+	font-size: 1.25rem;
+	font-family: inherit;
+	cursor:pointer;
+}
+
+/* Update Levels Section */
+
+.change-difficulty {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 20px;
+}
+
+h3 {
+	margin-right: 10px;
+}
+
+.level-options-container {
+	margin: auto;
+	width: 80vw;
+	min-width: 350px;
+	display: flex;
+	flex-wrap: wrap;
+	flex-basis: calc(100% - 150px);
+	align-content: start;
+	justify-content: center;
+	margin-bottom: 5vh;
+}
+
+.level {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 20vw;
+	height: 20vw;
+	max-width: 125px;
+	max-height: 125px;
+	margin: 1%;
+	border: none;
+	box-sizing: border-box;
+	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	background: var(--card-background);
+}
+
+.level:hover {
+	background-color: var(--card-background-darker);
+}
+
+.level:disabled {
+	background-color: var(--card-background-locked);
+}
