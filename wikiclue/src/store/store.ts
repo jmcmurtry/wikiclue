@@ -7,13 +7,13 @@ import {
 	updatePassword,
 	type User
 } from 'firebase/auth';
-import { isAdmin } from './admin';
 import { addDoc, getDoc, getDocs, Timestamp, updateDoc } from 'firebase/firestore';
 import { collection, doc, setDoc, query, where, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { writable } from 'svelte/store';
 import { auth, db } from '../firebase/firebase';
 import { goto } from '$app/navigation';
 import type { theDaily } from './gameplay';
+import { allowOnMount } from './mount';
 
 const RUSH_SETTINGS_ID = '23kITe5rnUkXhAnBlf7W';
 
@@ -26,10 +26,16 @@ export const authHandlers = {
 		return await createUserWithEmailAndPassword(auth, email, password);
 	},
 	login: async (email: string, password: string) => {
+		allowOnMount.set(false);
 		const userCredential = await signInWithEmailAndPassword(auth, email, password);
 		const userClaims = await userCredential.user.getIdTokenResult();
-		isAdmin.set(userClaims.claims.user_id == import.meta.env.VITE_FIREBASE_ADMIN_ID);
+		if (userClaims.claims.user_id == import.meta.env.VITE_FIREBASE_ADMIN_ID) {
+			goto('/admin');
+		} else {
+			goto('/home');
+		}
 		sessionStorage.clear();
+		allowOnMount.set(false);
 	},
 	logout: async () => {
 		await signOut(auth);
@@ -82,21 +88,19 @@ export const authHandlers = {
 			console.log('Error getting document:', error);
 		}
 	},
-	updateUserLevelsData: async (id: string, difficulty:string, maxLevel: number) => {
+	updateUserLevelsData: async (id: string, difficulty: string, maxLevel: number) => {
 		const userCollection = collection(db, 'users');
 		const userDocRef = doc(userCollection, id);
 		try {
-			if (difficulty === 'easy'){
+			if (difficulty === 'easy') {
 				await updateDoc(userDocRef, {
 					'gameinfo.currenteasylevel': maxLevel
 				});
-			}
-			else if (difficulty === 'medium'){
+			} else if (difficulty === 'medium') {
 				await updateDoc(userDocRef, {
 					'gameinfo.currentmediumlevel': maxLevel
 				});
-			}
-			else if (difficulty === 'hard'){
+			} else if (difficulty === 'hard') {
 				await updateDoc(userDocRef, {
 					'gameinfo.currenthardlevel': maxLevel
 				});
