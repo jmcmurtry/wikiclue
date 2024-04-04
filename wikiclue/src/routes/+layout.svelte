@@ -7,7 +7,6 @@
     import Spinner from '../components/spinner.svelte';
 
     const nonAuthRoutes = ['/login', '/signup', '/', '/play', '/forgot-password'];
-    const adminRoutes = ['/admin', '/admin/rush', '/admin/admin-settings', '/admin/change-password', '/admin/change-username', '/admin/daily', '/admin/levels'];
     let isPageReady = false;
     let isRedirected = false;
 
@@ -32,7 +31,7 @@
                     return;
                 }
 
-                if (user && adminRoutes.some(route => currentPath.startsWith(route))) {
+                if (user && currentPath.startsWith("/admin")) {
                     const isAdminUser = await isAdminUserCheck(user);
                     if (!isAdminUser && !isRedirected) {
                         window.location.href = '/home';

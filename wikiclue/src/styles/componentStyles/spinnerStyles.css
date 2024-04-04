@@ -12,7 +12,7 @@
 }
 
 .spinner {
-	border: 5px solid var(--plain-white);
+	border: 5px solid var(--search-background-hover);
 	border-top: 5px solid var(--skip);
 	border-radius: 50%;
 	width: 50px;
