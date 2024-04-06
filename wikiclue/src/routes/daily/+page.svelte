@@ -21,6 +21,7 @@
 	let today = new Date();
 	let userData: theDaily;
 	let statistics = { 'Played': 0, 'Win %': '0%', 'Current Streak': 0, 'Max Streak': 0 };
+	let maxAmount = 1;
 	let monthNames = [
 		'January',
 		'February',
@@ -149,6 +150,7 @@
 	}
 
 	function formatOverlay() {
+		maxAmount = Math.max(...userData.daily);
 		const winPercentage = ((userData.won / userData.played) * 100).toFixed(0);
 		statistics = {
 			'Played': userData.played,
@@ -203,9 +205,9 @@
 				{#each userData.daily as amount, index}
 					<div class="daily-guess">
 						<p class="guess-amount">{index + 1}</p>
-						<div class="guess-bar" style="width: calc({amount} / {4} * 80%);">
+						<div class="guess-bar" style="width: calc({amount} / {maxAmount} * 80%);">
 							<p class="times-guessed">
-								{amount}
+								{amount > 0 ? amount : ''}
 							</p>
 						</div>
 					</div>

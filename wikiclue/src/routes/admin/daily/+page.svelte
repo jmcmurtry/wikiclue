@@ -147,7 +147,7 @@
                 <div class="color-box" id="past"></div>
             </div>
             <div class="legend-item">
-                <div class="text">Completed:</div>
+                <div class="text">Created:</div>
                 <div class="color-box" id="filled-in"></div>
             </div>
             <div class="legend-item">

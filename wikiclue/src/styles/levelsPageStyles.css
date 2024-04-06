@@ -72,7 +72,7 @@
 	width: 240px;
 	max-width: 85%;
 	bottom: 20px;
-	gap: 30px;
+	gap: 20px;
 }
 
 .popup-button {
@@ -86,4 +86,10 @@
 
 .popup-button:hover {
 	background-color: var(--default-button-color-lighter);
+}
+
+hr {
+	width: 100%;
+	border: 1px solid var(--input-border-color);
+	margin: 0;
 }

@@ -38,9 +38,6 @@
 	</div>
 	{#if !showBurgerMenu}
 		<div class="links-container">
-			<a href="/admin/admin-settings" title="User Settings">
-				<ProfileIcon style="font-size: 1.5rem; color: white; padding-top: 5px" />
-			</a>
 			<button class="logout-button" title="Logout" on:click={() => logout()}>
 				<LogoutIcon style="font-size: 1.5rem; color: white; padding-top: 5px" />
 			</button>
