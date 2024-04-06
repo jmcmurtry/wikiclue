@@ -523,12 +523,12 @@ export const authHandlers = {
 			}
 
 			// eslint-disable-next-line prefer-const
-			let friendScores = new Map<string, Map<string, number>>();;
-			let easyLevels = new Map<string, number>();
-			let mediumLevels = new Map<string, number>();
-			let hardLevels = new Map<string, number>();
-			let daily = new Map<string, number>();
-			let rush = new Map<string, number>();
+			const friendScores = new Map<string, Map<string, number>>();;
+			const easyLevels = new Map<string, number>();
+			const mediumLevels = new Map<string, number>();
+			const hardLevels = new Map<string, number>();
+			const daily = new Map<string, number>();
+			const rush = new Map<string, number>();
 
 			for (const friendRef of friendsList) {
 				const friendDocSnapshot = await getDoc(friendRef);

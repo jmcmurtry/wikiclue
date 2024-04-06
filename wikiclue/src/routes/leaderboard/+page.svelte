@@ -85,18 +85,18 @@ function sortMapByGuesses(map: Map<string, number>): Map<string, number> {
     <div class="leaderboard-container">
         <div class="leader-container">
             <h2>Levels</h2>
+            <p class="leader-description">Highest Level your friends have reached</p>           
             <div class="change-difficulty">
-                <h3>Difficulty:</h3>
                 <div class="select">
-                    <select class="dropdown" on:change={handleOptionChange}>
+                    <p class="leader-description"> Difficulty:  <select class="dropdown" on:change={handleOptionChange}>
                         <option value="easy">Easy</option>
                         <option value="medium">Medium</option>
                         <option value="hard">Hard</option>
                     </select>
+                    </p>
                     <span class="focus"></span>
                 </div>                
             </div>
-            <p class="leader-description">Highest Level your friends have reached</p>
             <div class ="users-container">
                 <ul class = "list-container">
                     {#if selectedDifficulty === "easy"}
