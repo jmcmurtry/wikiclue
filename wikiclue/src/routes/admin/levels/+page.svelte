@@ -26,6 +26,7 @@
     function handleAddLevel() {
         wordOne = '';
         wordTwo = '';
+        selectedLevel = levelData.length + 1;
         isAddOverlayOpen.set(true);
     }
 
