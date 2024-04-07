@@ -7,9 +7,12 @@
 	import BurgerMenuIcon from '~icons/material-symbols/menu';
 	import { authHandlers } from '../store/store';
 	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
+	import ConfirmOverlay from './confirmOverlay.svelte';
 
 	let showBurgerMenu = false;
 	let burgerMenuOpen = false;
+	const isLogoutOverlay = writable(false);
 
 	onMount(() => {
 		const mediaQuery = window.matchMedia('(max-width: 768px)');
@@ -28,6 +31,7 @@
 	}
 
 	async function logout() {
+		isLogoutOverlay.set(false);
 		await authHandlers.logout();
 	}
 </script>
@@ -49,7 +53,13 @@
 			<a href="/user-settings" title="User Settings">
 				<ProfileIcon style="font-size: 1.5rem; color: white; padding-top: 5px" />
 			</a>
-			<button class="logout-button" title="Logout" on:click={() => logout()}>
+			<button
+				class="logout-button"
+				title="Logout"
+				on:click={() => {
+					isLogoutOverlay.set(true);
+				}}
+			>
 				<LogoutIcon style="font-size: 1.5rem; color: white; padding-top: 5px" />
 			</button>
 		</div>
@@ -62,9 +72,26 @@
 				<a href="/leaderboard">Leaderboard</a>
 				<a href="/add-friends">Add Friends</a>
 				<a href="/user-settings">User Settings</a>
-				<button on:click={() => logout()}>Logout</button>
+				<button
+					on:click={() => {
+						isLogoutOverlay.set(true);
+					}}>Logout</button
+				>
 			</div>
 		{/if}
+	{/if}
+	{#if $isLogoutOverlay}
+		<ConfirmOverlay
+			header="Logout "
+			onClose={() => {
+				isLogoutOverlay.set(false);
+			}}
+			popupText={'Please confirm you would like to logout'}
+			onCancel={() => {
+				isLogoutOverlay.set(false);
+			}}
+			onConfirm={() => logout()}
+		/>
 	{/if}
 </nav>
 
